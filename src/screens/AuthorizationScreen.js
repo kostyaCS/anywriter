@@ -5,12 +5,12 @@ import OrImage from "../images/or.svg"
 import GoogleButtonImage from "../images/google_button.svg"
 import LineSeparator from "../images/line_separator.svg"
 import LowerSeparator from "../images/lower_separator.svg"
-import { Link } from "react-router-dom";
 import "../App.css"
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword, signInWithPopup,
     GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import BlueButton from "../components/BlueButton";
 
 const AuthorizationScreen = () => {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const AuthorizationScreen = () => {
             console.log("User signed in");
             navigate("/user");
         } catch (error) {
-            console.error("Error signing in:", error.message);
+            alert("No such user!");
         }
     };
 
@@ -38,6 +38,10 @@ const AuthorizationScreen = () => {
         }
     };
 
+    const handleRedirect = () => {
+        navigate("/registration");
+    }
+
     return (
         <>
             <Main>
@@ -50,20 +54,14 @@ const AuthorizationScreen = () => {
                             onChange={(e) => setEmail(e.target.value)}/>
                 <InputField type="password" placeholder="Пароль" value={password}
                             onChange={(e) => setPassword(e.target.value)}/>
-                <BlueButton onClick={handleSignIn}>
-                    Продовжити
-                </BlueButton>
+                <BlueButton onClick={handleSignIn} text="Продовжити"/>
                 <StyledImage src={OrImage}/>
                 <GoogleButton onClick={handleGoogleSignIn}>
                     <StyledImage src={GoogleButtonImage}/>
                     Продовжити з Google
                 </GoogleButton>
                 <StyledImage src={LowerSeparator}/>
-                <BlueButton>
-                    <Link to="/registration">
-                    Зареєструвати акаунт
-                    </Link>
-                </BlueButton>
+                <BlueButton onClick={handleRedirect} text="Зареєструвати акаунт"/>
             </RightWindow>
             </Main>
         </>
@@ -110,19 +108,6 @@ const InputField = styled.input`
     padding-left: 20px;
     height: 50px;
     box-sizing: border-box;
-`;
-
-const BlueButton = styled.button`
-    background-color: #160070;
-    border-radius: 5px;
-    width: 420px;
-    height: 50px;
-    border: none;
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 18px;
-    cursor: pointer;
 `;
 
 const GoogleButton = styled.button`
