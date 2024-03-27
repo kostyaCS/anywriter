@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import styled from 'styled-components';
 import GoogleButtonImage from "../images/google_button.svg"
 import OrImage from "../images/or.svg"
 import { useNavigate } from "react-router-dom";
+import { auth, rtdb } from "../firebase";
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { ref, push, set } from '@firebase/database';
 
 const RegistrationScreen = () => {
     const navigate = useNavigate();
@@ -36,6 +37,22 @@ const RegistrationScreen = () => {
         }
     };
 
+    const saveInfoAboutUser = async () => {
+        console.log('Attempting to save info about user');
+        try {
+            const usersRef = ref(rtdb, 'users');
+            const newUserRef = push(usersRef);
+            await set(newUserRef, {
+                email: email,
+                date: date,
+                type: type
+            });
+            console.log('Email saved with key: ', newUserRef.key);
+        } catch (e) {
+            console.error(e.message);
+        }
+    };
+
     return (
         <>
             <Main>
@@ -52,7 +69,11 @@ const RegistrationScreen = () => {
                     <SmallInputField placeholder="Ваша роль" value={type}
                                      onChange={(e) => setType(e.target.value)}/>
                 </InputsContainer>
-                <BlueButton onClick={handleRegister}>
+                <BlueButton onClick={async () => {
+                    await saveInfoAboutUser();
+                    await handleRegister();
+                    }
+                }>
                     Зареєструвати акаунт
                 </BlueButton>
                 <StyledImage src={OrImage}/>
