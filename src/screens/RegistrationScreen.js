@@ -14,7 +14,22 @@ const RegistrationScreen = () => {
     const [date, setDate] = useState("");
     const [type, setType] = useState("");
 
+
+    const checkPassword = (password) => {
+        if (password.length < 8) {
+            alert("Password is too short.");
+            return false;
+        } else if (!/[A-Z]/.test(password)) {
+            alert("Password must contain at least one uppercase letter.");
+            return false;
+        }
+        return true;
+    };
+
     const handleRegister = async () => {
+        if (!checkPassword(password)) {
+            return;
+        }
         try {
             const userCred = await createUserWithEmailAndPassword(auth, email, password);
             setEmail("");
