@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import AnyWriterImage from "../images/AnyWriter.svg"
 import styled from 'styled-components';
 import OrImage from "../images/or.svg"
-import GoogleButtonImage from "../images/google_button.svg"
 import LineSeparator from "../images/line_separator.svg"
 import LowerSeparator from "../images/lower_separator.svg"
 import "../App.css"
@@ -11,6 +10,7 @@ import { signInWithEmailAndPassword, signInWithPopup,
     GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../components/BlueButton";
+import GoogleButton from "../components/GoogleButton";
 
 const AuthorizationScreen = () => {
     const navigate = useNavigate();
@@ -56,10 +56,9 @@ const AuthorizationScreen = () => {
                             onChange={(e) => setPassword(e.target.value)}/>
                 <BlueButton onClick={handleSignIn} text="Продовжити"/>
                 <StyledImage src={OrImage}/>
-                <GoogleButton onClick={handleGoogleSignIn}>
-                    <StyledImage src={GoogleButtonImage}/>
-                    Продовжити з Google
-                </GoogleButton>
+                <GoogleButton onClick={handleGoogleSignIn}
+                    text="Зареєструвати за допомогою Google"
+                />
                 <StyledImage src={LowerSeparator}/>
                 <BlueButton onClick={handleRedirect} text="Зареєструвати акаунт"/>
             </RightWindow>
@@ -108,21 +107,4 @@ const InputField = styled.input`
     padding-left: 20px;
     height: 50px;
     box-sizing: border-box;
-`;
-
-const GoogleButton = styled.button`
-    border: 1px solid #2100A3;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    gap: 10px;
-    width: 420px;
-    height: 50px;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 18px;
-    color: #2100A3;
-    cursor: pointer;
-    background-color: white;
 `;

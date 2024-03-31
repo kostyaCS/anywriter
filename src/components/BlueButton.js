@@ -24,3 +24,4 @@ const StyledButton = styled.button`
     line-height: 18px;
     cursor: pointer;
 `;
+
