@@ -9,6 +9,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BlueButton from "../components/BlueButton";
 import GoogleButton from "../components/GoogleButton";
+import InvalidInput from "../components/InvalidInput";
+import ExtraRedirectContainer from "../components/ExtraRedirectContainer";
+import InputTitle from "../components/InputTitle";
 
 const RegistrationScreen = () => {
     const navigate = useNavigate();
@@ -16,22 +19,58 @@ const RegistrationScreen = () => {
     const [password, setPassword] = useState("");
     const [type, setType] = useState("");
     const [startDate, setStartDate] = useState(new Date()); // <-- Initialize startDate state and setStartDate function
+    const [valid, setValid] = useState(false);
+    const [invalidEmailMessage, setInvalidEmail] = useState("");
+    const [invalidPasswordMessage, setInvalidPassword] = useState("");
+    const [invalidDateMessage, setInvalidDate] = useState("");
+
+    const checkEmail = (email) => {
+        if (String(email).match(
+            /^[a-zA-Z0-9._]+@[a-z]+\.[a-z]{2,}$/
+        )) {
+            setInvalidEmail("");
+            return true;
+        }
+        setInvalidEmail("Invalid email format.");
+        return false;
+    };
 
     const checkPassword = (password) => {
         if (password.length < 8) {
-            alert("Password is too short.");
+            setInvalidPassword("Password is too short.");
             return false;
         } else if (!/[A-Z]/.test(password)) {
-            alert("Password must contain at least one uppercase letter.");
+            setInvalidPassword("Password must contain at least one uppercase letter.");
             return false;
         }
+        setInvalidPassword("");
         return true;
     };
 
+    const subtractYears = (date, years) => {
+        return new Date(date.getTime()).setFullYear(date.getFullYear() - years);
+    }
+
+    const checkDate = (date) => {
+        let currDate = new Date();
+        if (date < subtractYears(currDate, 120) || date > subtractYears(currDate, 4)) {
+            setInvalidDate("Invalid date.");
+            return false;
+        }
+        setInvalidDate("");
+        return true;
+    };
+
+    const checkInputData = (email, password, date) => {
+        return checkEmail(email) && checkPassword(password) && checkDate(date);
+    };
+
     const handleRegister = async () => {
-        if (!checkPassword(password)) {
+        if (!checkInputData(email, password, startDate)) {
+            setValid(false);
             return;
         }
+        setValid(true);
         try {
             const userCred = await createUserWithEmailAndPassword(auth, email, password);
             setEmail("");
@@ -54,6 +93,10 @@ const RegistrationScreen = () => {
     };
 
     const saveInfoAboutUser = async (selectedDate) => {
+        if (!valid) {
+            console.log('Entered data is invalid.');
+            return;
+        }
         console.log('Attempting to save info about user');
         try {
             const usersRef = ref(rtdb, 'users');
@@ -61,7 +104,8 @@ const RegistrationScreen = () => {
             await set(newUserRef, {
                 email: email,
                 date: selectedDate.toISOString(),
-                type: type
+                type: type,
+                writings: {poems: [""], novels: [""]}
             });
             console.log('Email saved with key: ', newUserRef.key);
         } catch (e) {
@@ -69,30 +113,40 @@ const RegistrationScreen = () => {
         }
     };
 
+    const handleRedirect = () => {
+        navigate("/");
+    }
+
     return (
         <>
             <Main>
                 <Text>
                     Реєстрація акаунту
                 </Text>
-                <InputField placeholder="Email" value={email}
+                <InputTitle text="Електронна пошта" />
+                <InputField placeholder="Введіть свою електронну пошту" value={email}
                             onChange={(e) => setEmail(e.target.value)}/>
-                <InputField type="password" placeholder="Пароль" value={password}
+                {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage}/>)}
+                <InputTitle text="Пароль" />
+                <InputField type="password" placeholder="Введіть пароль" value={password}
                             onChange={(e) => setPassword(e.target.value)}/>
-                <InputsContainer>
-                    <StyledDatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-                    <SmallInputField placeholder="Ваша роль" value={type}
-                                     onChange={(e) => setType(e.target.value)}/>
-                </InputsContainer>
+                {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage}/>)}
+                <InputTitle text="Дата народження" />
+                <StyledDatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                {invalidDateMessage && (<InvalidInput text={invalidDateMessage}/>)}
                 <BlueButton onClick={async () => {
-                    await saveInfoAboutUser(startDate);
                     await handleRegister();
+                    await saveInfoAboutUser(startDate);
                     }}
                     text="Зареєструвати акаунт"
                 />
                 <StyledImage src={OrImage}/>
                 <GoogleButton onClick={handleGoogleSignIn}
                     text="Зареєструвати за допомогою Google"
+                />
+                <ExtraRedirectContainer onClick={handleRedirect}
+                                        text="Вже маєте акаунт?"
+                                        redirectButton="Увійти"
                 />
             </Main>
         </>
@@ -133,27 +187,11 @@ const StyledImage = styled.img`
     max-height: 100%;
 `;
 
-
-const SmallInputField = styled.input`
-    width: 205px;
-    height: 50px;
-    border: 1px solid #9B9B9B;
-    border-radius: 5px;
-    padding-left: 20px;
-    box-sizing: border-box;
-`;
-
-const InputsContainer = styled.div`
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-`;
-
 // Styled DatePicker
 const StyledDatePicker = styled(DatePicker)`
     border: 1px solid #9B9B9B;
     border-radius: 5px;
-    width: 205px;
+    width: 420px;
     height: 50px;
     padding-left: 20px;
     box-sizing: border-box;
