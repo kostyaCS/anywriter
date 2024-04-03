@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-function MyEditor() {
-    const [editorData, setEditorData] = useState('');
+function MyEditor({ editorData, onEditorChange }) {
 
     const handleEditorChange = (event, editor) => {
         const data = editor.getData();
-        setEditorData(data);
+        onEditorChange(data);
     };
 
     return (

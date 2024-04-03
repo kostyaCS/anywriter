@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
-import BlueButton from "../components/BlueButton";
 import MyEditor from "../components/TextEditor";
+import BlueButton from "../components/BlueButton";
+import { push, ref, set } from "@firebase/database";
+import { rtdb } from "../firebase";
 
 const CreateWork = () => {
-    const {currentUser} = useAuth();
-    const navigate = useNavigate();
+    const { currentUser } = useAuth();
+    const [editorData, setEditorData] = useState('');
 
-    return(
+    const handleEditorChange = (data) => {
+        setEditorData(data);
+    };
+
+    const saveWork = async () => {
+        try {
+            if (!currentUser) {
+                console.error("No user is currently logged in.");
+                return;
+            }
+
+            const userWorksRef = ref(rtdb, `users/${currentUser.uid}/works`);
+            const newWorkRef = push(userWorksRef);
+            await set(newWorkRef, {
+                content: editorData,
+                createdAt: new Date().toISOString()
+            });
+            console.log('Work saved successfully!');
+        } catch (error) {
+            console.error('Error saving work: ', error);
+        }
+    };
+
+    return (
         <>
             <Header>
                 <HeaderText>
@@ -21,7 +43,8 @@ const CreateWork = () => {
             <MainContainer>
                 {currentUser?.email}
             </MainContainer>
-            <MyEditor />
+            <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
+            <BlueButton text="Зберегти" onClick={saveWork}/>
         </>
     );
 }
