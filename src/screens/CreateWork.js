@@ -4,54 +4,29 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
-import SmallLogo from "../images/AnyWriterSmallLogo.svg";
-import { Link } from "react-router-dom";
+import BlueButton from "../components/BlueButton";
+import MyEditor from "../components/TextEditor";
 
-const MainPage = () => {
-    const { currentUser } = useAuth();
+const CreateWork = () => {
+    const {currentUser} = useAuth();
     const navigate = useNavigate();
 
-    React.useEffect(() => {
-        if (!currentUser) {
-            navigate("/");
-        }
-    }, [currentUser, navigate]);
-
-    const handleLogout = () => {
-        signOut(auth).then(() => {
-        }).catch((error) => {
-            console.error("Logout error:", error);
-        });
-    };
-
-
-    return (
+    return(
         <>
             <Header>
                 <HeaderText>
-                    Моя сторінка
-                </HeaderText>
-                <HeaderText>
-                    <Link to="/my_works">
-                        Мої твори
-                    </Link>
-                </HeaderText>
-                <StyledImage src={SmallLogo}/>
-                <HeaderText>
-                    Налаштування
-                </HeaderText>
-                <HeaderText onClick={handleLogout}>
-                    Вийти
+                    Мої твори
                 </HeaderText>
             </Header>
             <MainContainer>
                 {currentUser?.email}
             </MainContainer>
+            <MyEditor />
         </>
     );
-};
+}
 
-export default MainPage;
+export default CreateWork;
 
 const Header = styled.div`
     padding-top: 20px;
