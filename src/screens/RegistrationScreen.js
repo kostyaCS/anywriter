@@ -86,7 +86,7 @@ const RegistrationScreen = () => {
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
-            navigate("/user");
+            navigate("/main_page");
         } catch (error) {
             console.error(error.message);
         }

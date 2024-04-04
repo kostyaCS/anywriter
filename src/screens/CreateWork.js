@@ -5,9 +5,11 @@ import MyEditor from "../components/TextEditor";
 import BlueButton from "../components/BlueButton";
 import { push, ref, set } from "@firebase/database";
 import { rtdb } from "../firebase";
+import {useNavigate} from "react-router-dom";
 
 const CreateWork = () => {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [editorData, setEditorData] = useState('');
 
     const handleEditorChange = (data) => {
@@ -22,14 +24,21 @@ const CreateWork = () => {
             }
 
             const userWorksRef = ref(rtdb, `users/${currentUser.uid}/works`);
+            const mainDbRef = ref(rtdb, "works");
+            const newMainRef = push(mainDbRef);
             const newWorkRef = push(userWorksRef);
             await set(newWorkRef, {
                 content: editorData,
                 createdAt: new Date().toISOString()
             });
+            await set(newMainRef, {
+                content: editorData,
+            })
             console.log('Work saved successfully!');
         } catch (error) {
             console.error('Error saving work: ', error);
+        } finally {
+            navigate("/main_page");
         }
     };
 

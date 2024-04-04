@@ -21,7 +21,7 @@ const AuthorizationScreen = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             console.log("User signed in");
-            navigate("/user");
+            navigate("/main_page");
         } catch (error) {
             alert("No such user!");
         }
@@ -32,7 +32,7 @@ const AuthorizationScreen = () => {
         try {
             await signInWithPopup(auth, provider);
             console.log("User signed in with Google");
-            navigate("/user");
+            navigate("/main_page");
         } catch (error) {
             console.error("Error signing in with Google:", error.message);
         }

@@ -1,51 +1,41 @@
-import React from "react";
+import React, {useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
-import SmallLogo from "../images/AnyWriterSmallLogo.svg";
-import { Link } from "react-router-dom";
+import HeaderDef from "../components/Header";
+import {rtdb} from "../firebase";
+import { ref, onValue } from "firebase/database";
 
 const MainPage = () => {
     const { currentUser } = useAuth();
-    const navigate = useNavigate();
+    const [allData, setAllData] = useState([]);
 
-    React.useEffect(() => {
-        if (!currentUser) {
-            navigate("/");
-        }
-    }, [currentUser, navigate]);
+    useEffect(() => {
+        const worksRef = ref(rtdb, `works`);
 
-    const handleLogout = () => {
-        signOut(auth).then(() => {
-        }).catch((error) => {
-            console.error("Logout error:", error);
+        onValue(worksRef, (snapshot) => {
+            const works = snapshot.val();
+            const allContents = [];
+
+            for (let id in works) {
+                allContents.push(works[id].content);
+            }
+
+            setAllData(allContents);
         });
-    };
+        return () => {
+        };
+    }, []);
 
 
     return (
         <>
-            <Header>
-                <HeaderText>
-                    Моя сторінка
-                </HeaderText>
-                <HeaderText>
-                    <Link to="/my_works">
-                        Мої твори
-                    </Link>
-                </HeaderText>
-                <StyledImage src={SmallLogo}/>
-                <HeaderText>
-                    Налаштування
-                </HeaderText>
-                <HeaderText onClick={handleLogout}>
-                    Вийти
-                </HeaderText>
-            </Header>
+            <HeaderDef/>
             <MainContainer>
-                {currentUser?.email}
+                {allData.map((work, index) => (
+                    <WorkItem key={index}>
+                        <div dangerouslySetInnerHTML={{ __html: work }} />
+                    </WorkItem>
+                ))}
             </MainContainer>
         </>
     );
@@ -53,28 +43,15 @@ const MainPage = () => {
 
 export default MainPage;
 
-const Header = styled.div`
-    padding-top: 20px;
-    gap: 80px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid black;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-`;
-
-const StyledImage = styled.img``;
-
-const HeaderText = styled.div`
-    font-weight: 300;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 18px;
-`;
 
 const MainContainer = styled.div`
     justify-content: center;
     align-items: center;
     display: flex;
+`;
+
+const WorkItem = styled.div`
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
 `;

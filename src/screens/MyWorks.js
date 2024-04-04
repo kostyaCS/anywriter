@@ -5,11 +5,12 @@ import BlueButton from "../components/BlueButton";
 import { ref, onValue } from "firebase/database";
 import { rtdb } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import HeaderDef from "../components/Header";
 
 const MyWorks = () => {
     const { currentUser } = useAuth();
     const [userWorks, setUserWorks] = useState([]);
-    const navigate = useNavigate(); // useNavigate should be called inside the component
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!currentUser) return;
@@ -24,11 +25,7 @@ const MyWorks = () => {
             setUserWorks(works);
         });
 
-        // Cleanup function
         return () => {
-            // Unsubscribe from database listener when component unmounts
-            // This prevents potential memory leaks
-            // For real-time updates, consider using real-time listeners instead of get()
         };
     }, [currentUser]);
 
@@ -38,18 +35,12 @@ const MyWorks = () => {
 
     return (
         <>
-            <Header>
-                <HeaderText>
-                    Мої твори
-                </HeaderText>
-            </Header>
+            <HeaderDef/>
             <MainContainer>
-                {currentUser?.email}
                 <WorkList>
                     {userWorks.map((work, index) => (
                         <WorkItem key={index}>
                             <div dangerouslySetInnerHTML={{ __html: work.content }} />
-                            {/* Additional work details can be displayed here */}
                         </WorkItem>
                     ))}
                 </WorkList>
@@ -61,24 +52,6 @@ const MyWorks = () => {
 
 export default MyWorks;
 
-
-const Header = styled.div`
-    padding-top: 20px;
-    gap: 80px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid black;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-`;
-
-const HeaderText = styled.div`
-    font-weight: 300;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 18px;
-`;
 
 const MainContainer = styled.div`
     justify-content: center;

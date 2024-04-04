@@ -16,7 +16,7 @@ function App() {
                   <Route path="/" element={
                       <AuthorizationScreen/>} />
                   <Route path="/registration" element={<RegistrationScreen/>} />
-                  <Route path="/user" element={<MainPage/>} />
+                  <Route path="/main_page" element={<MainPage/>} />
                   <Route path="/my_works" element={<MyWorks/>} />
                   <Route path="/create_work" element={<CreateWork/>} />
               </Routes>
