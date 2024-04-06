@@ -35,7 +35,7 @@ const MyWorks = () => {
 
     return (
         <>
-            <HeaderDef/>
+            <HeaderDef />
             <MainContainer>
                 <WorkList>
                     {userWorks.map((work, index) => (
@@ -45,7 +45,7 @@ const MyWorks = () => {
                     ))}
                 </WorkList>
             </MainContainer>
-            <BlueButton onClick={handleRedirect} text="Створити твір"/>
+            <BlueButton onClick={handleRedirect} text="Створити твір" />
         </>
     );
 }

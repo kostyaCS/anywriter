@@ -19,7 +19,7 @@ const TitleContainer = styled.div`
     justify-content: flex-start;
     align-items: flex-start;
     height: 14px;
-    width: 410px;
+    width: 420px;
 `;
 
 const Title = styled.span`

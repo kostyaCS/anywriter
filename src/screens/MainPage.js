@@ -1,8 +1,8 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useAuth } from "../AuthContext";
 import HeaderDef from "../components/Header";
-import {rtdb} from "../firebase";
+import { rtdb } from "../firebase";
 import { ref, onValue } from "firebase/database";
 
 const MainPage = () => {
@@ -29,7 +29,7 @@ const MainPage = () => {
 
     return (
         <>
-            <HeaderDef/>
+            <HeaderDef />
             <MainContainer>
                 {allData.map((work, index) => (
                     <WorkItem key={index}>

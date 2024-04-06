@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AnyWriterImage from "../images/AnyWriter.svg"
 import styled from 'styled-components';
 import OrImage from "../images/or.svg"
@@ -6,8 +6,10 @@ import LineSeparator from "../images/line_separator.svg"
 import LowerSeparator from "../images/lower_separator.svg"
 import "../App.css"
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword, signInWithPopup,
-    GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import {
+    signInWithEmailAndPassword, signInWithPopup,
+    GoogleAuthProvider, onAuthStateChanged
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../components/BlueButton";
 import GoogleButton from "../components/GoogleButton";
@@ -45,23 +47,23 @@ const AuthorizationScreen = () => {
     return (
         <>
             <Main>
-            <LeftWindow>
-              <StyledImage src={AnyWriterImage}/>
-            </LeftWindow>
-                <StyledImage src={LineSeparator}/>
-            <RightWindow>
-                <InputField placeholder="Електронна пошта" value={email}
-                            onChange={(e) => setEmail(e.target.value)}/>
-                <InputField type="password" placeholder="Пароль" value={password}
-                            onChange={(e) => setPassword(e.target.value)}/>
-                <BlueButton onClick={handleSignIn} text="Продовжити"/>
-                <StyledImage src={OrImage}/>
-                <GoogleButton onClick={handleGoogleSignIn}
-                    text="Зареєструвати за допомогою Google"
-                />
-                <StyledImage src={LowerSeparator}/>
-                <BlueButton onClick={handleRedirect} text="Зареєструвати акаунт"/>
-            </RightWindow>
+                <LeftWindow>
+                    <StyledImage src={AnyWriterImage} />
+                </LeftWindow>
+                <StyledImage src={LineSeparator} />
+                <RightWindow>
+                    <InputField placeholder="Електронна пошта" value={email}
+                        onChange={(e) => setEmail(e.target.value)} />
+                    <InputField type="password" placeholder="Пароль" value={password}
+                        onChange={(e) => setPassword(e.target.value)} />
+                    <BlueButton onClick={handleSignIn} text="Продовжити" />
+                    <StyledImage src={OrImage} />
+                    <GoogleButton onClick={handleGoogleSignIn}
+                        text="Зареєструвати за допомогою Google"
+                    />
+                    <StyledImage src={LowerSeparator} />
+                    <BlueButton onClick={handleRedirect} text="Зареєструвати акаунт" />
+                </RightWindow>
             </Main>
         </>
     )

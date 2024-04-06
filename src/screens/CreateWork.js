@@ -5,7 +5,7 @@ import MyEditor from "../components/TextEditor";
 import BlueButton from "../components/BlueButton";
 import { push, ref, set } from "@firebase/database";
 import { rtdb } from "../firebase";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CreateWork = () => {
     const { currentUser } = useAuth();
@@ -53,7 +53,7 @@ const CreateWork = () => {
                 {currentUser?.email}
             </MainContainer>
             <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
-            <BlueButton text="Зберегти" onClick={saveWork}/>
+            <BlueButton text="Зберегти" onClick={saveWork} />
         </>
     );
 }

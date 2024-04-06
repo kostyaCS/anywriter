@@ -39,7 +39,7 @@ const HeaderDef = () => {
                         Мої твори
                     </Link>
                 </HeaderText>
-                <StyledImage onClick={handleLogoClick} src={SmallLogo}/>
+                <StyledImage onClick={handleLogoClick} src={SmallLogo} />
                 <HeaderText>
                     Налаштування
                 </HeaderText>

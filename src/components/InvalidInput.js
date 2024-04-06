@@ -18,5 +18,5 @@ const RedText = styled.span`
     color: red;
     font-size: 11px;
     height: 3px;
-    width: 395px;
+    width: 420px;
 `;

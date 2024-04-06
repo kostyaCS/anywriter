@@ -5,7 +5,7 @@ const GoogleButton = (props) => {
     return (
         <>
             <StyledButton onClick={props.onClick}>
-                <GoogleImage src={GoogleButtonImage}/>
+                <GoogleImage src={GoogleButtonImage} />
                 {props.text}
             </StyledButton>
         </>
