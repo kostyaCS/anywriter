@@ -26,5 +26,5 @@ const Question = styled.span`
     color: black;
     font-size: 16px;
     font-weight: 500;
-    font-family: Baghdad;
+    font-family: Helvetica;
 `;

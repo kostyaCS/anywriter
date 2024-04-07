@@ -28,21 +28,25 @@ const HeaderDef = () => {
         navigate("/main_page");
     }
 
+    const handleMyPageClick = () => {
+        navigate("/my_page");
+    }
+
     return (
         <>
             <Header>
-                <HeaderText>
+                <HeaderText onClick={handleMyPageClick}>
                     Моя сторінка
                 </HeaderText>
-                <HeaderText>
-                    <Link to="/my_works">
-                        Мої твори
-                    </Link>
-                </HeaderText>
+                {/*<HeaderText>*/}
+                {/*    <Link to="/my_works">*/}
+                {/*        Мої твори*/}
+                {/*    </Link>*/}
+                {/*</HeaderText>*/}
                 <StyledImage onClick={handleLogoClick} src={SmallLogo} />
-                <HeaderText>
-                    Налаштування
-                </HeaderText>
+                {/*<HeaderText>*/}
+                {/*    Налаштування*/}
+                {/*</HeaderText>*/}
                 <HeaderText onClick={handleLogout}>
                     Вийти
                 </HeaderText>

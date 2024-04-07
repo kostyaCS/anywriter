@@ -30,8 +30,8 @@ const MainPage = () => {
 
     return (
         <>
+            <HeaderDef />
             <MainContainer>
-                <HeaderDef />
                 <ScrollContainer text={allData} />
             </MainContainer>
         </>

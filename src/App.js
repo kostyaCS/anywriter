@@ -7,18 +7,19 @@ import MainPage from "./screens/MainPage";
 import { AuthProvider } from './AuthContext';
 import MyWorks from "./screens/MyWorks";
 import CreateWork from "./screens/CreateWork";
+import MyPage from "./screens/MyPage";
 
 function App() {
     return (
         <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={
-                        <AuthorizationScreen />} />
+                    <Route path="/" element={<AuthorizationScreen />} />
                     <Route path="/registration" element={<RegistrationScreen />} />
                     <Route path="/main_page" element={<MainPage />} />
                     <Route path="/my_works" element={<MyWorks />} />
                     <Route path="/create_work" element={<CreateWork />} />
+                    <Route path="/my_page" element={<MyPage />} />
                 </Routes>
             </Router>
         </AuthProvider>

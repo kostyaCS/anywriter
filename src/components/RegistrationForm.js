@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
-import OrImage from "../images/or.svg"
+import OrLineSeparator from "./OrLineSeparator";
 import { useNavigate } from "react-router-dom";
 import { auth, rtdb } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { ref, push, set } from '@firebase/database';
+import { getAuth } from "firebase/auth";
 import "react-datepicker/dist/react-datepicker.css";
 import BlueButton from "../components/BlueButton";
 import GoogleButton from "../components/GoogleButton";
@@ -96,12 +97,26 @@ const RegistrationForm = () => {
     const saveInfoAboutUser = async (selectedDate) => {
         console.log('Attempting to save info about user');
         try {
-            const usersRef = ref(rtdb, 'users');
-            const newUserRef = push(usersRef);
-            await set(newUserRef, {
-                email: email,
-                date: selectedDate.toISOString(),
-                writings: { poems: [""], novels: [""] },
+            // const usersRef = ref(rtdb, 'users');
+            // const newUserRef = push(usersRef);
+            // console.log(newUserRef);
+            // await set(newUserRef, {
+            //     email: email,
+            //     date: selectedDate.toISOString(),
+            //     writings: { poems: [""], novels: [""] },
+            //     userPref: {
+            //         age: getLabels(selectedAgeOption),
+            //         emotion: getLabels(selectedEmotionOption),
+            //         format: getLabels(selectedFormatOption),
+            //         genre: getLabels(selectedGenreOption),
+            //         interests: getLabels(selectedInterestOption)
+            //     }
+            // });
+            // console.log('Email saved with key: ', newUserRef.key);
+
+            const auth = getAuth();
+            const currentUserRef = ref(rtdb, `users/${auth.currentUser.uid}`);
+            await set(currentUserRef, {
                 userPref: {
                     age: getLabels(selectedAgeOption),
                     emotion: getLabels(selectedEmotionOption),
@@ -110,7 +125,7 @@ const RegistrationForm = () => {
                     interests: getLabels(selectedInterestOption)
                 }
             });
-            console.log('Email saved with key: ', newUserRef.key);
+            console.log('User saved successfully!');
         } catch (e) {
             console.error(e.message);
         }
@@ -210,7 +225,7 @@ const RegistrationForm = () => {
                         }}
                             text="Далі"
                         />
-                        <StyledImage src={OrImage} />
+                        <OrLineSeparator text="або" />
                         <GoogleButton onClick={handleGoogleSignIn}
                             text="Зареєструвати за допомогою Google"
                         />
@@ -278,10 +293,4 @@ const InputField = styled.input`
     padding-left: 20px;
     height: 50px;
     box-sizing: border-box;
-`;
-
-const StyledImage = styled.img`
-    width: auto;
-    height: auto;
-    max-height: 100%;
 `;

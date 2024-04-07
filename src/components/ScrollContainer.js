@@ -6,8 +6,6 @@ const ScrollContainer = (props) => {
     const [state, setState] = useState([]);
     const [ref, isVisible] = useInView({ threshold: 1 });
 
-    console.log(props.text.length);
-
     const newData = [...Array(1).keys()].map((x) => x + state.length);
 
     useEffect(() => {
@@ -18,9 +16,6 @@ const ScrollContainer = (props) => {
             setState((state) => [...state, ...newData]);
         }
     }, [isVisible, newData, props.text.length, state.length]);
-
-    console.log([...state]);
-    console.log([...newData]);
 
     return (
         <List>
