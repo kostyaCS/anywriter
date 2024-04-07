@@ -54,6 +54,10 @@ const HeaderDef = () => {
 export default HeaderDef;
 
 const Header = styled.div`
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 5vh;
     padding-top: 20px;
     gap: 80px;
     padding-bottom: 20px;
@@ -62,6 +66,7 @@ const Header = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    background-color: white;
 `;
 
 const StyledImage = styled.img`

@@ -4,6 +4,7 @@ import { useAuth } from "../AuthContext";
 import HeaderDef from "../components/Header";
 import { rtdb } from "../firebase";
 import { ref, onValue } from "firebase/database";
+import ScrollContainer from "../components/ScrollContainer";
 
 const MainPage = () => {
     const { currentUser } = useAuth();
@@ -29,13 +30,9 @@ const MainPage = () => {
 
     return (
         <>
-            <HeaderDef />
             <MainContainer>
-                {allData.map((work, index) => (
-                    <WorkItem key={index}>
-                        <div dangerouslySetInnerHTML={{ __html: work }} />
-                    </WorkItem>
-                ))}
+                <HeaderDef />
+                <ScrollContainer text={allData} />
             </MainContainer>
         </>
     );
@@ -45,9 +42,7 @@ export default MainPage;
 
 
 const MainContainer = styled.div`
-    justify-content: center;
-    align-items: center;
-    display: flex;
+    overflow: hidden;
 `;
 
 const WorkItem = styled.div`
