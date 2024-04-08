@@ -97,23 +97,6 @@ const RegistrationForm = () => {
     const saveInfoAboutUser = async (selectedDate) => {
         console.log('Attempting to save info about user');
         try {
-            // const usersRef = ref(rtdb, 'users');
-            // const newUserRef = push(usersRef);
-            // console.log(newUserRef);
-            // await set(newUserRef, {
-            //     email: email,
-            //     date: selectedDate.toISOString(),
-            //     writings: { poems: [""], novels: [""] },
-            //     userPref: {
-            //         age: getLabels(selectedAgeOption),
-            //         emotion: getLabels(selectedEmotionOption),
-            //         format: getLabels(selectedFormatOption),
-            //         genre: getLabels(selectedGenreOption),
-            //         interests: getLabels(selectedInterestOption)
-            //     }
-            // });
-            // console.log('Email saved with key: ', newUserRef.key);
-
             const auth = getAuth();
             const currentUserRef = ref(rtdb, `users/${auth.currentUser.uid}`);
             await set(currentUserRef, {
@@ -252,14 +235,14 @@ const RegistrationForm = () => {
                         <Options placeholder={'Вибрати зацікавлення'} data={interestsData} value={selectedInterestOption}
                             onChange={(e) => setSelectedInterestOption(e)} />
                         <BlueButton onClick={async () => {
-                            await handlePrevious();
-                        }} text="Назад" />
-                        <BlueButton onClick={async () => {
                             await handleRegister();
                             await saveInfoAboutUser(startDate);
                         }}
-                            text="Зареєструвати акаунт"
+                                    text="Зареєструвати акаунт"
                         />
+                        <BlueButton onClick={async () => {
+                            await handlePrevious();
+                        }} text="Назад" />
                     </>)}
             </Main>
         </>

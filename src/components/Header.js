@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
 import SmallLogo from "../images/AnyWriterSmallLogo.svg";
-import { Link } from "react-router-dom";
 
 const HeaderDef = () => {
     const { currentUser } = useAuth();
@@ -35,18 +34,13 @@ const HeaderDef = () => {
     return (
         <>
             <Header>
+                {currentUser?.email === "admin@gmail.com" && (
+                    <Link to="/create_work">Add Text</Link>
+                )}
                 <HeaderText onClick={handleMyPageClick}>
                     Моя сторінка
                 </HeaderText>
-                {/*<HeaderText>*/}
-                {/*    <Link to="/my_works">*/}
-                {/*        Мої твори*/}
-                {/*    </Link>*/}
-                {/*</HeaderText>*/}
                 <StyledImage onClick={handleLogoClick} src={SmallLogo} />
-                {/*<HeaderText>*/}
-                {/*    Налаштування*/}
-                {/*</HeaderText>*/}
                 <HeaderText onClick={handleLogout}>
                     Вийти
                 </HeaderText>
@@ -62,8 +56,8 @@ const Header = styled.div`
     top: 0;
     z-index: 1;
     height: 5vh;
+    gap: 75px;
     padding-top: 20px;
-    gap: 80px;
     padding-bottom: 20px;
     border-bottom: 1px solid black;
     display: flex;

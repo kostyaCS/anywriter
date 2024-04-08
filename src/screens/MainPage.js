@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useAuth } from "../AuthContext";
 import HeaderDef from "../components/Header";
 import { rtdb } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import ScrollContainer from "../components/ScrollContainer";
 
 const MainPage = () => {
-    const { currentUser } = useAuth();
     const [allData, setAllData] = useState([]);
 
     useEffect(() => {

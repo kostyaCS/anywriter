@@ -22,15 +22,8 @@ const CreateWork = () => {
                 console.error("No user is currently logged in.");
                 return;
             }
-
-            const userWorksRef = ref(rtdb, `users/${currentUser.uid}/works`);
             const mainDbRef = ref(rtdb, "works");
             const newMainRef = push(mainDbRef);
-            const newWorkRef = push(userWorksRef);
-            await set(newWorkRef, {
-                content: editorData,
-                createdAt: new Date().toISOString()
-            });
             await set(newMainRef, {
                 content: editorData,
             })

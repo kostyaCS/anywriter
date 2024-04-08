@@ -9,6 +9,7 @@ const ScrollContainer = (props) => {
     const newData = [...Array(1).keys()].map((x) => x + state.length);
 
     useEffect(() => {
+        console.log(props.text)
         if (state.length + newData.length > props.text.length) {
             return;
         }
@@ -18,59 +19,53 @@ const ScrollContainer = (props) => {
     }, [isVisible, newData, props.text.length, state.length]);
 
     return (
-        <List>
-            {state.map((el, index) => (
-                <Item key={index + el}>
-                    <DataContainer>
-                        <video
-                            controls
-                            src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-                            width="50%">
-                        </video>
-                        <ItemTextContainer>
-                            <div dangerouslySetInnerHTML={{__html: props.text[el]}}/>
-                        </ItemTextContainer>
-                        <Reaction>
-                            <ReactionIconButton>
-                                <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
-                                     viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                          d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                                </svg>
+        <>
+            <List>
+                {state.map((el, index) => (
+                    <Item key={index + el}>
+                        <DataContainer>
+                            <video
+                                controls
+                                src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                                width="50%">
+                            </video>
+                            <ItemTextContainer>
+                                <div dangerouslySetInnerHTML={{__html: props.text[el]}}/>
+                            </ItemTextContainer>
+                            <Reaction>
+                                <ReactionIconButton>
+                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                         viewBox="0 0 24 24">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                              d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                    </svg>
 
-                            </ReactionIconButton>
-                            <ReactionIconButton>
-                                <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
-                                     viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                          d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
-                                </svg>
+                                </ReactionIconButton>
+                                <ReactionIconButton>
+                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                         viewBox="0 0 24 24">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                              d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
+                                    </svg>
 
-                            </ReactionIconButton>
-                            <ReactionIconButton>
-                                <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
-                                     viewBox="0 0 24 24">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                          d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
-                                </svg>
-                            </ReactionIconButton>
-                        </Reaction>
-                    </DataContainer>
-                    <AuthorContainer>
-                        <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                             xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                  d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                        </svg>
-                        <span>Author name</span>
-                    </AuthorContainer>
-                </Item>
-            ))}
-            {state.length !== props.text.length && <Loader ref={ref}>Loading...</Loader>}
-        </List>
+                                </ReactionIconButton>
+                                <ReactionIconButton>
+                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                         viewBox="0 0 24 24">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                              d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
+                                    </svg>
+                                </ReactionIconButton>
+                            </Reaction>
+                        </DataContainer>
+                    </Item>
+                ))}
+                {state.length !== props.text.length && <Loader ref={ref}>Loading...</Loader>}
+            </List>
+        </>
     );
 }
 
@@ -129,6 +124,14 @@ const Loader = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 25px;
+`;
+
+const Text = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 30px;
 `;
 
 const Reaction = styled.div`
