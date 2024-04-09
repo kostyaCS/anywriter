@@ -11,6 +11,7 @@ const CreateWork = () => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
     const [editorData, setEditorData] = useState('');
+    const [title, setTitle] = useState('');
 
     const handleEditorChange = (data) => {
         setEditorData(data);
@@ -25,6 +26,7 @@ const CreateWork = () => {
             const mainDbRef = ref(rtdb, "works");
             const newMainRef = push(mainDbRef);
             await set(newMainRef, {
+                title: title,
                 content: editorData,
             })
             console.log('Work saved successfully!');
@@ -45,6 +47,7 @@ const CreateWork = () => {
             <MainContainer>
                 {currentUser?.email}
             </MainContainer>
+            <InputTitile value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Введіть назву"/>
             <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
             <BlueButton text="Зберегти" onClick={saveWork} />
         </>
@@ -65,6 +68,8 @@ const Header = styled.div`
 `;
 
 const StyledImage = styled.img``;
+
+const InputTitile = styled.input``;
 
 const HeaderText = styled.div`
     font-weight: 300;

@@ -14,9 +14,12 @@ const MainPage = () => {
         onValue(worksRef, (snapshot) => {
             const works = snapshot.val();
             const allContents = [];
-
             for (let id in works) {
-                allContents.push(works[id].content);
+                allContents.push({
+                    id: id,
+                    liked: false,
+                    ...works[id]
+                });
             }
 
             setAllData(allContents);

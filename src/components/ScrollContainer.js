@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-hook-inview";
 import styled from "styled-components";
+import {useAuth} from "../AuthContext";
+import {ref as firebaseRef, get, set} from "firebase/database"
+import { rtdb } from "../firebase";
+
 
 const ScrollContainer = (props) => {
+    const { currentUser } = useAuth();
     const [state, setState] = useState([]);
     const [ref, isVisible] = useInView({ threshold: 1 });
 
     const newData = [...Array(1).keys()].map((x) => x + state.length);
 
     useEffect(() => {
-        console.log(props.text)
         if (state.length + newData.length > props.text.length) {
             return;
         }
@@ -17,6 +21,31 @@ const ScrollContainer = (props) => {
             setState((state) => [...state, ...newData]);
         }
     }, [isVisible, newData, props.text.length, state.length]);
+
+    const handleLikeClick = async (workId) => {
+        console.log("Liked work ID:", workId);
+        const likesRef = firebaseRef(rtdb, `users/${currentUser.uid}/liked`);
+        let likesSnapshot = await get(likesRef);
+        let currentLikes = likesSnapshot.exists() ? likesSnapshot.val() : [];
+
+        if (currentLikes.includes(workId)) {
+            // If already liked, unlike it
+            currentLikes = currentLikes.filter(id => id !== workId);
+        } else {
+            // If not liked, add to likes
+            currentLikes.push(workId);
+        }
+
+        await set(likesRef, currentLikes);
+        const updatedState = state.map(item => {
+            if (item.id === workId) {
+                return { ...item, liked: !item.liked };
+            }
+            return item;
+        });
+        setState(updatedState);
+    };
+
 
     return (
         <>
@@ -30,17 +59,19 @@ const ScrollContainer = (props) => {
                                 width="50%">
                             </video>
                             <ItemTextContainer>
-                                <div dangerouslySetInnerHTML={{__html: props.text[el]}}/>
+                                <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
                             </ItemTextContainer>
                             <Reaction>
-                                <ReactionIconButton>
-                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                <ReactionIconButton onClick={() => {
+                                    handleLikeClick(props.text[el].id);
+                                    console.log(state);
+                                }}>
+                                    <svg className="w-[35px] h-[35px]" aria-hidden="true"
                                          xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
-                                         viewBox="0 0 24 24">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                         viewBox="0 0 24 24" stroke={state[el].liked ? "red" : "currentColor"}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
                                               d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
                                     </svg>
-
                                 </ReactionIconButton>
                                 <ReactionIconButton>
                                     <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"

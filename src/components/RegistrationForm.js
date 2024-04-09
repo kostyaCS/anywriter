@@ -25,7 +25,7 @@ const RegistrationForm = () => {
     const subtractYears = (date, years) => {
         return new Date(date.getTime()).setFullYear(date.getFullYear() - years);
     }
-    const [startDate, setStartDate] = useState(); // <-- Initialize startDate state and setStartDate function
+    const [startDate, setStartDate] = useState();
 
     const [invalidEmailMessage, setInvalidEmail] = useState("");
     const [invalidPasswordMessage, setInvalidPassword] = useState("");
