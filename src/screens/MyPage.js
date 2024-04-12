@@ -11,38 +11,37 @@ const MyPage = () => {
     const { currentUser } = useAuth();
     const [activeTab, setActiveTab] = useState("saved");
     const [likedWorks, setLikedWorks] = useState([]);
+    const [savedWorks, setSavedWorks] = useState([]);
 
     useEffect(() => {
-        const fetchLikedWorks = async () => {
-            if (activeTab === "liked" && currentUser) {
-                const likesRef = firebaseRef(rtdb, `users/${currentUser.uid}/liked`);
-                const snapshot = await get(likesRef);
-                if (snapshot.exists()) {
-                    const likedIds = snapshot.val() || [];
+        const fetchWorks = async () => {
+            if (!currentUser) return;
 
-                    // Fetch the details of the liked works from the works node
-                    const worksPromises = likedIds.map(id => {
-                        const workRef = firebaseRef(rtdb, `works/${id}`);
-                        return get(workRef);
-                    });
-
-                    const worksSnapshots = await Promise.all(worksPromises);
-                    const fetchedLikedWorks = worksSnapshots.map(snap => {
-                        if (snap.exists()) {
-                            return { id: snap.key, ...snap.val() };
-                        } else {
-                            return null;
-                        }
-                    }).filter(Boolean);
-
-                    setLikedWorks(fetchedLikedWorks);
-                } else {
-                    setLikedWorks([]);
-                }
+            const worksRef = firebaseRef(rtdb, `users/${currentUser.uid}/${activeTab}`);
+            const snapshot = await get(worksRef);
+            if (!snapshot.exists()) {
+                activeTab === "liked" ? setLikedWorks([]) : setSavedWorks([]);
+                return;
             }
-        };
 
-        fetchLikedWorks();
+            const ids = snapshot.val() || [];
+            const worksPromises = ids.map(id => {
+                const workRef = firebaseRef(rtdb, `works/${id}`);
+                return get(workRef);
+            });
+
+            const worksSnapshots = await Promise.all(worksPromises);
+            const fetchedWorks = worksSnapshots.map(snap => {
+                if (snap.exists()) {
+                    return { id: snap.key, ...snap.val() };
+                } else {
+                    return null;
+                }
+            }).filter(Boolean);
+
+            activeTab === "liked" ? setLikedWorks(fetchedWorks) : setSavedWorks(fetchedWorks);
+        };
+        fetchWorks();
     }, [activeTab, currentUser]);
 
 
@@ -71,8 +70,19 @@ const MyPage = () => {
                     </Tabs>
                     <TabContent>
                         {activeTab === "saved" ? (
-                            <p>Saved Writings...</p>
-
+                            <>
+                                {savedWorks.length > 0 ? (
+                                    <List>
+                                        {savedWorks.map(work => (
+                                            <ListItem key={work.id}>
+                                                <Text>{work.title}</Text>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                ) : (
+                                    <p>You have no saved writings.</p>
+                                )}
+                            </>
                         ) : (
                             <>
                                 {likedWorks.length > 0 ? (

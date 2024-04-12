@@ -46,6 +46,30 @@ const ScrollContainer = (props) => {
         setState(updatedState);
     };
 
+    const handleSavedClick = async (workId) => {
+        console.log("Liked work ID:", workId);
+        const savedRef = firebaseRef(rtdb, `users/${currentUser.uid}/saved`);
+        let savedSnapshot = await get(savedRef);
+        let currentSaves = savedSnapshot.exists() ? savedSnapshot.val() : [];
+
+        if (currentSaves.includes(workId)) {
+            // If already liked, unlike it
+            currentSaves = currentSaves.filter(id => id !== workId);
+        } else {
+            // If not liked, add to likes
+            currentSaves.push(workId);
+        }
+
+        await set(savedRef, currentSaves);
+        const updatedState = state.map(item => {
+            if (item.id === workId) {
+                return { ...item, liked: !item.liked };
+            }
+            return item;
+        });
+        setState(updatedState);
+    };
+
 
     return (
         <>
@@ -62,10 +86,7 @@ const ScrollContainer = (props) => {
                                 <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
                             </ItemTextContainer>
                             <Reaction>
-                                <ReactionIconButton onClick={() => {
-                                    handleLikeClick(props.text[el].id);
-                                    console.log(state);
-                                }}>
+                                <ReactionIconButton onClick={() => {handleLikeClick(props.text[el].id)}}>
                                     <svg className="w-[35px] h-[35px]" aria-hidden="true"
                                          xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                                          viewBox="0 0 24 24" stroke={state[el].liked ? "red" : "currentColor"}>
@@ -82,7 +103,7 @@ const ScrollContainer = (props) => {
                                     </svg>
 
                                 </ReactionIconButton>
-                                <ReactionIconButton>
+                                <ReactionIconButton onClick={() => {handleSavedClick(props.text[el].id)}}>
                                     <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
                                          xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                                          viewBox="0 0 24 24">
