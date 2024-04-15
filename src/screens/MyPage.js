@@ -5,9 +5,11 @@ import styled from "styled-components";
 import Avatar from "../images/avatar.png";
 import {ref as firebaseRef, get } from "firebase/database"
 import { rtdb } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 
 const MyPage = () => {
+    const navigate = useNavigate();
     const { currentUser } = useAuth();
     const [activeTab, setActiveTab] = useState("saved");
     const [likedWorks, setLikedWorks] = useState([]);
@@ -44,6 +46,10 @@ const MyPage = () => {
         fetchWorks();
     }, [activeTab, currentUser]);
 
+    const handleWorkClick = (workId) => {
+        navigate(`/work/${workId}`);
+    }
+
 
     return (
         <>
@@ -74,7 +80,7 @@ const MyPage = () => {
                                 {savedWorks.length > 0 ? (
                                     <List>
                                         {savedWorks.map(work => (
-                                            <ListItem key={work.id}>
+                                            <ListItem key={work.id} onClick={() => handleWorkClick(work.id)}>
                                                 <Text>{work.title}</Text>
                                             </ListItem>
                                         ))}
@@ -88,7 +94,7 @@ const MyPage = () => {
                                 {likedWorks.length > 0 ? (
                                     <List>
                                         {likedWorks.map(work => (
-                                            <ListItem key={work.id}>
+                                            <ListItem key={work.id} onClick={() => handleWorkClick(work.id)}>
                                                 <Text>{work.title}</Text>
                                             </ListItem>
                                         ))}

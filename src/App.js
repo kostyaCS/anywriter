@@ -8,6 +8,7 @@ import { AuthProvider } from './AuthContext';
 import MyWorks from "./screens/MyWorks";
 import CreateWork from "./screens/CreateWork";
 import MyPage from "./screens/MyPage";
+import CheckWork from "./screens/CheckWork";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/my_works" element={<MyWorks />} />
                     <Route path="/create_work" element={<CreateWork />} />
                     <Route path="/my_page" element={<MyPage />} />
+                    <Route path="/work/:workId" element={<CheckWork />} />
                 </Routes>
             </Router>
         </AuthProvider>

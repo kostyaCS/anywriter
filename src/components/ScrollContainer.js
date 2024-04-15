@@ -4,10 +4,12 @@ import styled from "styled-components";
 import {useAuth} from "../AuthContext";
 import {ref as firebaseRef, get, set} from "firebase/database"
 import { rtdb } from "../firebase";
+import { useNavigate } from 'react-router-dom';
 
 
 const ScrollContainer = (props) => {
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
     const [state, setState] = useState([]);
     const [ref, isVisible] = useInView({ threshold: 1 });
 
@@ -23,16 +25,13 @@ const ScrollContainer = (props) => {
     }, [isVisible, newData, props.text.length, state.length]);
 
     const handleLikeClick = async (workId) => {
-        console.log("Liked work ID:", workId);
         const likesRef = firebaseRef(rtdb, `users/${currentUser.uid}/liked`);
         let likesSnapshot = await get(likesRef);
         let currentLikes = likesSnapshot.exists() ? likesSnapshot.val() : [];
 
         if (currentLikes.includes(workId)) {
-            // If already liked, unlike it
             currentLikes = currentLikes.filter(id => id !== workId);
         } else {
-            // If not liked, add to likes
             currentLikes.push(workId);
         }
 
@@ -47,16 +46,15 @@ const ScrollContainer = (props) => {
     };
 
     const handleSavedClick = async (workId) => {
-        console.log("Liked work ID:", workId);
+
+
         const savedRef = firebaseRef(rtdb, `users/${currentUser.uid}/saved`);
         let savedSnapshot = await get(savedRef);
         let currentSaves = savedSnapshot.exists() ? savedSnapshot.val() : [];
 
         if (currentSaves.includes(workId)) {
-            // If already liked, unlike it
             currentSaves = currentSaves.filter(id => id !== workId);
         } else {
-            // If not liked, add to likes
             currentSaves.push(workId);
         }
 
@@ -65,11 +63,16 @@ const ScrollContainer = (props) => {
             if (item.id === workId) {
                 return { ...item, liked: !item.liked };
             }
+
             return item;
         });
+
         setState(updatedState);
     };
 
+    const handleReadClick = (workId) => {
+        navigate(`/work/${workId}`);
+    }
 
     return (
         <>
@@ -86,33 +89,35 @@ const ScrollContainer = (props) => {
                                 <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
                             </ItemTextContainer>
                             <Reaction>
-                                <ReactionIconButton onClick={() => {handleLikeClick(props.text[el].id)}}>
+                                <ReactionIconButton liked={el.liked} onClick={() => {{
+                                    handleLikeClick(props.text[el].id)}
+                                    props.text[el].liked = (props.text[el].liked)? !props.text[el].liked : 1;
+
+                                }}>
                                     <svg className="w-[35px] h-[35px]" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
-                                         viewBox="0 0 24 24" stroke={state[el].liked ? "red" : "currentColor"}>
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].liked ? "red" : "none"}
+                                         viewBox="0 0 24 24" stroke={props.text[el].liked ? "red" : "currentColor"}>
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
                                               d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
                                     </svg>
                                 </ReactionIconButton>
-                                <ReactionIconButton>
-                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
-                                         viewBox="0 0 24 24">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                              d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
-                                    </svg>
+                                <ReactionIconButton saved={el.saved} onClick={() => {{
+                                    handleSavedClick(props.text[el].id)}
+                                    props.text[el].saved = (props.text[el].saved)? !props.text[el].saved : 1;
 
-                                </ReactionIconButton>
-                                <ReactionIconButton onClick={() => {handleSavedClick(props.text[el].id)}}>
+                                }}>
                                     <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].saved ? "orange" : "none"}
                                          viewBox="0 0 24 24">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                        <path stroke={props.text[el].saved ? "orange" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
                                               d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
                                     </svg>
                                 </ReactionIconButton>
                             </Reaction>
                         </DataContainer>
+                        <StyledButton onClick={() => handleReadClick(props.text[el].id)}>
+                            Read it!
+                        </StyledButton>
                     </Item>
                 ))}
                 {state.length !== props.text.length && <Loader ref={ref}>Loading...</Loader>}
@@ -140,6 +145,7 @@ const List = styled.div`
     }
 `;
 
+
 const Item = styled.div`
     margin: 0 20px 20px 20px;
     padding: 20px 0;
@@ -156,6 +162,10 @@ const Item = styled.div`
 
     background: #fff;
 `;
+
+const StyledButton = styled.button`
+
+`
 
 const ItemTextContainer = styled.div`
     width: 30%;
