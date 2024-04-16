@@ -14,6 +14,7 @@ export default BlueButton;
 
 const StyledButton = styled.button`
     background-color: #160070;
+    margin-top: 20px;
     border-radius: 5px;
     width: 420px;
     height: 50px;
