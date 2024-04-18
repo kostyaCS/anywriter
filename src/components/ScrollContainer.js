@@ -74,6 +74,13 @@ const ScrollContainer = (props) => {
         navigate(`/work/${workId}`);
     }
 
+    const handleDislikeClick = () => {
+
+    }
+
+    const handleLikeButtonClick = () => {
+    }
+
     return (
         <>
             <List>
@@ -99,10 +106,9 @@ const ScrollContainer = (props) => {
                                 </ItemReviewsElement>
                             </ItemReviewsContainer>
                             <ItemTextContainer>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut suscipit mi quis urna tincidunt, ac posuere eros scelerisque.
+                                {props.text[el].content.slice(3, 400)}
                                 <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
                                     <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
-                                    <i style={{fontWeight: 300, textAlign: "right"}}>by Annie Writer</i>
                                 </span>
                             </ItemTextContainer>
                             <Reaction>
@@ -134,9 +140,17 @@ const ScrollContainer = (props) => {
                                 </ReactionIconButton>
                             </Reaction>
                         </DataContainer>
+                        <ButtonsContainer>
+                        <StyledButton onClick={handleDislikeClick}>
+                            Dislike
+                        </StyledButton>
                         <StyledButton onClick={() => handleReadClick(props.text[el].id)}>
                             Read it!
                         </StyledButton>
+                        <StyledButton onClick={handleLikeButtonClick}>
+                            Like
+                        </StyledButton>
+                        </ButtonsContainer>
                     </Item>
                 ))}
                 {state.length !== props.text.length && <Loader ref={ref}>Loading...</Loader>}
@@ -164,6 +178,28 @@ const List = styled.div`
     }
 `;
 
+const ButtonsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 25px;
+`;
+
+const LikeButton = styled.button`
+    background-color: green;
+    color: white;
+    &:hover {
+        background-color: darkgreen;
+    }
+`;
+
+const DislikeButton = styled.button`
+    background-color: red;
+    color: white;
+    &:hover {
+        background-color: darkred;
+    }
+`;
 
 const Item = styled.div`
     margin: 0 20px 20px 20px;
