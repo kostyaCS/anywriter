@@ -80,21 +80,40 @@ const ScrollContainer = (props) => {
                 {state.map((el, index) => (
                     <Item key={index + el}>
                         <DataContainer>
-                            <video
-                                controls
-                                src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-                                width="50%">
-                            </video>
+                            <ItemReviewsContainer>
+                                <ItemReviewsElement>
+                                    <span style={{fontSize: 18}}>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fringilla lobortis nunc, in ultricies odio aliquet ac. Praesent posuere, tellus sed blandit eleifend, nulla felis hendrerit nibh, a egestas augue diam ut felis. Aenean tristique, massa ac maximus pretium, felis urna pulvinar turpis, sed hendrerit quam lectus in justo. Sed ut justo et nulla convallis volutpat in a elit.
+                                    </span>
+                                    <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
+                                        Joe Biden from <span style={{fontWeight: 500}}>Reddit</span>
+                                    </span>
+                                </ItemReviewsElement>
+                                <ItemReviewsElement>
+                                    <span style={{fontSize: 18}}>
+                                        In fringilla lobortis nunc, in ultricies odio aliquet ac. Praesent posuere, tellus sed blandit eleifend, nulla felis hendrerit nibh, a egestas augue diam ut felis. Aenean tristique, massa ac maximus pretium, felis urna pulvinar turpis, sed hendrerit quam lectus in justo. Sed ut justo et nulla convallis volutpat in a elit.
+                                    </span>
+                                    <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
+                                        Stewie Griffin from <span style={{fontWeight: 500}}>Goodreads</span>
+                                    </span>
+                                </ItemReviewsElement>
+                            </ItemReviewsContainer>
                             <ItemTextContainer>
-                                <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut suscipit mi quis urna tincidunt, ac posuere eros scelerisque.
+                                <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
+                                    <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
+                                    <i style={{fontWeight: 300, textAlign: "right"}}>by Annie Writer</i>
+                                </span>
                             </ItemTextContainer>
                             <Reaction>
-                                <ReactionIconButton liked={el.liked} onClick={() => {{
-                                    handleLikeClick(props.text[el].id)}
-                                    props.text[el].liked = (props.text[el].liked)? !props.text[el].liked : 1;
+                                <ReactionIconButton liked={el.liked} onClick={() => {
+                                    {
+                                        handleLikeClick(props.text[el].id)
+                                    }
+                                    props.text[el].liked = (props.text[el].liked) ? !props.text[el].liked : 1;
 
                                 }}>
-                                    <svg className="w-[35px] h-[35px]" aria-hidden="true"
+                                <svg className="w-[35px] h-[35px]" aria-hidden="true"
                                          xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].liked ? "red" : "none"}
                                          viewBox="0 0 24 24" stroke={props.text[el].liked ? "red" : "currentColor"}>
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
@@ -164,13 +183,65 @@ const Item = styled.div`
 `;
 
 const StyledButton = styled.button`
-
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    color: rgba(0, 0, 0, 0.85);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    min-height: 3rem;
+    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+    transition: all 250ms;
+    user-select: none;
+    
+    &:hover {
+        border-color: rgba(0, 0, 0, 0.15);
+        box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+        color: rgba(0, 0, 0, 0.85);
+    }
 `
 
 const ItemTextContainer = styled.div`
-    width: 30%;
-    overflow: hidden;
-    white-space: pre;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 40%;
+    font-size: 32px;
+    text-align: left;
+`;
+
+const ItemReviewsContainer = styled.div`
+    width: 40%;
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: scroll;
+`;
+
+const ItemReviewsElement = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    //align-items: center;
+    background-color: white;
+    padding: 25px 15px 25px 15px;
+    margin: 5px;
+    border-radius: 15px;
+    text-align: left;
+`;
+
+const ItemReviewsText = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: flex-start;
+    word-break: break-all;
+    text-align: left;
 `;
 
 const Loader = styled.div`
