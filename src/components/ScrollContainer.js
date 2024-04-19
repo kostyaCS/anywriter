@@ -15,6 +15,14 @@ const ScrollContainer = (props) => {
     const [ref, isVisible] = useInView({ threshold: 1 });
 
     const newData = [...Array(1).keys()].map((x) => x + state.length);
+    // const [currIds, setCurrIds] = useState(props.text.map(obj => obj.id));
+    const [currIds, setCurrIds] = useState(props.text.map(obj => obj.id)[0]);
+    useEffect(() => {
+        if (props.text && currIds === undefined) {
+            setCurrIds(props.text.map(obj => obj.id)[0]);
+        }
+    }, [props.text, currIds]);
+
 
     useEffect(() => {
         if (state.length + newData.length > props.text.length) {
@@ -91,100 +99,98 @@ const ScrollContainer = (props) => {
             } else {
                 console.error('Failed to send feedback');
             }
-            
+
             // Get recommendations
             const recommendationResponse = await fetch('http://127.0.0.1:5000/recommendations');
             if (recommendationResponse.ok) {
                 const recommendation = await recommendationResponse.json();
+                setCurrIds(recommendation);
                 console.log('Recommendation:', recommendation);
             } else {
+                setCurrIds(props.text);
                 console.error('Failed to get recommendation');
             }
         } catch (error) {
             console.error('Error:', error);
         }
     }
-    
-    const handleDislikeClick = () => {
-        sendFeedback("Наукова фантастика", false);
+
+    const handleDislikeClick = (genre) => {
+        sendFeedback(genre, false);
     }
-    
-    const handleLikeButtonClick = () => {
-        sendFeedback("Наукова фантастика", true);
+
+    const handleLikeButtonClick = (genre) => {
+        sendFeedback(genre, true);
     }
 
     return (
         <>
             <List>
                 {state.map((el, index) => (
-                    console.log(typeof el, el, props.text[el]),
-                    <Item key={index + el}>
-                        <DataContainer>
-                            <ItemReviewsContainer>
-                                <ItemReviewsElement>
-                                    <span style={{fontSize: 18}}>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In fringilla lobortis nunc, in ultricies odio aliquet ac. Praesent posuere, tellus sed blandit eleifend, nulla felis hendrerit nibh, a egestas augue diam ut felis. Aenean tristique, massa ac maximus pretium, felis urna pulvinar turpis, sed hendrerit quam lectus in justo. Sed ut justo et nulla convallis volutpat in a elit.
+                    currIds.includes(props.text[el].id) ? (
+                        <Item key={index + el}>
+                            <DataContainer>
+                                <ItemReviewsContainer>
+                                    {props.text[el].reviews.map((review) => (
+                                        <ItemReviewsElement>
+                                            <span style={{fontSize: 18}}>
+                                                {review}
+                                            </span>
+                                                <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
+                                                Joe Biden from <span style={{fontWeight: 500}}>Reddit</span>
+                                            </span>
+                                        </ItemReviewsElement>
+                                    ))}
+                                </ItemReviewsContainer>
+                                <ItemTextContainer>
+                                    <div dangerouslySetInnerHTML={{__html: props.text[el].content.slice(3, 300)}}/>
+                                    <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
+                                        <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
+                                        {/*<i style={{fontWeight: 300, textAlign: "right"}}>by Annie Writer</i>*/}
                                     </span>
-                                    <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
-                                        Joe Biden from <span style={{fontWeight: 500}}>Reddit</span>
-                                    </span>
-                                </ItemReviewsElement>
-                                <ItemReviewsElement>
-                                    <span style={{fontSize: 18}}>
-                                        In fringilla lobortis nunc, in ultricies odio aliquet ac. Praesent posuere, tellus sed blandit eleifend, nulla felis hendrerit nibh, a egestas augue diam ut felis. Aenean tristique, massa ac maximus pretium, felis urna pulvinar turpis, sed hendrerit quam lectus in justo. Sed ut justo et nulla convallis volutpat in a elit.
-                                    </span>
-                                    <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
-                                        Stewie Griffin from <span style={{fontWeight: 500}}>Goodreads</span>
-                                    </span>
-                                </ItemReviewsElement>
-                            </ItemReviewsContainer>
-                            <ItemTextContainer>
-                                {props.text[el].content.slice(3, 400)}
-                                <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
-                                    <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
-                                </span>
-                            </ItemTextContainer>
-                            <Reaction>
-                                <ReactionIconButton liked={el.liked} onClick={() => {
-                                    {
-                                        handleLikeClick(props.text[el].id)
-                                    }
-                                    props.text[el].liked = (props.text[el].liked) ? !props.text[el].liked : 1;
+                                </ItemTextContainer>
+                                <Reaction>
+                                    <ReactionIconButton liked={el.liked} onClick={() => {
+                                        {
+                                            handleLikeClick(props.text[el].id)
+                                        }
+                                        props.text[el].liked = (props.text[el].liked) ? !props.text[el].liked : 1;
 
-                                }}>
-                                <svg className="w-[35px] h-[35px]" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].liked ? "red" : "none"}
-                                         viewBox="0 0 24 24" stroke={props.text[el].liked ? "red" : "currentColor"}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                              d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                                    </svg>
-                                </ReactionIconButton>
-                                <ReactionIconButton saved={el.saved} onClick={() => {{
-                                    handleSavedClick(props.text[el].id)}
-                                    props.text[el].saved = (props.text[el].saved)? !props.text[el].saved : 1;
+                                    }}>
+                                        <svg className="w-[35px] h-[35px]" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].liked ? "red" : "none"}
+                                             viewBox="0 0 24 24" stroke={props.text[el].liked ? "red" : "currentColor"}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                        </svg>
+                                    </ReactionIconButton>
+                                    <ReactionIconButton saved={el.saved} onClick={() => {{
+                                        handleSavedClick(props.text[el].id)}
+                                        props.text[el].saved = (props.text[el].saved)? !props.text[el].saved : 1;
 
-                                }}>
-                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].saved ? "orange" : "none"}
-                                         viewBox="0 0 24 24">
-                                        <path stroke={props.text[el].saved ? "orange" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                              d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
-                                    </svg>
-                                </ReactionIconButton>
-                            </Reaction>
-                        </DataContainer>
-                        <ButtonsContainer>
-                        <StyledButton onClick={handleDislikeClick}>
-                            Dislike
-                        </StyledButton>
-                        <StyledButton onClick={() => handleReadClick(props.text[el].id)}>
-                            Read it!
-                        </StyledButton>
-                        <StyledButton onClick={handleLikeButtonClick}>
-                            Like
-                        </StyledButton>
-                        </ButtonsContainer>
-                    </Item>
+                                    }}>
+                                        <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].saved ? "orange" : "none"}
+                                             viewBox="0 0 24 24">
+                                            <path stroke={props.text[el].saved ? "orange" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                                  d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
+                                        </svg>
+                                    </ReactionIconButton>
+                                </Reaction>
+                            </DataContainer>
+                            <ButtonsContainer>
+                                <StyledButton onClick={() => handleDislikeClick(props.text[el].genre)}>
+                                    Dislike
+                                </StyledButton>
+                                <StyledButton onClick={() => handleReadClick(props.text[el].id)}>
+                                    Read it!
+                                </StyledButton>
+                                <StyledButton onClick={() => handleLikeButtonClick(props.text[el].genre)}>
+                                    Like
+                                </StyledButton>
+                            </ButtonsContainer>
+                        </Item>
+                    ) : null
                 ))}
                 {state.length !== props.text.length && <Loader ref={ref}>Loading...</Loader>}
             </List>
@@ -198,7 +204,7 @@ const List = styled.div`
     //margin-top: 3vh;
     //margin-bottom: 2vh;
     max-height: 90vh;
-    overflow-y: hidden;
+    overflow-y: scroll;
     scroll-snap-type: y mandatory;
     background: #fff;
     display: flex;
@@ -266,7 +272,7 @@ const StyledButton = styled.button`
     padding: calc(.875rem - 1px) calc(1.5rem - 1px);
     transition: all 250ms;
     user-select: none;
-    
+
     &:hover {
         border-color: rgba(0, 0, 0, 0.15);
         box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
@@ -279,7 +285,7 @@ const ItemTextContainer = styled.div`
     flex-direction: column;
     gap: 25px;
     width: 40%;
-    font-size: 32px;
+    font-size: 30px;
     text-align: left;
 `;
 
@@ -353,7 +359,7 @@ const ReactionIconButton = styled.button`
     font: inherit;
     cursor: pointer;
     outline: inherit;
-    
+
     &:hover {
         transform: scale(1.1);
     }

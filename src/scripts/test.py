@@ -8,7 +8,6 @@ import random
 from collections import defaultdict
 
 
-
 class RecommendationSystem:
     def __init__(self, genres):
         self.graph = nx.Graph()
@@ -17,6 +16,12 @@ class RecommendationSystem:
         self.counter = 0
         self.initialize_graph()
         self.normalize_weights()
+
+    def __str__(self):
+        str_rep = ''
+        for genre in self.genres:
+            str_rep += f'{genre}: {self.graph[self.user][genre]["weight"]}\n'
+        return str_rep
 
     def initialize_graph(self):
         for genre in self.genres:
@@ -88,7 +93,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate('credentials.json')
+cred = credentials.Certificate('src/scripts/credentials.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://anywriter-a18d6-default-rtdb.europe-west1.firebasedatabase.app'
 })
@@ -127,17 +132,20 @@ def send_feedback(genre, like):
 @app.route('/recommendations', methods=['GET', 'POST'])
 def get_recommendations():
     if request.method == 'GET':
+        ret =  random.choice(dct[rec_sys.make_recommendations()])
+        print(ret)
+        return jsonify(ret)
         # Assuming rec_sys is instantiated elsewhere in the code
-        recs = []
-        i = 0
-        while i < 5:
-            rec = rec_sys.make_recommendations()
-            if rec in recs:
-                continue
-            recs.append(rec)
-            i += 1
+        # recs = []
+        # i = 0
+        # while i < 5:
+        #     rec = rec_sys.make_recommendations()
+        #     if rec in recs:
+        #         continue
+        #     recs.append(rec)
+        #     i += 1
         
-        return [random.choice(dct[elm]) for elm in recs]
+        # return [random.choice(dct[elm]) for elm in recs]
             
     elif request.method == 'POST':
         data = request.get_json()
@@ -145,6 +153,7 @@ def get_recommendations():
         like = data.get('like')
         if genre and like is not None:
             rec_sys.update_preferences(genre, like)
+            print(rec_sys)
             return jsonify({'message': 'Feedback received and processed successfully'}), 200
         else:
             return jsonify({'error': 'Genre and like parameters are required in the request'}), 400
