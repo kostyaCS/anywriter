@@ -5,6 +5,7 @@ import {useAuth} from "../AuthContext";
 import {ref as firebaseRef, get, set} from "firebase/database"
 import { rtdb } from "../firebase";
 import { useNavigate } from 'react-router-dom';
+import { type } from "@testing-library/user-event/dist/type";
 
 
 const ScrollContainer = (props) => {
@@ -74,17 +75,49 @@ const ScrollContainer = (props) => {
         navigate(`/work/${workId}`);
     }
 
-    const handleDislikeClick = () => {
-
+    const sendFeedback = async (genre, like) => {
+        try {
+            // Send feedback
+            const response = await fetch('http://127.0.0.1:5000/recommendations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ genre, like })
+            });
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Feedback sent successfully:', responseData);
+            } else {
+                console.error('Failed to send feedback');
+            }
+            
+            // Get recommendations
+            const recommendationResponse = await fetch('http://127.0.0.1:5000/recommendations');
+            if (recommendationResponse.ok) {
+                const recommendation = await recommendationResponse.json();
+                console.log('Recommendation:', recommendation);
+            } else {
+                console.error('Failed to get recommendation');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
-
+    
+    const handleDislikeClick = () => {
+        sendFeedback("Наукова фантастика", false);
+    }
+    
     const handleLikeButtonClick = () => {
+        sendFeedback("Наукова фантастика", true);
     }
 
     return (
         <>
             <List>
                 {state.map((el, index) => (
+                    console.log(typeof el, el, props.text[el]),
                     <Item key={index + el}>
                         <DataContainer>
                             <ItemReviewsContainer>
@@ -165,7 +198,7 @@ const List = styled.div`
     //margin-top: 3vh;
     //margin-bottom: 2vh;
     max-height: 90vh;
-    overflow-y: scroll;
+    overflow-y: hidden;
     scroll-snap-type: y mandatory;
     background: #fff;
     display: flex;

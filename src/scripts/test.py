@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 import firebase_admin
 from firebase_admin import credentials, db
@@ -7,13 +8,6 @@ import random
 from collections import defaultdict
 
 
-app = Flask(__name__)
-
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate('credentials.json')
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://anywriter-a18d6-default-rtdb.europe-west1.firebasedatabase.app'
-})
 
 class RecommendationSystem:
     def __init__(self, genres):
@@ -54,10 +48,10 @@ class RecommendationSystem:
         Update the graph based on the user's rating keeping the weights normalized (sum of weights = 1)
         """
         # Update the weight based on user rating
-        if rating:
+        if rating and self.graph[self.user][genre]['weight'] < 0.8:
             # Increase weight if user liked the recommendation
             self.graph[self.user][genre]['weight'] += 0.05
-        else:
+        elif not rating and self.graph[self.user][genre]['weight'] > 0.2:
             # Decrease weight if user didn't like the recommendation
             self.graph[self.user][genre]['weight'] -= 0.05
         
@@ -89,37 +83,64 @@ class RecommendationSystem:
         # Show plot
         plt.show()
 
-@app.route('/works', methods=['GET', 'POST'])
-def get_works():
+
+app = Flask(__name__)
+CORS(app)
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate('credentials.json')
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://anywriter-a18d6-default-rtdb.europe-west1.firebasedatabase.app'
+})
+# Connect to the Firebase Realtime Database
+works_ref = db.reference('works')
+works = works_ref.get()
+
+all_contents = []
+for key, value in works.items():
+    all_contents.append({'id': key, **value})
+
+genres = [list(work_details.values())[1] for work_details in list(works.values())]
+genres = list(set(genres))  
+
+dct = defaultdict(list)
+
+for (id, lst) in works.items():
+    dct[list(lst.values())[1]].append(id)
+
+print(dct)
+
+rec_sys = RecommendationSystem(genres)
+
+def send_feedback(genre, like):
+    url = 'http://127.0.0.1:5000/recommendations'
+    data = {'genre': genre, 'like': like}
     try:
-        # Connect to the Firebase Realtime Database
-        works_ref = db.reference('works')
-        works = works_ref.get()
-
-        # Process the data and convert it into a list of dictionaries
-        all_contents = []
-        for key, value in works.items():
-            all_contents.append({'id': key, **value})
-
-        genres = [list(work_details.values())[1] for work_details in list(works.values())]
-        genres = list(set(genres))  
-
-        dct = defaultdict(list)
-
-        for (id, lst) in works.items():
-            dct[list(lst.values())[1]].append(id)
-
-        print(dct)
-
-        rec_sys = RecommendationSystem(genres)
-
-
-        # Convert the response to JSON with Unicode support
-        response_json = json.dumps(genres, ensure_ascii=False)
-
-        return response_json
+        response = requests.post(url, json=data)
+        if response.ok:
+            print("Feedback sent successfully")
+        else:
+            print("Failed to send feedback")
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print("Error:", e)
+
+@app.route('/recommendations', methods=['GET', 'POST'])
+def get_recommendations():
+    if request.method == 'GET':
+        # Assuming rec_sys is instantiated elsewhere in the code
+        genre = rec_sys.make_recommendations()
+        return jsonify(random.choice(dct[genre]))
+    elif request.method == 'POST':
+        data = request.get_json()
+        genre = data.get('genre')
+        like = data.get('like')
+        if genre and like is not None:
+            rec_sys.update_preferences(genre, like)
+            return jsonify({'message': 'Feedback received and processed successfully'}), 200
+        else:
+            return jsonify({'error': 'Genre and like parameters are required in the request'}), 400
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
