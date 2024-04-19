@@ -128,8 +128,17 @@ def send_feedback(genre, like):
 def get_recommendations():
     if request.method == 'GET':
         # Assuming rec_sys is instantiated elsewhere in the code
-        genre = rec_sys.make_recommendations()
-        return jsonify(random.choice(dct[genre]))
+        recs = []
+        i = 0
+        while i < 5:
+            rec = rec_sys.make_recommendations()
+            if rec in recs:
+                continue
+            recs.append(rec)
+            i += 1
+        
+        return [random.choice(dct[elm]) for elm in recs]
+            
     elif request.method == 'POST':
         data = request.get_json()
         genre = data.get('genre')
