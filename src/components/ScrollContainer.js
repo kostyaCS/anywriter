@@ -5,24 +5,32 @@ import {useAuth} from "../AuthContext";
 import {ref as firebaseRef, get, set} from "firebase/database"
 import { rtdb } from "../firebase";
 import { useNavigate } from 'react-router-dom';
-import { type } from "@testing-library/user-event/dist/type";
-
 
 const ScrollContainer = (props) => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
     const [state, setState] = useState([]);
     const [ref, isVisible] = useInView({ threshold: 1 });
-
+    const [currentLikes, setCurrentLikes] = useState([]);
+    const [currentSaved, setCurrentSaved] = useState([]);
     const newData = [...Array(1).keys()].map((x) => x + state.length);
-    // const [currIds, setCurrIds] = useState(props.text.map(obj => obj.id));
     const [currIds, setCurrIds] = useState(props.text.map(obj => obj.id)[0]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredText, setFilteredText] = useState(props.text);
+
+    useEffect(() => {
+        const filtered = props.text.filter((item) =>
+            item.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredText(filtered);
+    }, [searchQuery, props.text]);
+
+
     useEffect(() => {
         if (props.text && currIds === undefined) {
             setCurrIds(props.text.map(obj => obj.id)[0]);
         }
     }, [props.text, currIds]);
-
 
     useEffect(() => {
         if (state.length + newData.length > props.text.length) {
@@ -33,51 +41,78 @@ const ScrollContainer = (props) => {
         }
     }, [isVisible, newData, props.text.length, state.length]);
 
-    const handleLikeClick = async (workId) => {
-        const likesRef = firebaseRef(rtdb, `users/${currentUser.uid}/liked`);
-        let likesSnapshot = await get(likesRef);
-        let currentLikes = likesSnapshot.exists() ? likesSnapshot.val() : [];
+    useEffect(() => {
+        let isActive = true;
 
-        if (currentLikes.includes(workId)) {
-            currentLikes = currentLikes.filter(id => id !== workId);
+        const fetchLikes = async () => {
+            try {
+                const likesRef = firebaseRef(rtdb, `users/${currentUser.uid}/liked`);
+                const likesSnapshot = await get(likesRef);
+                if (isActive) {
+                    setCurrentLikes(likesSnapshot.exists() ? likesSnapshot.val() : []);
+                }
+                const savedRef = firebaseRef(rtdb, `users/${currentUser.uid}/saved`);
+                const savesSnapshot = await get(savedRef);
+                if (isActive) {
+                    setCurrentSaved(savesSnapshot.exists() ? savesSnapshot.val() : []);
+                }
+            } catch (error) {
+                console.error('Failed to fetch likes:', error);
+            }
+        };
+
+        fetchLikes();
+
+        return () => {
+            isActive = false;
+        };
+    }, []);
+
+
+    const handleLikeClick = async (workId) => {
+        let updatedLikes = [...currentLikes];
+
+        if (updatedLikes.includes(workId)) {
+            updatedLikes = updatedLikes.filter(id => id !== workId);
         } else {
-            currentLikes.push(workId);
+            updatedLikes.push(workId);
         }
 
-        await set(likesRef, currentLikes);
+        setCurrentLikes(updatedLikes);
+        await set(firebaseRef(rtdb, `users/${currentUser.uid}/liked`), updatedLikes);
+
         const updatedState = state.map(item => {
             if (item.id === workId) {
                 return { ...item, liked: !item.liked };
             }
             return item;
         });
+
         setState(updatedState);
     };
 
     const handleSavedClick = async (workId) => {
+        let updatedSaved = [...currentSaved];
 
-
-        const savedRef = firebaseRef(rtdb, `users/${currentUser.uid}/saved`);
-        let savedSnapshot = await get(savedRef);
-        let currentSaves = savedSnapshot.exists() ? savedSnapshot.val() : [];
-
-        if (currentSaves.includes(workId)) {
-            currentSaves = currentSaves.filter(id => id !== workId);
+        if (updatedSaved.includes(workId)) {
+            updatedSaved = updatedSaved.filter(id => id !== workId);
         } else {
-            currentSaves.push(workId);
+            updatedSaved.push(workId);
         }
 
-        await set(savedRef, currentSaves);
+        setCurrentSaved(updatedSaved);
+        await set(firebaseRef(rtdb, `users/${currentUser.uid}/saved`), updatedSaved);
+
         const updatedState = state.map(item => {
             if (item.id === workId) {
-                return { ...item, liked: !item.liked };
+                return { ...item, saved: !item.saved };
             }
-
             return item;
         });
 
         setState(updatedState);
     };
+
 
     const handleReadClick = (workId) => {
         navigate(`/work/${workId}`);
@@ -125,74 +160,71 @@ const ScrollContainer = (props) => {
 
     return (
         <>
+            <SearchInput
+                type="text"
+                placeholder="Search by title..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <List>
-                {state.map((el, index) => (
-                    currIds.includes(props.text[el].id) ? (
-                        <Item key={index + el}>
-                            <DataContainer>
-                                <ItemReviewsContainer>
-                                    {props.text[el].reviews.map((review) => (
-                                        <ItemReviewsElement>
-                                            <span style={{fontSize: 18}}>
-                                                {review}
-                                            </span>
-                                                <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
-                                                Joe Biden from <span style={{fontWeight: 500}}>Reddit</span>
-                                            </span>
-                                        </ItemReviewsElement>
-                                    ))}
-                                </ItemReviewsContainer>
-                                <ItemTextContainer>
-                                    <div dangerouslySetInnerHTML={{__html: props.text[el].content.slice(3, 300)}}/>
-                                    <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
-                                        <div dangerouslySetInnerHTML={{__html: props.text[el].title}}/>
-                                        {/*<i style={{fontWeight: 300, textAlign: "right"}}>by Annie Writer</i>*/}
+                {filteredText.map((el, index) => (
+                    <Item key={el.id || index}>
+                        <DataContainer>
+                            <ItemReviewsContainer>
+                                {el.reviews.map((review, reviewIndex) => (
+                                    <ItemReviewsElement key={reviewIndex}>
+                                    <span style={{ fontSize: 18 }}>
+                                        {review}
                                     </span>
-                                </ItemTextContainer>
-                                <Reaction>
-                                    <ReactionIconButton liked={el.liked} onClick={() => {
-                                        {
-                                            handleLikeClick(props.text[el].id)
-                                        }
-                                        props.text[el].liked = (props.text[el].liked) ? !props.text[el].liked : 1;
-
-                                    }}>
-                                        <svg className="w-[35px] h-[35px]" aria-hidden="true"
-                                             xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].liked ? "red" : "none"}
-                                             viewBox="0 0 24 24" stroke={props.text[el].liked ? "red" : "currentColor"}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                                        </svg>
-                                    </ReactionIconButton>
-                                    <ReactionIconButton saved={el.saved} onClick={() => {{
-                                        handleSavedClick(props.text[el].id)}
-                                        props.text[el].saved = (props.text[el].saved)? !props.text[el].saved : 1;
-
-                                    }}>
-                                        <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                             xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={props.text[el].saved ? "orange" : "none"}
-                                             viewBox="0 0 24 24">
-                                            <path stroke={props.text[el].saved ? "orange" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                                  d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
-                                        </svg>
-                                    </ReactionIconButton>
-                                </Reaction>
-                            </DataContainer>
-                            <ButtonsContainer>
-                                <StyledButton onClick={() => handleDislikeClick(props.text[el].genre)}>
-                                    Dislike
-                                </StyledButton>
-                                <StyledButton onClick={() => handleReadClick(props.text[el].id)}>
-                                    Read it!
-                                </StyledButton>
-                                <StyledButton onClick={() => handleLikeButtonClick(props.text[el].genre)}>
-                                    Like
-                                </StyledButton>
-                            </ButtonsContainer>
-                        </Item>
-                    ) : null
+                                        <span style={{ fontSize: 14, fontWeight: 300, textAlign: "right" }}>
+                                        Joe Biden from <span style={{ fontWeight: 500 }}>Reddit</span>
+                                    </span>
+                                    </ItemReviewsElement>
+                                ))}
+                            </ItemReviewsContainer>
+                            <ItemTextContainer>
+                                <div dangerouslySetInnerHTML={{ __html: el.content.slice(3, 300) }} />
+                                <span style={{ fontSize: 18, fontWeight: 500, textAlign: "right" }}>
+                                <div dangerouslySetInnerHTML={{ __html: el.title }} />
+                            </span>
+                            </ItemTextContainer>
+                            <Reaction>
+                                <ReactionIconButton liked={currentLikes.includes(el.id)} onClick={() => {
+                                    handleLikeClick(el.id);
+                                }}>
+                                    <svg className="w-[35px] h-[35px]" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={currentLikes.includes(el.id) ? "red" : "none"}
+                                         viewBox="0 0 24 24" stroke={currentLikes.includes(el.id) ? "red" : "currentColor"}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                              d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                    </svg>
+                                </ReactionIconButton>
+                                <ReactionIconButton saved={currentSaved.includes(el.id)} onClick={() => {
+                                    handleSavedClick(el.id)}
+                                }>
+                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={currentSaved.includes(el.id) ? "orange" : "none"}
+                                         viewBox="0 0 24 24">
+                                        <path stroke={currentSaved.includes(el.id) ? "orange" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                              d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
+                                    </svg>
+                                </ReactionIconButton>
+                            </Reaction>
+                        </DataContainer>
+                        <ButtonsContainer>
+                            <StyledButton onClick={() => handleDislikeClick(el.genre)}>
+                                Dislike
+                            </StyledButton>
+                            <StyledButton onClick={() => handleReadClick(el.id)}>
+                                Read it!
+                            </StyledButton>
+                            <StyledButton onClick={() => handleLikeButtonClick(el.genre)}>
+                                Like
+                            </StyledButton>
+                        </ButtonsContainer>
+                    </Item>
                 ))}
-                {state.length !== props.text.length && <Loader ref={ref}>Loading...</Loader>}
+                {filteredText.length === 0 && <Loader>No matches found</Loader>}
             </List>
         </>
     );
@@ -201,8 +233,6 @@ const ScrollContainer = (props) => {
 export default ScrollContainer;
 
 const List = styled.div`
-    //margin-top: 3vh;
-    //margin-bottom: 2vh;
     max-height: 90vh;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
@@ -213,8 +243,17 @@ const List = styled.div`
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
-        display: none; /* for Chrome, Safari, and Opera */
+        display: none;
     }
+`;
+
+const SearchInput = styled.input`
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 `;
 
 const ButtonsContainer = styled.div`
@@ -224,21 +263,6 @@ const ButtonsContainer = styled.div`
     gap: 25px;
 `;
 
-const LikeButton = styled.button`
-    background-color: green;
-    color: white;
-    &:hover {
-        background-color: darkgreen;
-    }
-`;
-
-const DislikeButton = styled.button`
-    background-color: red;
-    color: white;
-    &:hover {
-        background-color: darkred;
-    }
-`;
 
 const Item = styled.div`
     margin: 0 20px 20px 20px;

@@ -4,9 +4,18 @@ import HeaderDef from "../components/Header";
 import { rtdb } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import ScrollContainer from "../components/ScrollContainer";
+import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 const MainPage = () => {
     const [allData, setAllData] = useState([]);
+    const auth = getAuth();
+
+    setPersistence(auth, browserSessionPersistence)
+        .then(() => {
+        })
+        .catch((error) => {
+            console.error("Persistence setup failed:", error);
+        });
 
     useEffect(() => {
         const worksRef = ref(rtdb, `works`);
