@@ -81,9 +81,17 @@ const RegistrationForm = () => {
     }
 
     const handleGoogleSignIn = async () => {
-        const provider = new GoogleAuthProvider();
+        const googleProvider = new GoogleAuthProvider();
+        googleProvider.addScope('https://www.googleapis.com/auth/calendar');
+        googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
+        googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+        googleProvider.addScope('openid');
+
+        googleProvider.setCustomParameters({
+            prompt: 'select_account consent',
+        });
         try {
-            const result = await signInWithPopup(auth, provider);
+            const result = await signInWithPopup(auth, googleProvider);
             navigate("/main_page");
         } catch (error) {
             console.error(error.message);
