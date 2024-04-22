@@ -91,6 +91,7 @@ const RegistrationForm = () => {
             prompt: 'select_account consent',
         });
         try {
+            
             const result = await signInWithPopup(auth, googleProvider);
             navigate("/main_page");
         } catch (error) {
