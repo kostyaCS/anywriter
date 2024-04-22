@@ -18,13 +18,12 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-        # cache: 'npm'
 
     - name: Install Dependencies
       run: npm install 
 
     - name: Set up Google Cloud Platform
-      uses: google-github-actions/setup-gcloud@latest
+      uses: google-github-actions/setup-gcloud@v0.10.0
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
@@ -42,4 +41,3 @@ jobs:
       run: gcloud app deploy --quiet --project ${{ secrets.GCP_PROJECT_ID }}
       env:
         CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
-
