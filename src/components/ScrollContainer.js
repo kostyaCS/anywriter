@@ -17,13 +17,19 @@ const ScrollContainer = (props) => {
     const [currIds, setCurrIds] = useState(props.text.map(obj => obj.id)[0]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredText, setFilteredText] = useState(props.text);
+    const [selectedGenres, setSelectedGenres] = useState([]);
+
+    const genreData = [ "Хорор", "Фентезі", "Наукова фантастика", "Містика",
+        "Трилер", "Історичний", "Романтичний роман", "Детектив"];
+
 
     useEffect(() => {
-        const filtered = props.text.filter((item) =>
-            item.title.toLowerCase().includes(searchQuery.toLowerCase())
+        const filtered = props.text.filter(item =>
+            item.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            (selectedGenres.length === 0 || selectedGenres.includes(item.genre))
         );
         setFilteredText(filtered);
-    }, [searchQuery, props.text]);
+    }, [searchQuery, selectedGenres, props.text]);
 
 
     useEffect(() => {
@@ -68,6 +74,15 @@ const ScrollContainer = (props) => {
         };
     }, []);
 
+    const handleGenreChange = (genre) => {
+        setSelectedGenres(prevGenres => {
+            if (prevGenres.includes(genre)) {
+                return prevGenres.filter(g => g !== genre);
+            } else {
+                return [...prevGenres, genre];
+            }
+        });
+    };
 
     const handleLikeClick = async (workId) => {
         let updatedLikes = [...currentLikes];
@@ -118,6 +133,10 @@ const ScrollContainer = (props) => {
         navigate(`/work/${workId}`);
     }
 
+    useEffect(() => {
+        console.log(selectedGenres);
+    }, [selectedGenres]);
+
     const sendFeedback = async (genre, like) => {
         try {
             // Send feedback
@@ -135,7 +154,6 @@ const ScrollContainer = (props) => {
                 console.error('Failed to send feedback');
             }
 
-            // Get recommendations
             const recommendationResponse = await fetch('http://127.0.0.1:5000/recommendations');
             if (recommendationResponse.ok) {
                 const recommendation = await recommendationResponse.json();
@@ -166,6 +184,24 @@ const ScrollContainer = (props) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
+            <Text>
+                Жанри
+            </Text>
+            <GenreCheckboxes>
+                {genreData.map((genre, index) => (
+                    <CheckboxContainer key={index}>
+                        <input
+                            type="checkbox"
+                            id={`checkbox-${genre}`}
+                            name="genres"
+                            value={genre}
+                            checked={selectedGenres.includes(genre)}
+                            onChange={() => handleGenreChange(genre)}
+                        />
+                        <label htmlFor={`checkbox-${genre}`}>{genre}</label>
+                    </CheckboxContainer>
+                ))}
+            </GenreCheckboxes>
             <List>
                 {filteredText.map((el, index) => (
                     <Item key={el.id || index}>
@@ -246,6 +282,19 @@ const List = styled.div`
         display: none;
     }
 `;
+
+const CheckboxContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+`;
+
+const GenreCheckboxes = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
+`;
+
 
 const SearchInput = styled.input`
     width: 100%;
