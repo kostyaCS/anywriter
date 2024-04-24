@@ -54,9 +54,3 @@ export default MainPage;
 const MainContainer = styled.div`
     overflow: hidden;
 `;
-
-const WorkItem = styled.div`
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-`;

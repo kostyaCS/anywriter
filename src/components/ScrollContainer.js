@@ -5,6 +5,7 @@ import {useAuth} from "../AuthContext";
 import {ref as firebaseRef, get, set} from "firebase/database"
 import { rtdb } from "../firebase";
 import { useNavigate } from 'react-router-dom';
+import CheckboxGroup from "./CheckBoxGroup";
 
 const ScrollContainer = (props) => {
     const { currentUser } = useAuth();
@@ -18,18 +19,40 @@ const ScrollContainer = (props) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredText, setFilteredText] = useState(props.text);
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState([]);
+    const [selectedFormats, setSelectedFormats] = useState([]);
+    const [selectedEmotions, setSelectedEmotions] = useState([]);
 
     const genreData = [ "Хорор", "Фентезі", "Наукова фантастика", "Містика",
         "Трилер", "Історичний", "Романтичний роман", "Детектив"];
 
+    const interestsData = ["Подорожі", "Живопис", "Скульптура",
+        "Музика", "Театр", "Історія", "Кіно", "Спорт",
+    ];
+
+    const formatData = ["Нарис", "Лист", "Новела", "Оповідання", "Спогад", "Легенда",];
+
+    const emotionsData = ["Радість", "Сум", "Спокій", "Страх",];
+
 
     useEffect(() => {
-        const filtered = props.text.filter(item =>
-            item.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            (selectedGenres.length === 0 || selectedGenres.includes(item.genre))
-        );
+        const filtered = props.text.filter(item => {
+            const titleMatches = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+            const itemGenres = Array.isArray(item.genre) ? item.genre : [item.genre];
+            const genreMatches = selectedGenres.length === 0 ||
+                selectedGenres.some(genre => itemGenres.includes(genre));
+
+            const itemInterests = Array.isArray(item.interests) ? item.interests : [item.interests];
+            const interestsMatch = selectedInterests.length === 0 ||
+                selectedInterests.some(interest => itemInterests.includes(interest));
+
+            return titleMatches && genreMatches && interestsMatch;
+        });
+
         setFilteredText(filtered);
-    }, [searchQuery, selectedGenres, props.text]);
+    }, [searchQuery, selectedGenres, selectedInterests, props.text]);
+
 
 
     useEffect(() => {
@@ -73,16 +96,6 @@ const ScrollContainer = (props) => {
             isActive = false;
         };
     }, []);
-
-    const handleGenreChange = (genre) => {
-        setSelectedGenres(prevGenres => {
-            if (prevGenres.includes(genre)) {
-                return prevGenres.filter(g => g !== genre);
-            } else {
-                return [...prevGenres, genre];
-            }
-        });
-    };
 
     const handleLikeClick = async (workId) => {
         let updatedLikes = [...currentLikes];
@@ -184,40 +197,53 @@ const ScrollContainer = (props) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Text>
-                Жанри
-            </Text>
-            <GenreCheckboxes>
-                {genreData.map((genre, index) => (
-                    <CheckboxContainer key={index}>
-                        <input
-                            type="checkbox"
-                            id={`checkbox-${genre}`}
-                            name="genres"
-                            value={genre}
-                            checked={selectedGenres.includes(genre)}
-                            onChange={() => handleGenreChange(genre)}
-                        />
-                        <label htmlFor={`checkbox-${genre}`}>{genre}</label>
-                    </CheckboxContainer>
-                ))}
-            </GenreCheckboxes>
+            <CheckboxGroup
+                title="Жанри"
+                options={genreData}
+                selectedValues={selectedGenres}
+                onChange={setSelectedGenres}
+            />
+            <CheckboxGroup
+                title="Інтереси"
+                options={interestsData}
+                selectedValues={selectedInterests}
+                onChange={setSelectedInterests}
+            />
+            <CheckboxGroup
+                title="Формати"
+                options={formatData}
+                selectedValues={selectedFormats}
+                onChange={setSelectedFormats}
+            />
+            <CheckboxGroup
+                title="Емоція"
+                options={emotionsData}
+                selectedValues={selectedEmotions}
+                onChange={setSelectedEmotions}
+            />
             <List>
                 {filteredText.map((el, index) => (
                     <Item key={el.id || index}>
                         <DataContainer>
                             <ItemReviewsContainer>
-                                {el.reviews.map((review, reviewIndex) => (
-                                    <ItemReviewsElement key={reviewIndex}>
-                                    <span style={{ fontSize: 18 }}>
-                                        {review}
-                                    </span>
-                                        <span style={{ fontSize: 14, fontWeight: 300, textAlign: "right" }}>
-                                        Joe Biden from <span style={{ fontWeight: 500 }}>Reddit</span>
-                                    </span>
+                                { (el.reviews || []).length > 0 ? (
+                                    el.reviews.map((review, reviewIndex) => (
+                                        <ItemReviewsElement key={reviewIndex}>
+                <span style={{ fontSize: 18 }}>
+                    {review}
+                </span>
+                                            <span style={{ fontSize: 14, fontWeight: 300, textAlign: "right" }}>
+                    Joe Biden from <span style={{ fontWeight: 500 }}>Reddit</span>
+                </span>
+                                        </ItemReviewsElement>
+                                    ))
+                                ) : (
+                                    <ItemReviewsElement>
+                                        <span style={{ fontSize: 18 }}>No reviews</span>
                                     </ItemReviewsElement>
-                                ))}
+                                )}
                             </ItemReviewsContainer>
+
                             <ItemTextContainer>
                                 <div dangerouslySetInnerHTML={{ __html: el.content.slice(3, 300) }} />
                                 <span style={{ fontSize: 18, fontWeight: 500, textAlign: "right" }}>
@@ -444,14 +470,4 @@ const DataContainer = styled.div`
     justify-content: space-evenly;
     align-content: center;
     align-items: center;
-`;
-
-const AuthorContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-left: 9%;
 `;

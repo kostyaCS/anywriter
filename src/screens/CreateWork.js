@@ -88,7 +88,8 @@ const CreateWork = () => {
                 emotion: getLabels(selectedEmotion),
                 format: getLabels(selectedFormat),
                 genre: getLabels(selectedGenre),
-                interests: getLabels(selectedInterest)
+                interests: getLabels(selectedInterest),
+                reviews: [],
             });
             console.log('Work saved successfully!');
         } catch (error) {
