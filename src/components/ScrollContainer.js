@@ -189,65 +189,85 @@ const ScrollContainer = (props) => {
         sendFeedback(genre, true);
     }
 
+    const [isCheckboxVisible, setIsCheckboxVisible] = useState(false);
+
+    const toggleCheckboxVisibility = () => {
+        setIsCheckboxVisible((prevVisibility) => !prevVisibility);
+    };
+
     return (
         <>
-            <SearchInput
-                type="text"
-                placeholder="Search by title..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <CheckboxGroup
-                title="Жанри"
-                options={genreData}
-                selectedValues={selectedGenres}
-                onChange={setSelectedGenres}
-            />
-            <CheckboxGroup
-                title="Інтереси"
-                options={interestsData}
-                selectedValues={selectedInterests}
-                onChange={setSelectedInterests}
-            />
-            <CheckboxGroup
-                title="Формати"
-                options={formatData}
-                selectedValues={selectedFormats}
-                onChange={setSelectedFormats}
-            />
-            <CheckboxGroup
-                title="Емоція"
-                options={emotionsData}
-                selectedValues={selectedEmotions}
-                onChange={setSelectedEmotions}
-            />
+            <style>
+                @import
+                url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+            </style>
+            <ScrollHeader>
+                <ToggleCheckboxButton onClick={toggleCheckboxVisibility}>
+                    Toggle Filters
+                </ToggleCheckboxButton>
+                <SearchInput
+                    type="text"
+                    placeholder="Search by title..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+            </ScrollHeader>
+            {isCheckboxVisible && (
+                <>
+                    {/* Checkbox groups */}
+                    <CheckboxGroup
+                        title="Жанри"
+                        options={genreData}
+                        selectedValues={selectedGenres}
+                        onChange={setSelectedGenres}
+                    />
+                    <CheckboxGroup
+                        title="Інтереси"
+                        options={interestsData}
+                        selectedValues={selectedInterests}
+                        onChange={setSelectedInterests}
+                    />
+                    <CheckboxGroup
+                        title="Формати"
+                        options={formatData}
+                        selectedValues={selectedFormats}
+                        onChange={setSelectedFormats}
+                    />
+                    <CheckboxGroup
+                        title="Емоція"
+                        options={emotionsData}
+                        selectedValues={selectedEmotions}
+                        onChange={setSelectedEmotions}
+                    />
+                </>
+            )}
             <List>
                 {filteredText.map((el, index) => (
                     <Item key={el.id || index}>
                         <DataContainer>
                             <ItemReviewsContainer>
-                                { (el.reviews || []).length > 0 ? (
+                                {(el.reviews || []).length > 0 ? (
                                     el.reviews.map((review, reviewIndex) => (
                                         <ItemReviewsElement key={reviewIndex}>
-                <span style={{ fontSize: 18 }}>
+                <span style={{fontSize: 18}}>
                     {review}
                 </span>
-                                            <span style={{ fontSize: 14, fontWeight: 300, textAlign: "right" }}>
-                    Joe Biden from <span style={{ fontWeight: 500 }}>Reddit</span>
+                                            <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
+                    Joe Biden from <span style={{fontWeight: 500}}>Reddit</span>
                 </span>
                                         </ItemReviewsElement>
                                     ))
                                 ) : (
                                     <ItemReviewsElement>
-                                        <span style={{ fontSize: 18 }}>No reviews</span>
+                                        <span style={{fontSize: 18}}>No reviews</span>
                                     </ItemReviewsElement>
                                 )}
                             </ItemReviewsContainer>
 
                             <ItemTextContainer>
-                                <div dangerouslySetInnerHTML={{ __html: el.content.slice(3, 300) }} />
-                                <span style={{ fontSize: 18, fontWeight: 500, textAlign: "right" }}>
-                                <div dangerouslySetInnerHTML={{ __html: el.title }} />
+                                <div dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
+                                <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
+                                <div dangerouslySetInnerHTML={{__html: el.title}}/>
                             </span>
                             </ItemTextContainer>
                             <Reaction>
@@ -255,33 +275,32 @@ const ScrollContainer = (props) => {
                                     handleLikeClick(el.id);
                                 }}>
                                     <svg className="w-[35px] h-[35px]" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={currentLikes.includes(el.id) ? "red" : "none"}
-                                         viewBox="0 0 24 24" stroke={currentLikes.includes(el.id) ? "red" : "currentColor"}>
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                         fill={currentLikes.includes(el.id) ? "red" : "none"}
+                                         viewBox="0 0 24 24"
+                                         stroke={currentLikes.includes(el.id) ? "red" : "currentColor"}>
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
                                               d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
                                     </svg>
                                 </ReactionIconButton>
                                 <ReactionIconButton saved={currentSaved.includes(el.id)} onClick={() => {
-                                    handleSavedClick(el.id)}
+                                    handleSavedClick(el.id)
+                                }
                                 }>
                                     <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill={currentSaved.includes(el.id) ? "orange" : "none"}
+                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                         fill={currentSaved.includes(el.id) ? "orange" : "none"}
                                          viewBox="0 0 24 24">
-                                        <path stroke={currentSaved.includes(el.id) ? "orange" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                        <path stroke={currentSaved.includes(el.id) ? "orange" : "currentColor"}
+                                              strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
                                               d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
                                     </svg>
                                 </ReactionIconButton>
                             </Reaction>
                         </DataContainer>
                         <ButtonsContainer>
-                            <StyledButton onClick={() => handleDislikeClick(el.genre)}>
-                                Dislike
-                            </StyledButton>
                             <StyledButton onClick={() => handleReadClick(el.id)}>
                                 Read it!
-                            </StyledButton>
-                            <StyledButton onClick={() => handleLikeButtonClick(el.genre)}>
-                                Like
                             </StyledButton>
                         </ButtonsContainer>
                     </Item>
@@ -295,7 +314,8 @@ const ScrollContainer = (props) => {
 export default ScrollContainer;
 
 const List = styled.div`
-    max-height: 90vh;
+    margin-top: 20px;
+    max-height: 80vh;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     background: #fff;
@@ -322,14 +342,6 @@ const GenreCheckboxes = styled.div`
 `;
 
 
-const SearchInput = styled.input`
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-`;
 
 const ButtonsContainer = styled.div`
     display: flex;
@@ -351,6 +363,7 @@ const Item = styled.div`
     scroll-snap-align: start;
     min-height: 85vh;
     border-radius: 25px;
+    border: 2px solid #000;
     box-shadow: 0 10px 32px -15px rgba(0,0,0,0.75);
 
     background: #fff;
@@ -470,4 +483,46 @@ const DataContainer = styled.div`
     justify-content: space-evenly;
     align-content: center;
     align-items: center;
+`;
+
+const ToggleCheckboxButton = styled.button`
+    background-color: #ffffff;
+    border: 1.5px solid #000000;
+    color: black;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat Alternates", sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 6px 6px 0px 0px #81ADC8;
+    margin-left: 20px;
+
+    &:hover {
+        background-color: #ffddcf;
+    }
+`;
+
+
+const SearchInput = styled.input`
+    background-color: #ffffff;
+    border: 1.5px solid #000000;
+    color: black;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat Alternates", sans-serif;
+    transition: background-color 0.3s ease;
+    box-shadow: 6px 6px 0px 0px #81ADC8;
+    margin-right: 20px;
+`;
+
+const ScrollHeader = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
 `;

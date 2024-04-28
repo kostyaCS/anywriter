@@ -8,6 +8,7 @@ import { getAuth, setPersistence, browserSessionPersistence } from "firebase/aut
 
 const MainPage = () => {
     const [allData, setAllData] = useState([]);
+    const [activeTab, setActiveTab] = useState("all"); // Додано стан для відстеження активності кнопок
     const auth = getAuth();
 
     setPersistence(auth, browserSessionPersistence)
@@ -37,25 +38,37 @@ const MainPage = () => {
         };
     }, []);
 
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
 
     return (
         <>
             <HeaderDef />
             <MainContainer>
                 <Left>
-                    <LeftOpt>
-                        Liked
-                    </LeftOpt>
-                    <LeftOpt>
+                    <LeftOpt
+                        onClick={() => handleTabClick("all")}
+                        active={activeTab === "all"} // Змінено стиль кнопки в залежності від активності
+                    >
                         All
                     </LeftOpt>
-                    <LeftOpt>
+                    <LeftOpt
+                        onClick={() => handleTabClick("liked")}
+                        active={activeTab === "liked"} // Змінено стиль кнопки в залежності від активності
+                    >
+                        Liked
+                    </LeftOpt>
+                    <LeftOpt
+                        onClick={() => handleTabClick("saved")}
+                        active={activeTab === "saved"} // Змінено стиль кнопки в залежності від активності
+                    >
                         Saved
                     </LeftOpt>
                 </Left>
+                <DivLine />
                 <Right>
-
-                    <ScrollContainer text={allData} />
+                    <ScrollContainer text={allData.filter(item => activeTab === "all" || (activeTab === "liked" && item.liked) || (activeTab === "saved" && item.saved))} />
                 </Right>
             </MainContainer>
         </>
@@ -64,28 +77,45 @@ const MainPage = () => {
 
 export default MainPage;
 
-
 const MainContainer = styled.div`
     overflow: hidden;
+    display: flex;
+    flex-direction: row;
 `;
 
 const Left = styled.div`
-    width: 20%;
+    margin-top: 40px;
+    width: 15%;
     height: 100vh;
-    background-color: #f5f5f5;
+    background-color: white;
     float: left;
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
 `;
 
 const LeftOpt = styled.div`
     padding: 10px;
-    border-bottom: 1px solid #e0e0e0;
     cursor: pointer;
+    line-height: 18px;
+    font-size: 20px;
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 500;
+    background-color: ${props => props.active ? '#ccc' : 'transparent'}; // Додано стиль кнопки в залежності від активності
 `;
 
 const Right = styled.div`
-    width: 80%;
+    padding-left: 3%;
+    margin-top: 40px;
+    width: 79%;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: white;
     float: left;
 `;
 
+const DivLine = styled.div`
+    margin-top: 40px;
+    height: 400px;
+    width: 2px;
+    background-color: #d6d6d6;
+`;
