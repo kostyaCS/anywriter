@@ -5,6 +5,7 @@ import { rtdb } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import ScrollContainer from "../components/ScrollContainer";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
+import ProfileComponent from "../components/ProfileComponent";
 
 const MainPage = () => {
     const [allData, setAllData] = useState([]);
@@ -49,26 +50,36 @@ const MainPage = () => {
                 <Left>
                     <LeftOpt
                         onClick={() => handleTabClick("all")}
-                        active={activeTab === "all"} // Змінено стиль кнопки в залежності від активності
+                        active={activeTab === "all"}
                     >
                         All
                     </LeftOpt>
                     <LeftOpt
                         onClick={() => handleTabClick("liked")}
-                        active={activeTab === "liked"} // Змінено стиль кнопки в залежності від активності
+                        active={activeTab === "liked"}
                     >
                         Liked
                     </LeftOpt>
                     <LeftOpt
                         onClick={() => handleTabClick("saved")}
-                        active={activeTab === "saved"} // Змінено стиль кнопки в залежності від активності
+                        active={activeTab === "saved"}
                     >
                         Saved
+                    </LeftOpt>
+                    <LeftOpt
+                        onClick={() => handleTabClick("profile")}
+                        active={activeTab === "profile"}
+                    >
+                        Profile
                     </LeftOpt>
                 </Left>
                 <DivLine />
                 <Right>
-                    <ScrollContainer text={allData.filter(item => activeTab === "all" || (activeTab === "liked" && item.liked) || (activeTab === "saved" && item.saved))} />
+                    {activeTab === "profile" ? (
+                        <ProfileComponent/>
+                    ) : (
+                        <ScrollContainer text={allData.filter(item => activeTab === "all" || (activeTab === "liked" && item.liked) || (activeTab === "saved" && item.saved))} />
+                    )}
                 </Right>
             </MainContainer>
         </>
@@ -91,17 +102,19 @@ const Left = styled.div`
     float: left;
     display: flex;
     flex-direction: column;
-    margin-left: 50px;
+    margin-left: 60px;
+    margin-right: 10px;
 `;
 
 const LeftOpt = styled.div`
     padding: 10px;
     cursor: pointer;
+    border-radius: 10px;
     line-height: 18px;
     font-size: 20px;
     font-family: "Montserrat Alternates", sans-serif;
     font-weight: 500;
-    background-color: ${props => props.active ? '#ccc' : 'transparent'}; // Додано стиль кнопки в залежності від активності
+    background-color: ${props => props.active ? '#e3e3e3' : 'transparent'}; // Додано стиль кнопки в залежності від активності
 `;
 
 const Right = styled.div`

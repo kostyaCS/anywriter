@@ -87,22 +87,11 @@ const CheckboxContainer = styled.div`
             border: 1px solid #ccc;
             background-color: #fff;
         }
-        &:after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 7px;
-            width: 5px;
-            height: 10px;
-            border: solid #555;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-            opacity: 0;
-        }
+
     }
     input[type="checkbox"]:checked + label:before {
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: #81ADC8;
+        border-color: #81ADC8;
     }
     input[type="checkbox"]:checked + label:after {
         opacity: 1;

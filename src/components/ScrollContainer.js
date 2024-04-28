@@ -243,32 +243,12 @@ const ScrollContainer = (props) => {
             )}
             <List>
                 {filteredText.map((el, index) => (
-                    <Item key={el.id || index}>
+                    <Item key={el.id || index} onClick={() => handleReadClick(el.id)}>
                         <DataContainer>
-                            <ItemReviewsContainer>
-                                {(el.reviews || []).length > 0 ? (
-                                    el.reviews.map((review, reviewIndex) => (
-                                        <ItemReviewsElement key={reviewIndex}>
-                <span style={{fontSize: 18}}>
-                    {review}
-                </span>
-                                            <span style={{fontSize: 14, fontWeight: 300, textAlign: "right"}}>
-                    Joe Biden from <span style={{fontWeight: 500}}>Reddit</span>
-                </span>
-                                        </ItemReviewsElement>
-                                    ))
-                                ) : (
-                                    <ItemReviewsElement>
-                                        <span style={{fontSize: 18}}>No reviews</span>
-                                    </ItemReviewsElement>
-                                )}
-                            </ItemReviewsContainer>
-
                             <ItemTextContainer>
-                                <div dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
-                                <span style={{fontSize: 18, fontWeight: 500, textAlign: "right"}}>
-                                <div dangerouslySetInnerHTML={{__html: el.title}}/>
-                            </span>
+                                <ItemDate>28.05.2024</ItemDate>
+                                <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}/>
+                                <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
                             </ItemTextContainer>
                             <Reaction>
                                 <ReactionIconButton liked={currentLikes.includes(el.id)} onClick={() => {
@@ -297,12 +277,8 @@ const ScrollContainer = (props) => {
                                     </svg>
                                 </ReactionIconButton>
                             </Reaction>
+                            <ItemGenre>{el.genre}</ItemGenre>
                         </DataContainer>
-                        <ButtonsContainer>
-                            <StyledButton onClick={() => handleReadClick(el.id)}>
-                                Read it!
-                            </StyledButton>
-                        </ButtonsContainer>
                     </Item>
                 ))}
                 {filteredText.length === 0 && <Loader>No matches found</Loader>}
@@ -361,12 +337,44 @@ const Item = styled.div`
     align-items: center;
     align-content: center;
     scroll-snap-align: start;
-    min-height: 85vh;
+    min-height: 25vh;
     border-radius: 25px;
     border: 2px solid #000;
     box-shadow: 0 10px 32px -15px rgba(0,0,0,0.75);
-
+    font-family: "Montserrat Alternates", sans-serif;
     background: #fff;
+    cursor: pointer;
+`;
+
+const ItemTitle = styled.div`
+    font-size: 25px;
+    font-weight: 700;
+    text-align: left;
+    transition: transform 0.25s ease;
+    ${Item}:hover & {
+        transform: scale(1.01);
+    }
+`;
+
+const ItemText = styled.div`
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+`;
+
+const ItemDate = styled.div`
+    color: #CB6B6B;
+    font-size: 18px;
+    font-weight:600;
+    text-align: left;
+`;
+
+const ItemGenre = styled.div`
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight:400;
+    border: 1px solid #000;
 `;
 
 const StyledButton = styled.button`
@@ -397,7 +405,7 @@ const ItemTextContainer = styled.div`
     flex-direction: column;
     gap: 25px;
     width: 40%;
-    font-size: 30px;
+    font-size: 25px;
     text-align: left;
 `;
 
@@ -487,7 +495,7 @@ const DataContainer = styled.div`
 
 const ToggleCheckboxButton = styled.button`
     background-color: #ffffff;
-    border: 1.5px solid #000000;
+    border: 2px solid #000000;
     color: black;
     border-radius: 15px;
     padding: 10px 20px;
@@ -495,28 +503,34 @@ const ToggleCheckboxButton = styled.button`
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
     cursor: pointer;
-    transition: background-color 0.3s ease;
     box-shadow: 6px 6px 0px 0px #81ADC8;
     margin-left: 20px;
-
+    
+    transition: 0.4s ease;
     &:hover {
-        background-color: #ffddcf;
+        scale: 1.03;
+        box-shadow: 8px 8px 0px 0px #81ADC8;
     }
 `;
 
 
 const SearchInput = styled.input`
     background-color: #ffffff;
-    border: 1.5px solid #000000;
+    border: 2px solid #000000;
     color: black;
     border-radius: 15px;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
-    transition: background-color 0.3s ease;
     box-shadow: 6px 6px 0px 0px #81ADC8;
     margin-right: 20px;
+    
+    transition: 0.4s ease;
+    &:hover {
+        scale: 1.03;
+        box-shadow: 8px 8px 0px 0px #81ADC8;
+    }
 `;
 
 const ScrollHeader = styled.div`
