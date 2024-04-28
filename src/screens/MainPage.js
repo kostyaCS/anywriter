@@ -42,7 +42,21 @@ const MainPage = () => {
         <>
             <HeaderDef />
             <MainContainer>
-                <ScrollContainer text={allData} />
+                <Left>
+                    <LeftOpt>
+                        Liked
+                    </LeftOpt>
+                    <LeftOpt>
+                        All
+                    </LeftOpt>
+                    <LeftOpt>
+                        Saved
+                    </LeftOpt>
+                </Left>
+                <Right>
+
+                    <ScrollContainer text={allData} />
+                </Right>
             </MainContainer>
         </>
     );
@@ -54,3 +68,24 @@ export default MainPage;
 const MainContainer = styled.div`
     overflow: hidden;
 `;
+
+const Left = styled.div`
+    width: 20%;
+    height: 100vh;
+    background-color: #f5f5f5;
+    float: left;
+`;
+
+const LeftOpt = styled.div`
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+`;
+
+const Right = styled.div`
+    width: 80%;
+    height: 100vh;
+    background-color: #f0f0f0;
+    float: left;
+`;
+

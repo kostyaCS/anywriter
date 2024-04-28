@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
-import SmallLogo from "../images/AnyWriterSmallLogo.svg";
+import SmallLogo from "../images/logo.svg";
 
 const HeaderDef = () => {
     const { currentUser } = useAuth();
@@ -33,17 +33,32 @@ const HeaderDef = () => {
 
     return (
         <>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+            </style>
             <Header>
                 {currentUser?.email === "admin@gmail.com" && (
                     <Link to="/create_work">Add Text</Link>
                 )}
-                <HeaderText onClick={handleMyPageClick}>
-                    Моя сторінка
-                </HeaderText>
-                <StyledImage onClick={handleLogoClick} src={SmallLogo} />
-                <HeaderText onClick={handleLogout}>
-                    Вийти
-                </HeaderText>
+                <Logo onClick={handleLogoClick}>
+                    <img src={SmallLogo} alt="AnyWriter" />
+                </Logo>
+                <HeaderCenter>
+                    <HeaderText onClick={handleLogoClick}>
+                        Anywriter
+                    </HeaderText>
+                </HeaderCenter>
+                <HeaderRight>
+                    <HeaderText onClick={handleMyPageClick}>
+                        Profile
+                    </HeaderText>
+                    <HeaderText>
+                        Settings
+                    </HeaderText>
+                    <HeaderText onClick={handleLogout}>
+                        Log out
+                    </HeaderText>
+                </HeaderRight>
             </Header>
         </>
     );
@@ -52,6 +67,7 @@ const HeaderDef = () => {
 export default HeaderDef;
 
 const Header = styled.div`
+    background-color: #FDF7F4;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -59,21 +75,37 @@ const Header = styled.div`
     gap: 75px;
     padding-top: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid black;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
-    background-color: white;
-`;
-
-const StyledImage = styled.img`
-    cursor: pointer;
+    padding-left: 5%;
 `;
 
 const HeaderText = styled.div`
-    font-weight: 300;
     cursor: pointer;
     font-size: 16px;
     line-height: 18px;
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+`;
+
+const HeaderCenter = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    
+`;
+
+const Logo = styled.div`
+    width: 50px;
+    cursor: pointer;
+`;
+
+const HeaderRight = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    margin-left: auto;
+    margin-right: 5%;
 `;
