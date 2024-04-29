@@ -243,11 +243,11 @@ const ScrollContainer = (props) => {
             )}
             <List>
                 {filteredText.map((el, index) => (
-                    <Item key={el.id || index} onClick={() => handleReadClick(el.id)}>
+                    <Item key={el.id || index}>
                         <DataContainer>
                             <ItemTextContainer>
                                 <ItemDate>28.05.2024</ItemDate>
-                                <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}/>
+                                <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}  onClick={() => handleReadClick(el.id)}/>
                                 <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
                             </ItemTextContainer>
                             <Reaction>
@@ -343,7 +343,6 @@ const Item = styled.div`
     box-shadow: 0 10px 32px -15px rgba(0,0,0,0.75);
     font-family: "Montserrat Alternates", sans-serif;
     background: #fff;
-    cursor: pointer;
 `;
 
 const ItemTitle = styled.div`
@@ -354,6 +353,7 @@ const ItemTitle = styled.div`
     ${Item}:hover & {
         transform: scale(1.01);
     }
+    cursor: pointer;
 `;
 
 const ItemText = styled.div`
