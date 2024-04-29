@@ -15,20 +15,26 @@ const GoogleButton = (props) => {
 export default GoogleButton;
 
 const StyledButton = styled.button`
-    border: 1px solid #2100A3;
-    border-radius: 5px;
+    border: 1px solid #333333;
+    border-radius: 40px;
     display: flex;
     justify-content: center; 
     align-items: center;
     gap: 10px;
-    width: 420px;
-    height: 50px;
-    font-weight: 700;
+    width: 360px;
+    height: 55px;
     font-size: 16px;
+    font-family: 'Montserrat Alternates', sans-serif;
     line-height: 18px;
-    color: #2100A3;
+    color: black;
     cursor: pointer;
     background-color: white;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        transform: translateY(-0.1mm);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
 `;
 
 const GoogleImage = styled.img`

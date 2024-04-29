@@ -28,22 +28,24 @@ const ExtraSingInContainer = styled.div`
 `;
 
 const ExtraSingInText = styled.span`
-    color: black;
-    font-size: 14px;
+    color: #4D4D4D;
+    font-size: 19px;
+    font-weight: 500;
 `;
 
 const ExtraSingInButton = styled.button`
     background: none;
-    color: #160070;
+    color: black;
     border: none;
     padding: 0;
     font: inherit;
-    font-size: 14px;
+    font-size: 19px;
     font-weight: 600;
+    text-decoration: underline;
     cursor: pointer;
     outline: inherit;
-    transition: all 0.25s ease-in-out;
+    transition: all 0.2s ease-in-out;
     &:hover {
-        color: #6a56f1;
+        color: #915F6D;
     }
 `;

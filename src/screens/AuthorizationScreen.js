@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import AnyWriterImage from "../images/AnyWriter.svg"
+import doodle from "../images/doodle.png";
+import spiral from "../images/spiral.png";
+import three_stars from "../images/three_stars.png";
 import styled from 'styled-components';
 import OrLineSeparator from "../components/OrLineSeparator";
 import "../App.css"
 import { auth } from "../firebase";
 import {
     signInWithEmailAndPassword, signInWithPopup,
-    GoogleAuthProvider, onAuthStateChanged
+    GoogleAuthProvider
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import BlueButton from "../components/BlueButton";
 import GoogleButton from "../components/GoogleButton";
 import InvalidInput from "../components/InvalidInput";
+import ExtraRedirectContainer from "../components/ExtraRedirectContainer";
+import ContinueButton from "../components/ContinueButton";
 
 const AuthorizationScreen = () => {
     const navigate = useNavigate();
@@ -27,7 +30,7 @@ const AuthorizationScreen = () => {
             setInvalidEmail("");
             return true;
         }
-        setInvalidEmail("Неправильний формат адреси електронної пошти.");
+        setInvalidEmail("Invalid email format.");
         return false;
     };
 
@@ -60,74 +63,113 @@ const AuthorizationScreen = () => {
     }
 
     return (
-        <>
+        <Container>
+            <StyledSpiralImage src={spiral} alt="spiral" />
             <Main>
-                <LeftWindow>
-                    <StyledImage src={AnyWriterImage} />
-                </LeftWindow>
-                <VerticalLineSeparator />
-                <RightWindow>
-                    <InputField placeholder="Електронна пошта" value={email}
-                        onChange={(e) => setEmail(e.target.value)} />
-                    {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
-                    <InputField type="password" placeholder="Пароль" value={password}
-                        onChange={(e) => setPassword(e.target.value)} />
-                    <BlueButton onClick={handleSignIn} text="Продовжити" />
-                    <OrLineSeparator text="або" />
-                    <GoogleButton onClick={handleGoogleSignIn}
-                        text="Зареєструвати за допомогою Google"
-                    />
-                    <BlueButton onClick={handleRedirect} text="Зареєструвати акаунт" />
-                </RightWindow>
+                <Title>
+                    <StyledImage src={doodle} alt="doodle" />
+                    <TitleText>Log in</TitleText>
+                </Title>
+                <ExtraRedirectContainer onClick={handleRedirect}
+                                        text="Not a member?"
+                                        redirectButton="Sign up"
+                />
+                <HorizontalLineSeparator/>
+                <Subtitle>Email</Subtitle>
+                <InputField placeholder="Email" value={email}
+                    onChange={(e) => setEmail(e.target.value)} />
+                {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
+                <Subtitle>Password</Subtitle>
+                <InputField type="password" placeholder="Password" value={password}
+                    onChange={(e) => setPassword(e.target.value)} />
+                <ContinueButton onClick={handleSignIn} text="LOG IN"/>
+                <OrLineSeparator text="OR" />
+                <GoogleButton onClick={handleGoogleSignIn}
+                    text="Continue with Google"
+                />
             </Main>
-        </>
+            <StyledStarsImage src={three_stars} alt="three_stars" />
+        </Container>
     )
 };
 
 export default AuthorizationScreen;
 
-const Main = styled.div`
+const Container = styled.div`
     display: flex;
-    max-height: 100vh;
-    justify-content: center;
-    align-items: center;
     flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+    font-family: 'Montserrat Alternates';
 `;
 
-const VerticalLineSeparator = styled.div`
+const Main = styled.div`
     height: 100vh;
-    width: 1px;
-    background-color: #282c34;
+    width: 50vw;
+    max-height: 100vh;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat Alternates';
+`;
+
+const Title = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 `;
 
 const StyledImage = styled.img`
-    width: auto;
+    width: 67px;
     height: auto;
     max-height: 100%;
+    margin-right: -50px;
 `;
 
-const LeftWindow = styled.div`
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+const TitleText = styled.h1`
+    font-size: 50px;
+    margin: 0 0 20px 0;
 `;
 
-const RightWindow = styled.div`
-    width: 50%;
-    display: flex;
-    justify-content: center; 
-    gap: 10px;
-    align-items: center;
-    flex-direction: column;
+const HorizontalLineSeparator = styled.div`
+    width: 450px;
+    height: 0.15mm;
+    background-color: #4D4D4D;
+    margin: 30px 0 20px 0;
+`;
+
+const Subtitle = styled.h4`
+    width: 450px;
+    font-size: 15px;
+    margin: 12px 0;
 `;
 
 const InputField = styled.input`
-    border: 1px solid #9B9B9B;
-    border-radius: 5px;
-    width: 420px;
-    padding-left: 20px;
+    font-size: 14px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    width: 450px;
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 0 10px 0 20px;
     height: 50px;
     box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    }
+`;
+
+const StyledSpiralImage = styled.img`
+    width: 75px;
+    height: auto;
+    margin-bottom: 20vh;
+`;
+
+const StyledStarsImage = styled.img`
+    width: 65px;
+    height: auto;
+    margin-bottom: 55vh;
 `;
