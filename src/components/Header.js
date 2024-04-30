@@ -49,9 +49,6 @@ const HeaderDef = () => {
                     </HeaderText>
                 </HeaderCenter>
                 <HeaderRight>
-                    <HeaderText onClick={handleMyPageClick}>
-                        Profile
-                    </HeaderText>
                     <HeaderText>
                         Settings
                     </HeaderText>

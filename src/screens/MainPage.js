@@ -2,22 +2,76 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import HeaderDef from "../components/Header";
 import { rtdb } from "../firebase";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, get } from "firebase/database";
 import ScrollContainer from "../components/ScrollContainer";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 import ProfileComponent from "../components/ProfileComponent";
+import {useAuth} from "../AuthContext";
 
 const MainPage = () => {
     const [allData, setAllData] = useState([]);
-    const [activeTab, setActiveTab] = useState("all"); // Додано стан для відстеження активності кнопок
-    const auth = getAuth();
+    const [activeTab, setActiveTab] = useState("all");
+    const { currentUser } = useAuth();
 
-    setPersistence(auth, browserSessionPersistence)
-        .then(() => {
-        })
-        .catch((error) => {
-            console.error("Persistence setup failed:", error);
+
+    useEffect(() => {
+        if (!currentUser) return;
+
+        const fetchWorks = async () => {
+            if (activeTab === "all") {
+                const worksRef = ref(rtdb, "works");
+                const snapshot = await get(worksRef);
+                if (!snapshot.exists()) {
+                    setAllData([]);
+                    return;
+                }
+
+                const worksData = snapshot.val();
+                const allWorks = Object.keys(worksData).map(key => ({
+                    id: key,
+                    ...worksData[key]
+                }));
+                setAllData(allWorks);
+            } else {
+                const userWorksRef = ref(rtdb, `users/${currentUser.uid}/${activeTab}`);
+                const userSnapshot = await get(userWorksRef);
+                if (!userSnapshot.exists()) {
+                    setAllData([]);
+                    return;
+                }
+
+                const ids = userSnapshot.val() || [];
+                const worksPromises = ids.map(id => {
+                    const workRef = ref(rtdb, `works/${id}`);
+                    return new Promise((resolve) => {
+                        onValue(workRef, (snapshot) => {
+                            resolve(snapshot.exists() ? { id: snapshot.key, ...snapshot.val() } : null);
+                        });
+                    });
+                });
+
+                const fetchedWorks = await Promise.all(worksPromises);
+                setAllData(fetchedWorks.filter(Boolean));
+            }
+        };
+        fetchWorks();
+    }, [activeTab, currentUser]);
+
+    useEffect(() => {
+        if (!currentUser || activeTab === "all") return;
+
+        const userWorksRef = ref(rtdb, `users/${currentUser.uid}/${activeTab}`);
+        const unsubscribe = onValue(userWorksRef, (snapshot) => {
+            const ids = snapshot.val() || [];
+            const updatedData = allData.filter(work => ids.includes(work.id));
+            setAllData(updatedData);
         });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [activeTab, currentUser, allData]);
+
 
     useEffect(() => {
         const worksRef = ref(rtdb, `works`);
@@ -34,10 +88,12 @@ const MainPage = () => {
             }
 
             setAllData(allContents);
+            console.log(allContents)
         });
         return () => {
         };
     }, []);
+
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -78,7 +134,7 @@ const MainPage = () => {
                     {activeTab === "profile" ? (
                         <ProfileComponent/>
                     ) : (
-                        <ScrollContainer text={allData.filter(item => activeTab === "all" || (activeTab === "liked" && item.liked) || (activeTab === "saved" && item.saved))} />
+                        <ScrollContainer text={allData} />
                     )}
                 </Right>
             </MainContainer>

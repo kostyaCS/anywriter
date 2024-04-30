@@ -53,8 +53,6 @@ const ScrollContainer = (props) => {
         setFilteredText(filtered);
     }, [searchQuery, selectedGenres, selectedInterests, props.text]);
 
-
-
     useEffect(() => {
         if (props.text && currIds === undefined) {
             setCurrIds(props.text.map(obj => obj.id)[0]);
