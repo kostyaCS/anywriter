@@ -3,24 +3,24 @@ import styled from 'styled-components';
 import OrLineSeparator from "./OrLineSeparator";
 import { useNavigate } from "react-router-dom";
 import { auth, rtdb } from "../firebase";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { ref, push, set } from '@firebase/database';
-import { getAuth } from "firebase/auth";
+import {createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, getAuth} from "firebase/auth";
+import {ref, set} from "@firebase/database";
 import "react-datepicker/dist/react-datepicker.css";
-import BlueButton from "../components/BlueButton";
 import GoogleButton from "../components/GoogleButton";
 import InvalidInput from "../components/InvalidInput";
 import ExtraRedirectContainer from "../components/ExtraRedirectContainer";
-import InputTitle from "../components/InputTitle";
 import StyledDatePicker from "./StyledDatePicker";
-import Options from "./Options";
-import InputQuestion from "./InputQuestion";
+import doodle from "../images/doodle.png";
+import spiral from "../images/spiral.png";
+import three_stars from "../images/three_stars.png";
+import ContinueButton from "./ContinueButton";
 
 
 const RegistrationForm = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [nickname, setNickname] = useState("");
 
     const subtractYears = (date, years) => {
         return new Date(date.getTime()).setFullYear(date.getFullYear() - years);
@@ -30,8 +30,7 @@ const RegistrationForm = () => {
     const [invalidEmailMessage, setInvalidEmail] = useState("");
     const [invalidPasswordMessage, setInvalidPassword] = useState("");
     const [invalidDateMessage, setInvalidDate] = useState("");
-
-    const [displayQuestions, setDisplayQuestions] = useState(false);
+    const [invalidNicknameMessage, setInvalidNickname] = useState("");
 
     const checkEmail = (email) => {
         if (String(email).match(
@@ -40,16 +39,16 @@ const RegistrationForm = () => {
             setInvalidEmail("");
             return true;
         }
-        setInvalidEmail("Неправильний формат адреси електронної пошти.");
+        setInvalidEmail("Invalid email format.");
         return false;
     };
 
     const checkPassword = (password) => {
         if (password.length < 8) {
-            setInvalidPassword("Пароль має містити мінімум 7 символів.");
+            setInvalidPassword("Password must contain at least 7 characters.");
             return false;
         } else if (!/[A-Z]/.test(password)) {
-            setInvalidPassword("Пароль має містити принаймні одну велику літеру.");
+            setInvalidPassword("Password must contain at least one capital letter.");
             return false;
         }
         setInvalidPassword("");
@@ -58,22 +57,35 @@ const RegistrationForm = () => {
 
     const checkDate = (date) => {
         if (date == null) {
-            setInvalidDate("Введіть дату народження.");
+            setInvalidDate("Enter birthdate.");
             return false;
         }
         setInvalidDate("");
         return true;
     };
 
-    const checkInputData = (email, password, date) => {
-        return checkEmail(email) && checkPassword(password) && checkDate(date);
+    const checkNickname = (nickname) => {
+        // TODO: save in db and check if nickname exists
+        // if (nickname exists) {
+        //     setInvalidDate("Nickname already exists.");
+        //     return false;
+        // }
+        setInvalidNickname("");
+        return true;
+    };
+
+    const checkInputData = () => {
+        return checkEmail(email) && checkPassword(password) && checkDate(startDate) && checkNickname(nickname);
     };
 
     const handleRegister = async () => {
+        if (!checkInputData()) { return; }
+
         try {
             const userCred = await createUserWithEmailAndPassword(auth, email, password);
             setEmail("");
             setPassword("");
+            setNickname("");
             navigate("/main_page");
         } catch (err) {
             console.log(err.message)
@@ -99,23 +111,16 @@ const RegistrationForm = () => {
         }
     };
 
-    const getLabels = (options) => {
-        return options ? options.map(item => item.label) : [];
-    }
+    const saveInfoAboutUser = async () => {
+        if (!checkInputData(email, password, startDate)) { return; }
 
-    const saveInfoAboutUser = async (selectedDate) => {
         console.log('Attempting to save info about user');
         try {
             const auth = getAuth();
             const currentUserRef = ref(rtdb, `users/${auth.currentUser.uid}`);
             await set(currentUserRef, {
-                userPref: {
-                    age: getLabels(selectedAgeOption),
-                    emotion: getLabels(selectedEmotionOption),
-                    format: getLabels(selectedFormatOption),
-                    genre: getLabels(selectedGenreOption),
-                    interests: getLabels(selectedInterestOption)
-                }
+                nickname: nickname,
+                birthdate: startDate
             });
             console.log('User saved successfully!');
         } catch (e) {
@@ -127,162 +132,130 @@ const RegistrationForm = () => {
         navigate("/");
     }
 
-    const handleNext = async () => {
-        if (!checkInputData(email, password, startDate)) {
-            return;
-        }
-        setDisplayQuestions(true);
-    }
-
-    const handlePrevious = async () => {
-        setDisplayQuestions(false);
-    }
-
-    const [selectedAgeOption, setSelectedAgeOption] = useState();
-    const [selectedEmotionOption, setSelectedEmotionOption] = useState();
-    const [selectedFormatOption, setSelectedFormatOption] = useState();
-    const [selectedGenreOption, setSelectedGenreOption] = useState();
-    const [selectedInterestOption, setSelectedInterestOption] = useState();
-
-    const ageData = [
-        { label: "13-17", value: 1 },
-        { label: "18-21", value: 2 },
-        { label: "21-25", value: 3 },
-        { label: "25-35", value: 4 },
-        { label: "35+", value: 5 },
-    ];
-
-    const emotionData = [
-        { label: "Радість", value: 1 },
-        { label: "Сум", value: 2 },
-        { label: "Спокій", value: 3 },
-        { label: "Страх", value: 4 },
-    ];
-
-    const formatData = [
-        { label: "Нарис", value: 1 },
-        { label: "Лист", value: 2 },
-        { label: "Новела", value: 3 },
-        { label: "Оповідання", value: 4 },
-        { label: "Спогад", value: 5 },
-        { label: "Легенда", value: 6 }
-    ];
-
-    const genreData = [
-        { label: "Хорор", value: 1 },
-        { label: "Фентезі", value: 2 },
-        { label: "Наукова фантастика", value: 3 },
-        { label: "Містика", value: 4 },
-        { label: "Трилер", value: 5 },
-        { label: "Історичний роман", value: 6 },
-        { label: "Романтичний роман", value: 7 },
-        { label: "Детектив", value: 8 }
-    ];
-
-    const interestsData = [
-        { label: "Подорожі", value: 1 },
-        { label: "Живопис", value: 2 },
-        { label: "Скульптура", value: 3 },
-        { label: "Музика", value: 4 },
-        { label: "Театр", value: 5 },
-        { label: "Історія", value: 6 },
-        { label: "Кіно", value: 7 },
-        { label: "Спорт", value: 8 }
-    ];
-
     return (
-        <>
+        <Container>
+            <StyledSpiralImage src={spiral} alt="spiral" />
             <Main>
-                <Text>
-                    Реєстрація акаунту
-                </Text>
-                {!displayQuestions &&
-                    (<>
-                        <InputTitle text="Електронна пошта" />
-                        <InputField type="email" placeholder="Введіть свою електронну пошту" value={email}
+                <Title>
+                    <StyledImage src={doodle} alt="doodle" />
+                    <TitleText>Create an account</TitleText>
+                </Title>
+                <ExtraRedirectContainer onClick={handleRedirect}
+                                        text="Already have an account?"
+                                        redirectButton="Log in"
+                />
+                <HorizontalLineSeparator/>
+                <Subtitle>Nickname</Subtitle>
+                <InputField type="text" placeholder="Enter your nickname" value={nickname}
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\s/g, '');
+                                setNickname(value);
+                                checkNickname(value);
+                            }} />
+                {invalidNicknameMessage && (<InvalidInput text={invalidNicknameMessage} />)}
+                <Subtitle>Email</Subtitle>
+                <InputField type="email" placeholder="Enter your email" value={email}
                             onChange={(e) => setEmail(e.target.value)} />
-                        {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
-                        <InputTitle text="Пароль" />
-                        <InputField type="password" placeholder="Введіть пароль" value={password}
+                {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
+                <Subtitle>Password</Subtitle>
+                <InputField type="password" placeholder="Enter your password" value={password}
                             onChange={(e) => setPassword(e.target.value)} />
-                        {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage} />)}
-                        <InputTitle text="Дата народження" />
-                        <StyledDatePicker
-                            startDate={startDate} setStartDate={setStartDate}
-                            checkDate={checkDate} subtractYears={subtractYears}
-                        />
-                        {invalidDateMessage && (<InvalidInput text={invalidDateMessage} />)}
-                        <BlueButton onClick={async () => {
-                            await handleNext();
-                        }}
-                            text="Далі"
-                        />
-                        <OrLineSeparator text="або" />
-                        <GoogleButton onClick={handleGoogleSignIn}
-                            text="Зареєструвати за допомогою Google"
-                        />
-                        <ExtraRedirectContainer onClick={handleRedirect}
-                            text="Вже маєте акаунт?"
-                            redirectButton="Увійти"
-                        />
-                    </>)}
-                {displayQuestions &&
-                    (<>
-                        <InputQuestion text="Оберіть Ваш віковий діапазон?" />
-                        <Options placeholder={'Вибрати віковий діапазон'} data={ageData} value={selectedAgeOption}
-                            onChange={(e) => setSelectedAgeOption(e)} />
-                        <InputQuestion text="Яку емоцію(ї) Ви хочете пережити?" />
-                        <Options placeholder={'Вибрати емоцію'} data={emotionData} value={selectedEmotionOption}
-                            onChange={(e) => setSelectedEmotionOption(e)} />
-                        <InputQuestion text="Яким формам надаєте перевагу?" />
-                        <Options placeholder={'Вибрати форму'} data={formatData} value={selectedFormatOption}
-                            onChange={(e) => setSelectedFormatOption(e)} />
-                        <InputQuestion text="Яким жанрам надаєте перевагу?" />
-                        <Options placeholder={'Вибрати жанр'} data={genreData} value={selectedGenreOption}
-                            onChange={(e) => setSelectedGenreOption(e)} />
-                        <InputQuestion text="Ваші зацікавлення?" />
-                        <Options placeholder={'Вибрати зацікавлення'} data={interestsData} value={selectedInterestOption}
-                            onChange={(e) => setSelectedInterestOption(e)} />
-                        <BlueButton onClick={async () => {
-                            await handleRegister();
-                            await saveInfoAboutUser(startDate);
-                        }}
-                                    text="Зареєструвати акаунт"
-                        />
-                        <BlueButton onClick={async () => {
-                            await handlePrevious();
-                        }} text="Назад" />
-                    </>)}
+                {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage} />)}
+                <Subtitle>Birthdate</Subtitle>
+                <StyledDatePicker
+                    startDate={startDate} setStartDate={setStartDate}
+                    checkDate={checkDate} subtractYears={subtractYears}
+                />
+                {invalidDateMessage && (<InvalidInput text={invalidDateMessage} />)}
+                <ContinueButton onClick={async () => {
+                    await handleRegister();
+                    await saveInfoAboutUser();
+                }} text="SIGN UP"/>
+                <OrLineSeparator text="OR" />
+                <GoogleButton onClick={handleGoogleSignIn}
+                              text="Sign up with Google"
+                />
             </Main>
-        </>
+            <StyledStarsImage src={three_stars} alt="three_stars" />
+        </Container>
     )
 };
 
 
 export default RegistrationForm;
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+    font-family: 'Montserrat Alternates', sans-serif;
+`;
+
 const Main = styled.div`
     display: flex;
-    gap: 10px;
+    gap: 6px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 100vh;
 `;
 
-const Text = styled.div`
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 36.8px;
-    color: black;
-    margin-bottom: 10px;
+const Title = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+`;
+
+const StyledImage = styled.img`
+    width: 67px;
+    height: auto;
+    max-height: 100%;
+    margin-right: -50px;
+`;
+
+const TitleText = styled.h1`
+    font-size: 50px;
+    margin: 0 0 5px 0;
+`;
+
+const HorizontalLineSeparator = styled.div`
+    width: 450px;
+    height: 0.15mm;
+    background-color: #4D4D4D;
+    margin: 10px 0 5px 0;
+`;
+
+const Subtitle = styled.h4`
+    width: 450px;
+    font-size: 15px;
+    margin: 4px 0;
 `;
 
 const InputField = styled.input`
-    border: 1px solid #9B9B9B;
-    border-radius: 5px;
-    width: 420px;
-    padding-left: 20px;
+    font-size: 14px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    width: 450px;
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 0 10px 0 20px;
     height: 50px;
     box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    }
+`;
+
+const StyledSpiralImage = styled.img`
+    width: 75px;
+    height: auto;
+    margin-bottom: 20vh;
+`;
+
+const StyledStarsImage = styled.img`
+    width: 65px;
+    height: auto;
+    margin-bottom: 55vh;
 `;

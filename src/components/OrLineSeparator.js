@@ -20,13 +20,14 @@ const OrContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 15px;
-    color: #9b9b9b;
-    font-family: Munito, sans-serif;
+    color: #4D4D4D;
     font-weight: 200;
+    font-family: 'Montserrat Alternates', sans-serif;
+    margin: 15px 0;
 `;
 
 const HorizontalLineSeparator = styled.div`
-    height: 1px;
-    width: 180px;
-    background-color: #838383;
+    width: 200px;
+    height: 0.1mm;
+    background-color: #4D4D4D;
 `;

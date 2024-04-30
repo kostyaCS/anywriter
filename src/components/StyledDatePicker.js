@@ -14,7 +14,7 @@ const StyledDatePicker = (props) => {
                     props.setStartDate(date);
                     props.checkDate(date);
                 }}
-                placeholderText="Введіть дату народження (dd/mm/yyyy)"
+                placeholderText="Enter your birthdate (dd/mm/yyyy)"
                 isClearable={() => props.setStartDate(undefined)}
                 dateFormat='dd/MM/yyyy'
                 minDate={props.subtractYears(new Date(), 110)}
@@ -27,10 +27,17 @@ const StyledDatePicker = (props) => {
 export default StyledDatePicker;
 
 const StyledDatePickerContainer = styled(DatePicker)`
-    border: 1px solid #9B9B9B;
-    border-radius: 5px;
-    width: 420px;
+    width: 450px;
     height: 50px;
-    padding-left: 20px;
+    border: 1px solid black;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    padding: 0 10px 0 20px;
     box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    }
 `;

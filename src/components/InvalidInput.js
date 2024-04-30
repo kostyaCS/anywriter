@@ -13,10 +13,9 @@ const InvalidInput = (props) => {
 export default InvalidInput;
 
 const RedText = styled.span`
-    display: flex;
-    align-items: center;
-    color: red;
+    width: 450px;
+    color: #EB4747;
     font-size: 11px;
-    height: 3px;
-    width: 420px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    margin-top: 6px;
 `;

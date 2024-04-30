@@ -195,10 +195,6 @@ const ScrollContainer = (props) => {
 
     return (
         <>
-            <style>
-                @import
-                url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-            </style>
             <ScrollHeader>
                 <ToggleCheckboxButton onClick={toggleCheckboxVisibility}>
                     Toggle Filters
@@ -327,7 +323,7 @@ const ButtonsContainer = styled.div`
 
 const Item = styled.div`
     margin: 0 20px 20px 20px;
-    padding: 20px 0;
+    padding: 60px 0;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -501,13 +497,13 @@ const ToggleCheckboxButton = styled.button`
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
     cursor: pointer;
-    box-shadow: 6px 6px 0px 0px #81ADC8;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
     margin-left: 20px;
     
-    transition: 0.4s ease;
+    transition: 0.3s ease;
     &:hover {
         scale: 1.03;
-        box-shadow: 8px 8px 0px 0px #81ADC8;
+        box-shadow: 6px 6px 0px 0px #81ADC8;
     }
 `;
 
@@ -521,13 +517,19 @@ const SearchInput = styled.input`
     font-size: 16px;
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
-    box-shadow: 6px 6px 0px 0px #81ADC8;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
     margin-right: 20px;
-    
-    transition: 0.4s ease;
+
+    transition: 0.3s ease;
+
     &:hover {
         scale: 1.03;
-        box-shadow: 8px 8px 0px 0px #81ADC8;
+        box-shadow: 6px 6px 0px 0px #81ADC8;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 5px 5px 0px 0px rgba(145, 95, 109, 0.5);
     }
 `;
 
