@@ -12,8 +12,9 @@ import ExtraRedirectContainer from "../components/ExtraRedirectContainer";
 import StyledDatePicker from "./StyledDatePicker";
 import doodle from "../images/doodle.png";
 import spiral from "../images/spiral.png";
-import three_stars from "../images/three_stars.png";
+import three_diamonds from "../images/three_diamonds.png";
 import ContinueButton from "./ContinueButton";
+import logo from "../images/logo.png";
 
 
 const RegistrationForm = () => {
@@ -129,62 +130,76 @@ const RegistrationForm = () => {
     };
 
     const handleRedirect = () => {
+        navigate("/auth");
+    }
+
+    const handleLogoClick = () => {
         navigate("/");
     }
 
     return (
-        <Container>
-            <StyledSpiralImage src={spiral} alt="spiral" />
-            <Main>
-                <Title>
-                    <StyledImage src={doodle} alt="doodle" />
-                    <TitleText>Create an account</TitleText>
-                </Title>
-                <ExtraRedirectContainer onClick={handleRedirect}
-                                        text="Already have an account?"
-                                        redirectButton="Log in"
-                />
-                <HorizontalLineSeparator/>
-                <Subtitle>Nickname</Subtitle>
-                <InputField type="text" placeholder="Enter your nickname" value={nickname}
-                            onChange={(e) => {
-                                const value = e.target.value.replace(/\s/g, '');
-                                setNickname(value);
-                                checkNickname(value);
-                            }} />
-                {invalidNicknameMessage && (<InvalidInput text={invalidNicknameMessage} />)}
-                <Subtitle>Email</Subtitle>
-                <InputField type="email" placeholder="Enter your email" value={email}
-                            onChange={(e) => setEmail(e.target.value)} />
-                {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
-                <Subtitle>Password</Subtitle>
-                <InputField type="password" placeholder="Enter your password" value={password}
-                            onChange={(e) => setPassword(e.target.value)} />
-                {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage} />)}
-                <Subtitle>Birthdate</Subtitle>
-                <StyledDatePicker
-                    startDate={startDate} setStartDate={setStartDate}
-                    checkDate={checkDate} subtractYears={subtractYears}
-                />
-                {invalidDateMessage && (<InvalidInput text={invalidDateMessage} />)}
-                <ContinueButton onClick={async () => {
-                    await handleRegister();
-                    await saveInfoAboutUser();
-                }} text="SIGN UP"/>
-                <OrLineSeparator text="OR" />
-                <GoogleButton onClick={handleGoogleSignIn}
-                              text="Sign up with Google"
-                />
-            </Main>
-            <StyledStarsImage src={three_stars} alt="three_stars" />
-        </Container>
+        <>
+            <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
+            <Registration>
+                <StyledSpiralImage src={spiral} alt="spiral" />
+                <Main>
+                    <Title>
+                        <StyledImage src={doodle} alt="doodle" />
+                        <TitleText>Create an account</TitleText>
+                    </Title>
+                    <ExtraRedirectContainer onClick={handleRedirect}
+                                            text="Already have an account?"
+                                            redirectButton="Log in"
+                    />
+                    <HorizontalLineSeparator/>
+                    <Subtitle>Nickname</Subtitle>
+                    <InputField type="text" placeholder="Enter your nickname" value={nickname}
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/\s/g, '');
+                                    setNickname(value);
+                                    checkNickname(value);
+                                }} />
+                    {invalidNicknameMessage && (<InvalidInput text={invalidNicknameMessage} />)}
+                    <Subtitle>Email</Subtitle>
+                    <InputField type="email" placeholder="Enter your email" value={email}
+                                onChange={(e) => setEmail(e.target.value)} />
+                    {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
+                    <Subtitle>Password</Subtitle>
+                    <InputField type="password" placeholder="Enter your password" value={password}
+                                onChange={(e) => setPassword(e.target.value)} />
+                    {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage} />)}
+                    <Subtitle>Birthdate</Subtitle>
+                    <StyledDatePicker
+                        startDate={startDate} setStartDate={setStartDate}
+                        checkDate={checkDate} subtractYears={subtractYears}
+                    />
+                    {invalidDateMessage && (<InvalidInput text={invalidDateMessage} />)}
+                    <ContinueButton onClick={async () => {
+                        await handleRegister();
+                        await saveInfoAboutUser();
+                    }} text="SIGN UP"/>
+                    <OrLineSeparator text="OR" />
+                    <GoogleButton onClick={handleGoogleSignIn}
+                                  text="Sign up with Google"
+                    />
+                </Main>
+                <StyledStarsImage src={three_diamonds} alt="three diamonds" />
+            </Registration>
+        </>
     )
 };
 
 
 export default RegistrationForm;
 
-const Container = styled.div`
+const Logo = styled.img`
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    padding: 9px 5vw;
+`;
+
+const Registration = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -198,7 +213,7 @@ const Main = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
+    height: 90vh;
 `;
 
 const Title = styled.div`

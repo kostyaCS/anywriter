@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import doodle from "../images/doodle.png";
 import spiral from "../images/spiral.png";
-import three_stars from "../images/three_stars.png";
+import three_diamonds from "../images/three_diamonds.png";
 import styled from 'styled-components';
 import OrLineSeparator from "../components/OrLineSeparator";
 import "../App.css"
@@ -15,6 +15,7 @@ import GoogleButton from "../components/GoogleButton";
 import InvalidInput from "../components/InvalidInput";
 import ExtraRedirectContainer from "../components/ExtraRedirectContainer";
 import ContinueButton from "../components/ContinueButton";
+import logo from "../images/logo.png";
 
 const AuthorizationScreen = () => {
     const navigate = useNavigate();
@@ -62,40 +63,47 @@ const AuthorizationScreen = () => {
         navigate("/registration");
     }
 
+    const handleLogoClick = () => {
+        navigate("/");
+    }
+
     return (
-        <Container>
-            <StyledSpiralImage src={spiral} alt="spiral" />
-            <Main>
-                <Title>
-                    <StyledImage src={doodle} alt="doodle" />
-                    <TitleText>Log in</TitleText>
-                </Title>
-                <ExtraRedirectContainer onClick={handleRedirect}
-                                        text="Not a member?"
-                                        redirectButton="Sign up"
-                />
-                <HorizontalLineSeparator/>
-                <Subtitle>Email</Subtitle>
-                <InputField placeholder="Email" value={email}
-                    onChange={(e) => setEmail(e.target.value)} />
-                {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
-                <Subtitle>Password</Subtitle>
-                <InputField type="password" placeholder="Password" value={password}
-                    onChange={(e) => setPassword(e.target.value)} />
-                <ContinueButton onClick={handleSignIn} text="LOG IN"/>
-                <OrLineSeparator text="OR" />
-                <GoogleButton onClick={handleGoogleSignIn}
-                    text="Continue with Google"
-                />
-            </Main>
-            <StyledStarsImage src={three_stars} alt="three_stars" />
-        </Container>
+        <>
+            <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
+            <Auth>
+                <StyledSpiralImage src={spiral} alt="spiral" />
+                <Main>
+                    <Title>
+                        <StyledImage src={doodle} alt="doodle" />
+                        <TitleText>Log in</TitleText>
+                    </Title>
+                    <ExtraRedirectContainer onClick={handleRedirect}
+                                            text="Not a member?"
+                                            redirectButton="Sign up"
+                    />
+                    <HorizontalLineSeparator/>
+                    <Subtitle>Email</Subtitle>
+                    <InputField placeholder="Email" value={email}
+                        onChange={(e) => setEmail(e.target.value)} />
+                    {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
+                    <Subtitle>Password</Subtitle>
+                    <InputField type="password" placeholder="Password" value={password}
+                        onChange={(e) => setPassword(e.target.value)} />
+                    <ContinueButton onClick={handleSignIn} text="LOG IN"/>
+                    <OrLineSeparator text="OR" />
+                    <GoogleButton onClick={handleGoogleSignIn}
+                        text="Continue with Google"
+                    />
+                </Main>
+                <StyledStarsImage src={three_diamonds} alt="three diamonds" />
+            </Auth>
+        </>
     )
 };
 
 export default AuthorizationScreen;
 
-const Container = styled.div`
+const Auth = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -103,8 +111,15 @@ const Container = styled.div`
     font-family: 'Montserrat Alternates';
 `;
 
+const Logo = styled.img`
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    padding: 9px 5vw;
+`;
+
 const Main = styled.div`
-    height: 100vh;
+    height: 90vh;
     width: 50vw;
     max-height: 100vh;
     max-width: 100vw;

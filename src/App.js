@@ -1,6 +1,7 @@
 import {
     BrowserRouter as Router, Route, Routes
 } from "react-router-dom";
+import LandingScreen from "./screens/Landing";
 import AuthorizationScreen from "./screens/AuthorizationScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import MainPage from "./screens/MainPage";
@@ -15,7 +16,8 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<AuthorizationScreen />} />
+                    <Route path="/" element={<LandingScreen />} />
+                    <Route path="/auth" element={<AuthorizationScreen />} />
                     <Route path="/registration" element={<RegistrationScreen />} />
                     <Route path="/main_page" element={<MainPage />} />
                     <Route path="/my_works" element={<MyWorks />} />

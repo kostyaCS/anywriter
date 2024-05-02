@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const ContinueButton = (props) => {
+const SignUpButton = (props) => {
     return (
         <>
             <StyledButton onClick={props.onClick}>
@@ -10,12 +10,11 @@ const ContinueButton = (props) => {
     )
 };
 
-export default ContinueButton;
+export default SignUpButton;
 
 const StyledButton = styled.button`
-    padding: 17px 25px;
+    padding: 18px 22px;
     background-color: black;
-    margin-top: 20px;
     border-radius: 5px;
     border: none;
     color: white;
