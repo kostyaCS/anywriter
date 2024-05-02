@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
-import { ref, update, onValue } from "firebase/database";
+import { ref, update, onValue, set } from "firebase/database";
 import { rtdb } from "../firebase";
 import { useNavigate} from "react-router-dom";
+import {auth} from "../firebase";
 
 const CheckWork = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const CheckWork = () => {
         onValue(workRef, (snapshot) => {
             setWork(snapshot.val());
         });
-    }, [workId]);
+    }, [workId, work]);
 
     const handleBackClick = () => {
         navigate("/main_page")
@@ -30,15 +31,12 @@ const CheckWork = () => {
         event.preventDefault();
 
         let updates = {};
-
         const newReview = comment;
         const currentReviews = work.reviews || [];
         const newReviewKey = currentReviews.length.toString();
 
-        updates[`/works/${workId}/reviews/${newReviewKey}`] = newReview;
+        updates[`/works/${workId}/reviews/${newReviewKey}`] = [newReview, auth.currentUser.uid, auth.currentUser.email];
         update(ref(rtdb), updates).then(() => {
-            console.log('Review added successfully!');
-
             const updatedReviews = [...currentReviews, newReview];
             setWork({ ...work, reviews: updatedReviews });
             setComment('');
@@ -46,6 +44,17 @@ const CheckWork = () => {
             console.error('Error adding review: ', error);
         });
     };
+
+    const handleDeleteClick = (review) => {
+        const workRef = ref(rtdb, `works/${workId}/reviews`);
+        const newReviews = work.reviews.filter(element => element !== review);
+
+        set(workRef, newReviews).then(() => {
+            setWork({ ...work, reviews: newReviews });
+        }).catch(error => {
+            console.error(error);
+        });
+    }
 
 
     return (
@@ -70,7 +79,10 @@ const CheckWork = () => {
                     <h2>Reviews</h2>
                     {work.reviews.map((review, index) => (
                         <ReviewItem key={index}>
-                            <p>{review}</p>
+                            <p>{Array.isArray(review) ? review[0] : review}</p>
+                            {Array.isArray(review) && review[1] === auth.currentUser.uid ?
+                                (<button onClick={() => handleDeleteClick(review)}>Delete comment</button>) : null}
+                            <p>{Array.isArray(review) ? review[2]: null}</p>
                         </ReviewItem>
                     ))}
                 </ReviewsSection>
