@@ -288,7 +288,7 @@ const LandingScreen = () => {
                             <FooterColText>(123) 456 - 7890</FooterColText>
                         </FooterCol>
                         <FooterCol>
-                            <FooterColText>App available on:</FooterColText>
+                            <FooterColTitle>App available on:</FooterColTitle>
                             <FooterColAppImg>
                                 <StyledMarketImage src={app_store} alt="app store" />
                                 <StyledMarketImage src={google_play} alt="google play" />
@@ -300,7 +300,7 @@ const LandingScreen = () => {
                 <FooterBottom>
                     <FooterBottomText>
                         ©{getCurrentYear()}. All Rights Reserved.
-                        <ReadlyLink>Readly</ReadlyLink>
+                        <ReadlyLink  onClick={handleLogoClick}> Readly</ReadlyLink>
                     </FooterBottomText>
                     <FooterBottomText>Terms & Privacy</FooterBottomText>
                 </FooterBottom>
@@ -920,6 +920,12 @@ const FooterColTitle = styled.h4`
 `;
 
 const FooterColText = styled.div`
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    
+    &:hover {
+        color: #915F6D;
+    }
 `;
 
 const StyledMarketImage = styled.img`
@@ -937,7 +943,11 @@ const FooterBottom = styled.div`
 `;
 
 const FooterBottomText = styled.div`
+    cursor: pointer;
 `;
 
 const ReadlyLink = styled.a`
+    font-weight: 600;
+    cursor: pointer;
+    color: #915F6D;
 `;
