@@ -74,6 +74,7 @@ const CreateWork = () => {
     }
 
     const saveWork = async () => {
+        const date = new Date();
         try {
             if (!currentUser) {
                 console.error("No user is currently logged in.");
@@ -89,6 +90,7 @@ const CreateWork = () => {
                 format: getLabels(selectedFormat),
                 genre: getLabels(selectedGenre),
                 interests: getLabels(selectedInterest),
+                date: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`,
                 reviews: [],
             });
             console.log('Work saved successfully!');

@@ -22,6 +22,7 @@ const ScrollContainer = (props) => {
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [selectedFormats, setSelectedFormats] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
+    const [isCheckboxVisible, setIsCheckboxVisible] = useState(false);
 
     const genreData = [ "Хорор", "Фентезі", "Наукова фантастика", "Містика",
         "Трилер", "Історичний", "Романтичний роман", "Детектив"];
@@ -145,49 +146,9 @@ const ScrollContainer = (props) => {
     }
 
     useEffect(() => {
-        console.log(selectedGenres);
-    }, [selectedGenres]);
+        console.log(filteredText);
+    }, []);
 
-    const sendFeedback = async (genre, like) => {
-        try {
-            // Send feedback
-            const response = await fetch('http://127.0.0.1:5000/recommendations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ genre, like })
-            });
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log('Feedback sent successfully:', responseData);
-            } else {
-                console.error('Failed to send feedback');
-            }
-
-            const recommendationResponse = await fetch('http://127.0.0.1:5000/recommendations');
-            if (recommendationResponse.ok) {
-                const recommendation = await recommendationResponse.json();
-                setCurrIds(recommendation);
-                console.log('Recommendation:', recommendation);
-            } else {
-                setCurrIds(props.text);
-                console.error('Failed to get recommendation');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    const handleDislikeClick = (genre) => {
-        sendFeedback(genre, false);
-    }
-
-    const handleLikeButtonClick = (genre) => {
-        sendFeedback(genre, true);
-    }
-
-    const [isCheckboxVisible, setIsCheckboxVisible] = useState(false);
 
     const toggleCheckboxVisibility = () => {
         setIsCheckboxVisible((prevVisibility) => !prevVisibility);
@@ -240,7 +201,7 @@ const ScrollContainer = (props) => {
                     <Item key={el.id || index}>
                         <DataContainer>
                             <ItemTextContainer>
-                                <ItemDate>28.05.2024</ItemDate>
+                                <ItemDate>{el.date? el.date : "28.05.2024"}</ItemDate>
                                 <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}  onClick={() => handleReadClick(el.id)}/>
                                 <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
                             </ItemTextContainer>

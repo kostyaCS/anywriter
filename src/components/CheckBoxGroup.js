@@ -5,11 +5,10 @@ const CheckboxGroup = ({ title, options, selectedValues, onChange }) => {
     const [showOptions, setShowOptions] = useState(false);
 
     const handleCheckboxChange = (option) => {
-        if (selectedValues.includes(option)) {
-            onChange(selectedValues.filter(item => item !== option));
-        } else {
-            onChange([...selectedValues, option]);
-        }
+        const newValue = selectedValues.includes(option)
+            ? selectedValues.filter(item => item !== option)
+            : [...selectedValues, option];
+        onChange(newValue);
     };
 
     return (
@@ -21,15 +20,14 @@ const CheckboxGroup = ({ title, options, selectedValues, onChange }) => {
                 <CheckboxesContainer>
                     {options.map((option, index) => (
                         <CheckboxContainer key={index}>
-                            <input
-                                type="checkbox"
+                            <HiddenCheckbox
                                 id={`checkbox-${option}`}
-                                name={option}
-                                value={option}
                                 checked={selectedValues.includes(option)}
                                 onChange={() => handleCheckboxChange(option)}
                             />
-                            <label htmlFor={`checkbox-${option}`}>{option}</label>
+                            <StyledCheckbox htmlFor={`checkbox-${option}`}>
+                                {option}
+                            </StyledCheckbox>
                         </CheckboxContainer>
                     ))}
                 </CheckboxesContainer>
@@ -42,58 +40,84 @@ export default CheckboxGroup;
 
 const CheckboxGroupContainer = styled.div`
     width: 90%;
-    margin-left: 20px;
+    margin: 20px;
     background-color: #FDF7F4;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const GroupTitle = styled.div`
     cursor: pointer;
     font-size: 16px;
-    line-height: 18px;
     font-family: "Montserrat Alternates", sans-serif;
-    font-weight: 600;
-    font-style: normal;
+    font-weight: bold;
+    margin-bottom: 10px;
+    user-select: none;
+    &:hover {
+        color: #81ADC8;
+    }
 `;
 
 const CheckboxesContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
 `;
 
 const CheckboxContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 15px;
-    margin-bottom: 8px;
-    input[type="checkbox"] {
-        display: none;
-    }
-    label {
-        position: relative;
-        padding-left: 25px;
-        cursor: pointer;
-        &:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 2px;
-            width: 15px;
-            height: 15px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-        }
+`;
 
+const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+    display: none;
+`;
+
+const StyledCheckbox = styled.label`
+    position: relative;
+    cursor: pointer;
+    padding: 5px 10px 5px 40px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    background-color: transparent;
+    border-radius: 4px;
+    transition: background-color 200ms;
+    user-select: none;
+    &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        transition: border-color 200ms, background-color 200ms;
     }
-    input[type="checkbox"]:checked + label:before {
-        background-color: #81ADC8;
+    &:hover:before {
         border-color: #81ADC8;
     }
-    input[type="checkbox"]:checked + label:after {
-        opacity: 1;
+    input:checked + & {
+        &:before {
+            border-color: #81ADC8;
+            background-color: #81ADC8;
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 17px;
+            transform: translateY(-50%) rotate(45deg);
+            width: 6px;
+            height: 12px;
+            border-bottom: 3px solid #fff;
+            border-right: 3px solid #fff;
+        }
     }
 `;
