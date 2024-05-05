@@ -10,6 +10,7 @@ import MyWorks from "./screens/MyWorks";
 import CreateWork from "./screens/CreateWork";
 import MyPage from "./screens/MyPage";
 import CheckWork from "./screens/CheckWork";
+import AboutScreen from "./screens/About";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<LandingScreen />} />
+                    <Route path="/about" element={<AboutScreen />} />
                     <Route path="/auth" element={<AuthorizationScreen />} />
                     <Route path="/registration" element={<RegistrationScreen />} />
                     <Route path="/main_page" element={<MainPage />} />

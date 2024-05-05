@@ -205,6 +205,7 @@ const Registration = styled.div`
     justify-content: space-around;
     align-items: flex-end;
     font-family: 'Montserrat Alternates', sans-serif;
+    overflow-x: hidden;
 `;
 
 const Main = styled.div`
@@ -213,7 +214,13 @@ const Main = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 90vh;
+    height: 80vh;
+    min-height: 700px;
+    margin-bottom: 60px;
+
+    @media (max-width: 627px) {
+        min-height: 760px;
+    }
 `;
 
 const Title = styled.div`
@@ -232,6 +239,7 @@ const StyledImage = styled.img`
 const TitleText = styled.h1`
     font-size: 50px;
     margin: 0 0 5px 0;
+    text-align: center;
 `;
 
 const HorizontalLineSeparator = styled.div`

@@ -108,7 +108,8 @@ const Auth = styled.div`
     flex-direction: row;
     justify-content: space-around;
     align-items: flex-end;
-    font-family: 'Montserrat Alternates';
+    font-family: 'Montserrat Alternates', sans-serif;
+    overflow-x: hidden;
 `;
 
 const Logo = styled.img`
@@ -119,10 +120,11 @@ const Logo = styled.img`
 `;
 
 const Main = styled.div`
-    height: 90vh;
+    height: 80vh;
+    min-height: 550px;
     width: 50vw;
-    max-height: 100vh;
     max-width: 100vw;
+    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -146,6 +148,7 @@ const StyledImage = styled.img`
 const TitleText = styled.h1`
     font-size: 50px;
     margin: 0 0 20px 0;
+    text-align: center;
 `;
 
 const HorizontalLineSeparator = styled.div`

@@ -34,13 +34,13 @@ import app_store from "../images/landing/app_store.png";
 import google_play from "../images/landing/google_play.png";
 import styled from 'styled-components';
 import "../App.css"
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import SignUpButton from "../components/landing/SignUpButton";
 import LogInButton from "../components/landing/LogInButton";
 import ContinueButton from "../components/ContinueButton";
 import LandingButton from "../components/landing/LandingButton";
 
-const LandingScreen = () => {
+const AboutScreen = () => {
     const navigate = useNavigate();
 
     const handleLogoClick = () => {
@@ -55,16 +55,12 @@ const LandingScreen = () => {
         navigate("/registration");
     }
 
+    const handlePricingClick = () => {
+        navigate("/auth");
+    }
+
     const handleAboutClick = () => {
         navigate("/about");
-    }
-
-    const handleAddressClick = () => {
-        window.open("https://maps.app.goo.gl/LDoje5M2UQB9YL5m8");
-    }
-
-    const handleEmailClick = () => {
-        window.location = 'mailto:contact@readly.com?subject=Get in Touch with Readly!';
     }
 
     function getCurrentYear() {
@@ -77,7 +73,9 @@ const LandingScreen = () => {
             <Header>
                 <HeaderLeft>
                     <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
-                    <HeaderText onClick={handleAboutClick}>About</HeaderText>
+                    <HeaderText>
+                        About
+                    </HeaderText>
                 </HeaderLeft>
                 <HeaderRight>
                     <LogInButton onClick={handleLogInClick} text="Log in"/>
@@ -92,7 +90,7 @@ const LandingScreen = () => {
                     <MainTextContainer>
                         <StyledMainText>Your Daily</StyledMainText>
                         <StyledMainTextPink>Writings</StyledMainTextPink>
-                        <SimpleText>Experience the magic of storytelling with our daily dose of captivating narratives.</SimpleText>
+                        <SimpleText>We cover all kinds of categories and a weekly special guest.</SimpleText>
                         <ContinueButton onClick={handleLogInClick} text="Get Started"/>
                     </MainTextContainer>
                     <RightImgContainer>
@@ -103,22 +101,22 @@ const LandingScreen = () => {
             </Main>
 
             <About>
-                <StyledAboutText>Read. Discuss. Get inspired by every minute of it.</StyledAboutText>
+                <StyledAboutText>Talk. Listen. Get inspired by every minute of it.</StyledAboutText>
                 <AboutImgContainer>
                     <AboutImgCard>
                         <StyledManImage src={man_thinking} alt="man thinking" />
-                        <AboutImgCardText>Participate in thought-provoking discussions, absorb inspiring perspectives, and unlock boundless potential for your writing journey.</AboutImgCardText>
+                        <AboutImgCardText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac ultrices odio.</AboutImgCardText>
                     </AboutImgCard>
                     <AboutImgCard>
                         <StyledBulbImage src={bulb} alt="bulb" />
-                        <AboutImgCardText>Dive into a vibrant community where people come together to explore diverse perspectives, share their stories, and ignite their creativity.</AboutImgCardText>
+                        <AboutImgCardText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac ultrices odio.</AboutImgCardText>
                     </AboutImgCard>
                 </AboutImgContainer>
                 <AboutReviewContainer>
                     <StyledSpiralImage src={spiral} alt="spiral" />
                     <AboutReviewMain>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledAboutReviewText>Readly revolutionized my reading. Diverse topics and a supportive community make it essential.</StyledAboutReviewText>
+                        <StyledAboutReviewText>One of the best daily writings that cover various topics.</StyledAboutReviewText>
                         <StyledAboutPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar} alt="avatar" />
@@ -144,7 +142,7 @@ const LandingScreen = () => {
                 <ReadersCardContainer>
                     <ReadersCard>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledReadersCardText>I found amazing content on various topics. The community here is incredibly supportive!</StyledReadersCardText>
+                        <StyledReadersCardText>Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor incidi ut labore et dolore magna aliqua. </StyledReadersCardText>
                         <StyledReadersPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar_2} alt="avatar" />
@@ -158,7 +156,7 @@ const LandingScreen = () => {
                     </ReadersCard>
                     <ReadersCard>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledReadersCardText>Readly has become my go-to platform for discovering insightful articles. The sense of community here is truly inspiring.</StyledReadersCardText>
+                        <StyledReadersCardText>Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor incidi ut labore et dolore magna aliqua. </StyledReadersCardText>
                         <StyledReadersPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar_3} alt="avatar" />
@@ -172,7 +170,7 @@ const LandingScreen = () => {
                     </ReadersCard>
                     <ReadersCard>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledReadersCardText>I've found a treasure trove of engaging content on Readly. It's like having a literary oasis at my fingertips.</StyledReadersCardText>
+                        <StyledReadersCardText>Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor incidi ut labore et dolore magna aliqua. </StyledReadersCardText>
                         <StyledReadersPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar_4} alt="avatar" />
@@ -193,45 +191,46 @@ const LandingScreen = () => {
                     <StyledScribbleZigImage src={scribble_zig} alt="scribble zigzag" />
                     Membership benefits
                 </StyledMembershipText>
-                <StyledReadersTextSmall>Gain access to personalized content and be part of a supportive community that embraces creativity in all its forms.</StyledReadersTextSmall>
+                <StyledReadersTextSmall>Become our sponsor and get all benefits</StyledReadersTextSmall>
                 <MembershipCardsContainer>
                     <MembershipCard>
                         <StyledScribbleBlueImg src={scribble_blue} alt="scribble blue" />
                         <MembershipCardMainText>Topic by Request</MembershipCardMainText>
-                        Tailor your reading experience by requesting topics that resonate with you.
+                        Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor.
                     </MembershipCard>
                     <MembershipCard>
                         <StyledThreeDiamondsImg src={three_diamonds} alt="three diamonds" />
                         <MembershipCardMainText>Exclusive Content</MembershipCardMainText>
-                        Unlock a world of exclusive content curated just for members.
+                        Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor.
                     </MembershipCard>
                     <MembershipCard>
                         <StyledSmileImg src={smile} alt="smile" />
                         <MembershipCardMainText>Join the Community</MembershipCardMainText>
-                        Connect with fellow members, share your ideas, and collaborate on exciting projects.
+                        Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor.
                     </MembershipCard>
                     <MembershipCard>
                         <StyledFacesImg src={faces} alt="faces" />
                         <MembershipCardMainText>Livestreaming Access</MembershipCardMainText>
-                        Enjoy exclusive access to live events and broadcasts, including author interviews, workshops, and discussions.
+                        Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor.
                     </MembershipCard>
                     <MembershipCard>
                         <StyledFireImg src={fire} alt="fire" />
-                        <MembershipCardMainText>Exclusive Writings & Merch</MembershipCardMainText>
-                        Enjoy access to special writings, bonus content, and exclusive merchandise.
+                        <MembershipCardMainText>Exclusive Episodes & Merch</MembershipCardMainText>
+                        Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor.
                     </MembershipCard>
                     <MembershipCard>
                         <StyledAsteriskImg src={asterisk} alt="asterisk" />
                         <MembershipCardMainText>And much more!</MembershipCardMainText>
-                        Unlock additional perks, surprises, and opportunities to further enrich your Readly experience.
+                        Lorem ipsum dolor sit amet consectet piscing elit, sed do eiusmod tempor.
                     </MembershipCard>
                 </MembershipCardsContainer>
-                <LandingButton onClick={handleLogInClick} text="JOIN NOW"/>
+                <LandingButton onClick={handlePricingClick} text="SEE PRICING"/>
                 <ScribbleImg src={scribble_black} alt="scribble black" />
             </Membership>
 
             <RecentWriting>
                 <StyledReadersText>Recent Writings</StyledReadersText>
+                <StyledReadersTextSmall>Available on your favorite platform</StyledReadersTextSmall>
                 <RecentWritingContainer>
                     <StyledLinesImg src={lines} alt="lines" />
                     <RecentWritingCard>
@@ -241,16 +240,15 @@ const LandingScreen = () => {
                             </FrameImgContainer>
                             <RecentWritingMainTextContainer>
                                 <RecentWritingMainDate>13.04.2024</RecentWritingMainDate>
-                                <RecentWritingMainTitle>The Wanderer's Tale</RecentWritingMainTitle>
+                                <RecentWritingMainTitle>Pandemic Becoming Endemic</RecentWritingMainTitle>
                                 <HorizontalLine />
-                                <RecentWritingMainText>In the quiet of the morning, when the world is still shrouded in the gentle embrace of dawn, I find solace in the rhythmic cadence of my footsteps against the earth. Each step is a whisper, a testament to the journey that lies ahead.</RecentWritingMainText>
+                                <RecentWritingMainText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac ultrices odio.</RecentWritingMainText>
                             </RecentWritingMainTextContainer>
                         </RecentWritingMain>
                         <RecentWritingAdditional>
                             <RecentWritingAdditionalTags>
-                                <RecentWritingAdditionalTag>adventure</RecentWritingAdditionalTag>
-                                <RecentWritingAdditionalTag>traveler</RecentWritingAdditionalTag>
-                                <RecentWritingAdditionalTag>nature</RecentWritingAdditionalTag>
+                                <RecentWritingAdditionalTag>covid-19</RecentWritingAdditionalTag>
+                                <RecentWritingAdditionalTag>health</RecentWritingAdditionalTag>
                             </RecentWritingAdditionalTags>
                             <RecentWritingAdditionalCreator>
                                 Created by:
@@ -259,7 +257,7 @@ const LandingScreen = () => {
                         </RecentWritingAdditional>
                     </RecentWritingCard>
                 </RecentWritingContainer>
-                <LandingButton onClick={handleLogInClick} text="BROWSE ALL WRITINGS"/>
+                <LandingButton onClick={handlePricingClick} text="BROWSE ALL WRITINGS"/>
                 <ScribbleImg src={scribble_black} alt="scribble black" />
             </RecentWriting>
 
@@ -270,7 +268,7 @@ const LandingScreen = () => {
                             <StyledLogoImage src={logo} alt="logo" />
                             ©{getCurrentYear()}.
                         </FooterLeftImage>
-                        Stay connected with us for the latest updates, exclusive offers, and behind-the-scenes peeks into our world of creativity and inspiration.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         <FooterSocialMedia>
                             <StyledSocialMediaImage src={instagram} alt="instagram" />
                             <StyledSocialMediaImage src={twitter} alt="twitter" />
@@ -287,9 +285,9 @@ const LandingScreen = () => {
                         </FooterCol>
                         <FooterCol>
                             <FooterColTitle>Contact</FooterColTitle>
-                            <FooterColText onClick={handleAddressClick}>Lviv, Ukraine</FooterColText>
-                            <StyledLink to={'#'} onClick={handleEmailClick}>contact@readly.com</StyledLink>
-                            <StyledLink to="tel:123456789">(123) 456 - 7890</StyledLink>
+                            <FooterColText>55 East Birchwood Ave. Brooklyn, New York 11201</FooterColText>
+                            <FooterColText>contact@readly.com</FooterColText>
+                            <FooterColText>(123) 456 - 7890</FooterColText>
                         </FooterCol>
                         <FooterCol>
                             <FooterColTitle>App available on:</FooterColTitle>
@@ -313,7 +311,7 @@ const LandingScreen = () => {
     )
 };
 
-export default LandingScreen;
+export default AboutScreen;
 
 const Container = styled.div`
     font-family: 'Montserrat Alternates', sans-serif;
@@ -334,7 +332,7 @@ const Header = styled.div`
     background-color: #FDF7F4;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 1;
     width: 90vw;
     padding: 5px 5vw;
 `;
@@ -384,7 +382,7 @@ const Main = styled.div`
     height: 590px;
 
     @media (max-width: 836px) {
-        height: 700px;
+        height: 750px;
     }
 `;
 
@@ -453,10 +451,6 @@ const ScribbleImg = styled.img`
     margin-top: 70px;
     margin-left: 30px;
     z-index: 1;
-
-    @media (max-width: 836px) {
-        margin-top: 100px;
-    }
 `;
 
 
@@ -622,8 +616,6 @@ const StyledCircleImage = styled.img`
 
 const StyledReadersTextSmall = styled.div`
     font-size: 20px;
-    width: 70vw;
-    text-align: center;
 `;
 
 const ReadersCardContainer = styled.div`
@@ -687,11 +679,6 @@ const StyledMembershipText = styled.div`
     font-weight: 700;
     text-align: center;
     margin-bottom: 20px;
-    word-break:keep-all;
-
-    @media (max-width: 836px) {
-        width: 370px;
-    }
 `;
 
 const StyledScribbleZigImage = styled.img`
@@ -831,7 +818,6 @@ const RecentWritingMainText = styled.div`
 const RecentWritingAdditional = styled.div`
     width: 100%;
     display: flex;
-    gap: 18px;
     justify-content: space-between;
     align-items: center;
     margin: 15px 0 0 0;
@@ -842,7 +828,6 @@ const RecentWritingAdditionalTags = styled.div`
     justify-content: flex-start;
     align-items: center;
     gap: 15px;
-    flex-wrap: wrap;
 `;
 
 const RecentWritingAdditionalTag = styled.div`
@@ -879,11 +864,6 @@ const FooterTop = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 30px;
-
-    @media (max-width: 836px) {
-        flex-direction: column;
-        gap: 60px;
-    }
 `;
 
 const FooterLeft = styled.div`
@@ -950,15 +930,6 @@ const FooterColText = styled.div`
     }
 `;
 
-const StyledLink  = styled(Link)`
-    cursor: pointer;
-    transition: all 0.1s ease-in-out;
-
-    &:hover {
-        color: #915F6D;
-    }
-`;
-
 const StyledMarketImage = styled.img`
     height: 40px;
     cursor: pointer;
@@ -981,9 +952,4 @@ const ReadlyLink = styled.a`
     font-weight: 600;
     cursor: pointer;
     color: #915F6D;
-    transition: all 0.1s ease-in-out;
-
-    &:hover {
-        color: #000000;
-    }
 `;
