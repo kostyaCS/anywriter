@@ -45,6 +45,10 @@ const LandingScreen = () => {
 
     const handleLogoClick = () => {
         navigate("/");
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        });
     }
 
     const handleLogInClick = () => {
@@ -57,6 +61,9 @@ const LandingScreen = () => {
 
     const handleAboutClick = () => {
         navigate("/about");
+        window.scroll({
+            top: 0
+        });
     }
 
     const handleAddressClick = () => {
@@ -267,7 +274,7 @@ const LandingScreen = () => {
                 <FooterTop>
                     <FooterLeft>
                         <FooterLeftImage>
-                            <StyledLogoImage src={logo} alt="logo" />
+                            <StyledLogoImage onClick={handleLogoClick} src={logo} alt="logo" />
                             ©{getCurrentYear()}.
                         </FooterLeftImage>
                         Stay connected with us for the latest updates, exclusive offers, and behind-the-scenes peeks into our world of creativity and inspiration.
