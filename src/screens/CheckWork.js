@@ -71,7 +71,7 @@ const CheckWork = () => {
                         onChange={(e) => setComment(e.target.value)}
                         required
                     />
-                    <StyledButton type="submit">Add comment</StyledButton>
+                    <AddCommentButtom type="submit">Add comment</AddCommentButtom>
                 </CommentForm>
             </AddCommentSection>
             {work.reviews && work.reviews.length > 0 && (
@@ -121,24 +121,67 @@ const StyledContainer = styled.div`
 const AddCommentSection = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 15px;
     width: 50%;
     justify-content: center;
     align-items: center;
 `;
 
 const Title = styled.div`
-    
+    margin-top: 40px;
 `;
 
 const StyledDiv = styled.div`
-    margin-bottom: 50px;
+    width: 90vw;
+    margin: 40px 0;
+`;
+
+const AddCommentButtom = styled.button`
+    height: 42px;
+    width: 200px;
+    background-color: transparent;
+    border-radius: 5px;
+    border: 2px solid black;
+    color: black;
+    font-size: 14px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 20px;
+
+    &:hover {
+        transform: translateY(-1px);
+    }
 `;
 
 const StyledButton = styled.button`
     margin-bottom: 50px;
+    height: 42px;
+    width: 120px;
+    background-color: black;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-box-shadow: 5px 5px 0 0 rgba(0,0,0,0.25);
+    -moz-box-shadow: 5px 5px 0 0 rgba(0,0,0,0.25);
+    box-shadow: 5px 5px 0 0 rgba(0,0,0,0.25);
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 7px 7px 0 0 rgba(0,0,0,0.25);
+    }
 `;
 
 const CommentForm = styled.form`
     display: flex;
     flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
 `;

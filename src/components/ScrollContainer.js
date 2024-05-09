@@ -6,6 +6,10 @@ import {ref as firebaseRef, get, set} from "firebase/database"
 import { rtdb } from "../firebase";
 import { useNavigate } from 'react-router-dom';
 import CheckboxGroup from "./CheckBoxGroup";
+import VideoComponent from "./VideoComponent";
+import love_of_life from "../videos/love_of_life.mp4"
+import the_canterville_ghost from "../videos/the_canterville_ghost.mp4"
+import the_metamorphosis from "../videos/the_metamorphosis.MP4"
 
 const ScrollContainer = (props) => {
     const { currentUser } = useAuth();
@@ -23,6 +27,12 @@ const ScrollContainer = (props) => {
     const [selectedFormats, setSelectedFormats] = useState([]);
     const [selectedEmotions, setSelectedEmotions] = useState([]);
     const [isCheckboxVisible, setIsCheckboxVisible] = useState(false);
+    // TODO: fix later
+    const videos_path = {
+        "Жага до життя": love_of_life,
+        "Кентервільський привид": the_canterville_ghost,
+        "Перевтілення": the_metamorphosis
+    };
 
     const genreData = [ "Хорор", "Фентезі", "Наукова фантастика", "Містика",
         "Трилер", "Історичний", "Романтичний роман", "Детектив"];
@@ -197,7 +207,7 @@ const ScrollContainer = (props) => {
                 </>
             )}
             <List>
-                {filteredText.map((el, index) => (
+                {[...filteredText].reverse().map((el, index) => (
                     <Item key={el.id || index}>
                         <DataContainer>
                             <ItemTextContainer>
@@ -205,6 +215,7 @@ const ScrollContainer = (props) => {
                                 <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}  onClick={() => handleReadClick(el.id)}/>
                                 <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
                             </ItemTextContainer>
+                            {el.title in videos_path && (<VideoComponent src={videos_path[el.title]}></VideoComponent>)}
                             <Reaction>
                                 <ReactionIconButton liked={currentLikes.includes(el.id)} onClick={() => {
                                     handleLikeClick(el.id);
@@ -232,8 +243,8 @@ const ScrollContainer = (props) => {
                                     </svg>
                                 </ReactionIconButton>
                             </Reaction>
-                            <ItemGenre>{el.genre}</ItemGenre>
                         </DataContainer>
+                        <ItemGenre>{el.genre}</ItemGenre>
                     </Item>
                 ))}
                 {filteredText.length === 0 && <Loader>No matches found</Loader>}
@@ -284,7 +295,7 @@ const ButtonsContainer = styled.div`
 
 const Item = styled.div`
     margin: 0 20px 20px 20px;
-    padding: 60px 0;
+    padding: 130px 25px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -326,6 +337,7 @@ const ItemDate = styled.div`
 
 const ItemGenre = styled.div`
     padding: 10px;
+    margin-top: 30px;
     border-radius: 6px;
     font-size: 16px;
     font-weight:400;

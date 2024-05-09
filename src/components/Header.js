@@ -40,7 +40,7 @@ const HeaderDef = () => {
                 <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
                 <HeaderCenter>
                     <HeaderText onClick={handleLogoClick}>
-                        Readly
+                        Anywriter
                     </HeaderText>
                 </HeaderCenter>
                 <HeaderRight>

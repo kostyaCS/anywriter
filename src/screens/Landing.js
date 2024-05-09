@@ -71,7 +71,7 @@ const LandingScreen = () => {
     }
 
     const handleEmailClick = () => {
-        window.location = 'mailto:contact@readly.com?subject=Get in Touch with Readly!';
+        window.location = 'mailto:contact@anywriter.com?subject=Get in Touch with Anywriter!';
     }
 
     function getCurrentYear() {
@@ -83,7 +83,7 @@ const LandingScreen = () => {
         <Container>
             <Header>
                 <HeaderLeft>
-                    <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
+                    <Logo src={logo} alt="anywriter" onClick={handleLogoClick}/>
                     <HeaderText onClick={handleAboutClick}>About</HeaderText>
                 </HeaderLeft>
                 <HeaderRight>
@@ -125,7 +125,7 @@ const LandingScreen = () => {
                     <StyledSpiralImage src={spiral} alt="spiral" />
                     <AboutReviewMain>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledAboutReviewText>Readly revolutionized my reading. Diverse topics and a supportive community make it essential.</StyledAboutReviewText>
+                        <StyledAboutReviewText>Anywriter revolutionized my reading. Diverse topics and a supportive community make it essential.</StyledAboutReviewText>
                         <StyledAboutPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar} alt="avatar" />
@@ -165,7 +165,7 @@ const LandingScreen = () => {
                     </ReadersCard>
                     <ReadersCard>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledReadersCardText>Readly has become my go-to platform for discovering insightful articles. The sense of community here is truly inspiring.</StyledReadersCardText>
+                        <StyledReadersCardText>Anywriter has become my go-to platform for discovering insightful articles. The sense of community here is truly inspiring.</StyledReadersCardText>
                         <StyledReadersPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar_3} alt="avatar" />
@@ -179,7 +179,7 @@ const LandingScreen = () => {
                     </ReadersCard>
                     <ReadersCard>
                         <StyledAboutReviewTextPink>“</StyledAboutReviewTextPink>
-                        <StyledReadersCardText>I've found a treasure trove of engaging content on Readly. It's like having a literary oasis at my fingertips.</StyledReadersCardText>
+                        <StyledReadersCardText>I've found a treasure trove of engaging content on Anywriter. It's like having a literary oasis at my fingertips.</StyledReadersCardText>
                         <StyledReadersPersonTextContainer>
                             <StyledAboutPersonText>
                                 <StyledAvatarImage src={avatar_4} alt="avatar" />
@@ -230,7 +230,7 @@ const LandingScreen = () => {
                     <MembershipCard>
                         <StyledAsteriskImg src={asterisk} alt="asterisk" />
                         <MembershipCardMainText>And much more!</MembershipCardMainText>
-                        Unlock additional perks, surprises, and opportunities to further enrich your Readly experience.
+                        Unlock additional perks, surprises, and opportunities to further enrich your Anywriter experience.
                     </MembershipCard>
                 </MembershipCardsContainer>
                 <LandingButton onClick={handleLogInClick} text="JOIN NOW"/>
@@ -295,7 +295,7 @@ const LandingScreen = () => {
                         <FooterCol>
                             <FooterColTitle>Contact</FooterColTitle>
                             <FooterColText onClick={handleAddressClick}>Lviv, Ukraine</FooterColText>
-                            <StyledLink to={'#'} onClick={handleEmailClick}>contact@readly.com</StyledLink>
+                            <StyledLink to={'#'} onClick={handleEmailClick}>contact@anywriter.com</StyledLink>
                             <StyledLink to="tel:123456789">(123) 456 - 7890</StyledLink>
                         </FooterCol>
                         <FooterCol>
@@ -311,7 +311,7 @@ const LandingScreen = () => {
                 <FooterBottom>
                     <FooterBottomText>
                         ©{getCurrentYear()}. All Rights Reserved.
-                        <ReadlyLink  onClick={handleLogoClick}> Readly</ReadlyLink>
+                        <ReadlyLink  onClick={handleLogoClick}> Anywriter</ReadlyLink>
                     </FooterBottomText>
                     <FooterBottomText>Terms & Privacy</FooterBottomText>
                 </FooterBottom>
