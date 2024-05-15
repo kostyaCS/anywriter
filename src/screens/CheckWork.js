@@ -59,14 +59,18 @@ const CheckWork = () => {
 
     return (
         <StyledContainer>
-            <Title>{work.title}</Title>
-            <StyledDiv dangerouslySetInnerHTML={{ __html: work.content }} />
+            <BackButton onClick={handleBackClick}>Back</BackButton>
+            <Text>
+                <Title>{work.title}</Title>
+                <StyledDiv dangerouslySetInnerHTML={{ __html: work.content }} />
+            </Text>
+            <StyledLine />
             <AddCommentSection>
-                <Title>
-                    Add your comment
-                </Title>
+                <ReviewTtle>
+                    Reviews
+                </ReviewTtle>
                 <CommentForm onSubmit={submitForm}>
-                    <textarea
+                    <StyledTextarea
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         required
@@ -76,7 +80,6 @@ const CheckWork = () => {
             </AddCommentSection>
             {work.reviews && work.reviews.length > 0 && (
                 <ReviewsSection>
-                    <h2>Reviews</h2>
                     {work.reviews.map((review, index) => (
                         <ReviewItem key={index}>
                             <p>{Array.isArray(review) ? review[0] : review}</p>
@@ -87,7 +90,7 @@ const CheckWork = () => {
                     ))}
                 </ReviewsSection>
             )}
-            <StyledButton onClick={handleBackClick}>Back</StyledButton>
+
         </StyledContainer>
     );
 
@@ -95,19 +98,68 @@ const CheckWork = () => {
 
 export default CheckWork;
 
+const ReviewTtle = styled.div`
+    font-size: 36px;
+    font-weight: 600;
+    align-self: flex-start;
+`;
+
+const StyledLine = styled.div`
+    width: 90%;
+    height: 2px;
+    background-color: gray;
+    margin-top: 50px;
+    margin-bottom: 50px;
+`;
+
+const BackButton = styled.button`
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    color: black;
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat Alternates", sans-serif;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
+    margin-left: 20px;
+
+    transition: 0.3s ease;
+    &:hover {
+        scale: 1.03;
+        box-shadow: 6px 6px 0px 0px #81ADC8;
+    }
+    align-self: flex-end;
+`;
+
+const Text = styled.div`
+    display: flex;
+    flex-direction: column;
+    font-family: "Montserrat Alternates", sans-serif;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+`;
+
 const ReviewsSection = styled.div`
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 80%;
     justify-content: center;
     align-items: center;
     gap: 20px;
     margin-bottom: 50px;
+    margin-top: 40px;
 `;
 
 const ReviewItem = styled.div`
-    border: 1px solid black;
-    width: 50%;
+    width: 70%;
+    color: #5c5c5c;
+    font-size: 24px;
+    align-self: flex-start;
 `;
 
 
@@ -121,24 +173,60 @@ const StyledContainer = styled.div`
 const AddCommentSection = styled.div`
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 80%;
     justify-content: center;
     align-items: center;
 `;
 
 const Title = styled.div`
-    
+    font-weight: 600;
+    font-size: 36px;
 `;
 
 const StyledDiv = styled.div`
     margin-bottom: 50px;
+    font-size: 24px;
+    line-height: 1.55;
+    font-weight: 450;
+    max-width: 70%;
+    text-align: justify;
 `;
 
 const StyledButton = styled.button`
-    margin-bottom: 50px;
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    color: black;
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat Alternates", sans-serif;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
+    margin-left: 20px;
+
+    transition: 0.3s ease;
+    &:hover {
+        scale: 1.03;
+        box-shadow: 6px 6px 0px 0px #81ADC8;
+    }
 `;
 
 const CommentForm = styled.form`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-self: flex-start;
+    margin-top: 20px;
+    align-items: center;
+    align-content: center;
+`;
+
+const StyledTextarea = styled.textarea`
+    padding: 10px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 10px;
 `;
