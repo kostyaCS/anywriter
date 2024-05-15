@@ -1,61 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
-import { ref, update, onValue, set } from "firebase/database";
+import { ref, update, onValue, set, child, get } from "firebase/database";
 import { rtdb } from "../firebase";
-import { useNavigate} from "react-router-dom";
-import {auth} from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+import { auth } from "../firebase";
 
 const CheckWork = () => {
     const navigate = useNavigate();
     const { workId } = useParams();
     const [comment, setComment] = useState("");
     const [work, setWork] = useState(null);
+    const [comments, setComments] = useState([]);
+    const { currentUser } = useAuth();
+    const userId = currentUser.uid;
 
     useEffect(() => {
         const workRef = ref(rtdb, `works/${workId}`);
         onValue(workRef, (snapshot) => {
             setWork(snapshot.val());
         });
-    }, [workId, work]);
+
+        const commentsRef = ref(rtdb, `comments/${workId}`);
+        onValue(commentsRef, (snapshot) => {
+            const commentsData = snapshot.val();
+            if (commentsData) {
+                const commentsArray = Object.entries(commentsData).map(([comment, authorId]) => {
+                    return { comment, authorId };
+                });
+                setComments(commentsArray);
+            } else {
+                setComments([]);
+            }
+        });
+    }, [workId]);
 
     const handleBackClick = () => {
-        navigate("/main_page")
-    }
+        navigate("/main_page");
+    };
+
+    const submitForm = async (event) => {
+        event.preventDefault();
+
+        const commentData = {
+            comment,
+            authorId: userId
+        };
+
+        const commentsRef = ref(rtdb, `comments/${workId}`);
+        await set(child(commentsRef, comment), userId);
+
+        const updatedReviews = [...(work.reviews || []), { comment, authorId: userId }];
+        await update(ref(rtdb, `works/${workId}`), { reviews: updatedReviews });
+
+        setComment('');
+    };
+
+    const handleDeleteClick = async (comment) => {
+        const commentsRef = ref(rtdb, `comments/${workId}`);
+        await set(child(commentsRef, comment), null);
+    };
 
     if (!work) {
         return <StyledDiv>Loading...</StyledDiv>;
     }
-
-    const submitForm = (event) => {
-        event.preventDefault();
-
-        let updates = {};
-        const newReview = comment;
-        const currentReviews = work.reviews || [];
-        const newReviewKey = currentReviews.length.toString();
-
-        updates[`/works/${workId}/reviews/${newReviewKey}`] = [newReview, auth.currentUser.uid, auth.currentUser.email];
-        update(ref(rtdb), updates).then(() => {
-            const updatedReviews = [...currentReviews, newReview];
-            setWork({ ...work, reviews: updatedReviews });
-            setComment('');
-        }).catch(error => {
-            console.error('Error adding review: ', error);
-        });
-    };
-
-    const handleDeleteClick = (review) => {
-        const workRef = ref(rtdb, `works/${workId}/reviews`);
-        const newReviews = work.reviews.filter(element => element !== review);
-
-        set(workRef, newReviews).then(() => {
-            setWork({ ...work, reviews: newReviews });
-        }).catch(error => {
-            console.error(error);
-        });
-    }
-
 
     return (
         <StyledContainer>
@@ -66,9 +75,7 @@ const CheckWork = () => {
             </Text>
             <StyledLine />
             <AddCommentSection>
-                <ReviewTtle>
-                    Reviews
-                </ReviewTtle>
+                <ReviewTtle>Reviews</ReviewTtle>
                 <CommentForm onSubmit={submitForm}>
                     <StyledTextarea
                         value={comment}
@@ -78,23 +85,22 @@ const CheckWork = () => {
                     <StyledButton type="submit">Add comment</StyledButton>
                 </CommentForm>
             </AddCommentSection>
-            {work.reviews && work.reviews.length > 0 && (
+            {comments.length > 0 && (
                 <ReviewsSection>
-                    {work.reviews.map((review, index) => (
+                    {comments.map(({ comment: cmt, authorId }, index) => (
                         <ReviewItem key={index}>
-                            <p>{Array.isArray(review) ? review[0] : review}</p>
-                            {Array.isArray(review) && review[1] === auth.currentUser.uid ?
-                                (<button onClick={() => handleDeleteClick(review)}>Delete comment</button>) : null}
-                            <p>{Array.isArray(review) ? review[2]: null}</p>
+                            <p>{cmt}</p>
+                            {authorId === userId &&
+                                <button onClick={() => handleDeleteClick(cmt)}>Delete comment</button>
+                            }
+                            <p>{authorId}</p>
                         </ReviewItem>
                     ))}
                 </ReviewsSection>
             )}
-
         </StyledContainer>
     );
-
-}
+};
 
 export default CheckWork;
 
@@ -133,6 +139,8 @@ const BackButton = styled.button`
         box-shadow: 6px 6px 0px 0px #81ADC8;
     }
     align-self: flex-end;
+    
+    
 `;
 
 const Text = styled.div`
@@ -142,6 +150,11 @@ const Text = styled.div`
     justify-content: center;
     align-items: center;
     gap: 20px;
+    
+    @media (max-width: 1000px) {
+        gap: 5px;
+        margin-top: 8px;
+    }
 `;
 
 const ReviewsSection = styled.div`
@@ -153,6 +166,10 @@ const ReviewsSection = styled.div`
     gap: 20px;
     margin-bottom: 50px;
     margin-top: 40px;
+    
+    @media (max-width: 1000px) {
+        width: 90%;
+    }
 `;
 
 const ReviewItem = styled.div`
@@ -160,6 +177,16 @@ const ReviewItem = styled.div`
     color: #5c5c5c;
     font-size: 24px;
     align-self: flex-start;
+    
+    @media (max-width: 1300px) {
+        font-size: 22px;
+        width: 80%;
+    }
+    
+    @media (max-width: 900px) {
+        font-size: 20px;
+        width: 90%;
+    }
 `;
 
 
@@ -168,6 +195,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-bottom: 20px;
 `;
 
 const AddCommentSection = styled.div`
@@ -176,11 +204,27 @@ const AddCommentSection = styled.div`
     width: 80%;
     justify-content: center;
     align-items: center;
+    
+    @media (max-width: 1000px) {
+        width: 90%;
+    }
 `;
 
 const Title = styled.div`
     font-weight: 600;
     font-size: 36px;
+    
+    @media (max-width: 1300px) {
+        font-size: 32px;
+    }
+    
+    @media (max-width: 900px) {
+        font-size: 30px;
+    }
+    
+    @media (max-width: 420px) {
+        font-size: 28px;
+    }
 `;
 
 const StyledDiv = styled.div`
@@ -190,6 +234,26 @@ const StyledDiv = styled.div`
     font-weight: 450;
     max-width: 70%;
     text-align: justify;
+    word-wrap: break-word;
+    
+    @media (max-width: 1300px) {
+        max-width: 80%;
+        font-size: 22px;
+    }
+    
+    @media (max-width: 900px) {
+        max-width: 85%;
+    }
+    
+    @media (max-width: 420px) {
+        max-width: 90%;
+        font-size: 20px;
+    }
+    
+    @media (max-width: 380px){
+        max-width: 95%;
+        font-size: 18px;
+    }
 `;
 
 const StyledButton = styled.button`
