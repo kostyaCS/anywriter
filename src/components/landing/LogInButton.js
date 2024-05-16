@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const SignUpButton = (props) => {
+const LogInButton = (props) => {
     return (
         <>
             <StyledButton onClick={props.onClick}>
@@ -10,7 +10,7 @@ const SignUpButton = (props) => {
     )
 };
 
-export default SignUpButton;
+export default LogInButton;
 
 const StyledButton = styled.button`
     height: 42px;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../images/logo.png";
 import scribble_pink from "../images/landing/scribble_pink.png";
 import spiral_star from "../images/landing/spiral_star.png";
@@ -75,7 +75,6 @@ const LandingScreen = () => {
     }
 
     function getCurrentYear() {
-        console.log(new Date().getFullYear());
         return new Date().getFullYear();
     }
 

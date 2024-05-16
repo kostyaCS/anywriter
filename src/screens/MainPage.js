@@ -1,24 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
-import HeaderDef from "../components/Header";
 import { rtdb } from "../firebase";
 import { ref, onValue, get } from "firebase/database";
 import ScrollContainer from "../components/ScrollContainer";
-import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
-import ProfileComponent from "../components/ProfileComponent";
 import {useAuth} from "../AuthContext";
+import logo from "../images/logo.png";
+import CreateButton from "../components/CreateButton";
+import {useNavigate} from "react-router-dom";
+import ProfileButton from "../components/profile/ProfileButton";
+
 
 const MainPage = () => {
     const [allData, setAllData] = useState([]);
     const [activeTab, setActiveTab] = useState("all");
     const { currentUser } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogoClick = () => {
+        navigate("/main_page");
+    }
+
+    const handleProfileClick = () => {
+        navigate("/profile");
+    }
+
+    const handleCreateClick = () => {
+        navigate("/create_work");
+    }
 
 
     useEffect(() => {
         if (!currentUser) return;
 
         const fetchWorks = async () => {
-            if (activeTab === "all") {
+            if (activeTab === "all" || activeTab === "your-writings") {
                 const worksRef = ref(rtdb, "works");
                 const snapshot = await get(worksRef);
                 if (!snapshot.exists()) {
@@ -27,10 +42,22 @@ const MainPage = () => {
                 }
 
                 const worksData = snapshot.val();
-                const allWorks = Object.keys(worksData).map(key => ({
-                    id: key,
-                    ...worksData[key]
-                }));
+                let allWorks = [];
+                if (activeTab === "all") {
+                    allWorks = Object.keys(worksData).map(key => ({
+                        id: key,
+                        ...worksData[key]
+                    }));
+                } else {
+                    allWorks = Object.keys(worksData).map(key => {
+                        if (worksData[key].userId === currentUser.uid) {
+                            return {
+                                id: key,
+                                ...worksData[key]
+                            };
+                        }
+                    }).filter(work => work !== undefined);
+                }
                 setAllData(allWorks);
             } else {
                 const userWorksRef = ref(rtdb, `users/${currentUser.uid}/${activeTab}`);
@@ -58,7 +85,7 @@ const MainPage = () => {
     }, [activeTab, currentUser]);
 
     useEffect(() => {
-        if (!currentUser || activeTab === "all") return;
+        if (!currentUser || activeTab === "all" || activeTab === "your-writings") return;
 
         const userWorksRef = ref(rtdb, `users/${currentUser.uid}/${activeTab}`);
         const unsubscribe = onValue(userWorksRef, (snapshot) => {
@@ -88,7 +115,6 @@ const MainPage = () => {
             }
 
             setAllData(allContents);
-            console.log(allContents)
         });
         return () => {
         };
@@ -100,8 +126,16 @@ const MainPage = () => {
     };
 
     return (
-        <>
-            <HeaderDef />
+        <Main>
+            <Header>
+                <HeaderLeft>
+                    <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
+                </HeaderLeft>
+                <HeaderRight>
+                    <CreateButton onClick={handleCreateClick} text="Create writing"/>
+                    <ProfileButton onClick={handleProfileClick} text="Profile"/>
+                </HeaderRight>
+            </Header>
             <MainContainer>
                 <Left>
                     <LeftOpt
@@ -123,26 +157,74 @@ const MainPage = () => {
                         Saved
                     </LeftOpt>
                     <LeftOpt
-                        onClick={() => handleTabClick("profile")}
-                        active={activeTab === "profile"}
+                        onClick={() => handleTabClick("your-writings")}
+                        active={activeTab === "your-writings"}
                     >
-                        Profile
+                        Your writings
                     </LeftOpt>
                 </Left>
                 <DivLine />
                 <Right>
-                    {activeTab === "profile" ? (
-                        <ProfileComponent/>
-                    ) : (
-                        <ScrollContainer text={allData} />
-                    )}
+                    <ScrollContainer text={allData} />
                 </Right>
             </MainContainer>
-        </>
+        </Main>
     );
 };
 
 export default MainPage;
+
+const Main = styled.div`
+    font-family: 'Montserrat Alternates', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+`;
+
+// ------------- Header -------------
+const Header = styled.div`
+    height: 74px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FDF7F4;
+    width: 90vw;
+    padding: 5px 5vw;
+`;
+
+const HeaderText = styled.div`
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.1s ease-in-out;
+
+    &:hover {
+        color: #915F6D;
+    }
+`;
+
+const HeaderLeft = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Logo = styled.img`
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+`;
+
+const HeaderRight = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+`;
 
 const MainContainer = styled.div`
     overflow: hidden;
@@ -166,9 +248,7 @@ const LeftOpt = styled.div`
     padding: 10px;
     cursor: pointer;
     border-radius: 10px;
-    line-height: 18px;
     font-size: 20px;
-    font-family: "Montserrat Alternates", sans-serif;
     font-weight: 500;
     background-color: ${props => props.active ? '#e3e3e3' : 'transparent'}; // Додано стиль кнопки в залежності від активності
 `;
