@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../AuthContext";
 import MyEditor from "../components/TextEditor";
-import BlueButton from "../components/BlueButton";
 import { push, ref, set } from "@firebase/database";
 import { rtdb } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import Options from "../components/Options";
+import Header from "../components/Header";
 
 const CreateWork = () => {
     const { currentUser } = useAuth();
@@ -103,54 +103,75 @@ const CreateWork = () => {
 
     return (
         <>
-            <Header>
-                <HeaderText>
-                    Мої твори
-                </HeaderText>
-            </Header>
-            <InputTitile value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Введіть назву"/>
-            <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
-            <Options placeholder={'Select Genre'} data={genreData} value={selectedGenre}
-                     onChange={(e) => setSelectedGenre(e)} />
-            <Options placeholder={'Select sphere of interest of the text'} data={interestsData} value={selectedInterest}
-                     onChange={(e) => setSelectedInterest(e)} />
-            <Options placeholder={'Select emotion, which your text represent'} data={emotionData} value={selectedEmotion}
-                     onChange={(e) => setSelectedEmotion(e)} />
-            <Options placeholder={'Select format of the text'} data={formatData} value={selectedFormat}
-                     onChange={(e) => setSelectedFormat(e)} />
-            <Options placeholder={'Select age category of your text'} data={ageData} value={selectedAge}
-                     onChange={(e) => setSelectedAge(e)} />
-            <BlueButton text="Зберегти" onClick={saveWork} />
+            <Header />
+            <MainContainer>
+                <InputTitile value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Введіть назву"/>
+                <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
+                <Options placeholder={'Select Genre'} data={genreData} value={selectedGenre}
+                         onChange={(e) => setSelectedGenre(e)} />
+                <Options placeholder={'Select sphere of interest of the text'} data={interestsData} value={selectedInterest}
+                         onChange={(e) => setSelectedInterest(e)} />
+                <Options placeholder={'Select emotion, which your text represent'} data={emotionData} value={selectedEmotion}
+                         onChange={(e) => setSelectedEmotion(e)} />
+                <Options placeholder={'Select format of the text'} data={formatData} value={selectedFormat}
+                         onChange={(e) => setSelectedFormat(e)} />
+                <Options placeholder={'Select age category of your text'} data={ageData} value={selectedAge}
+                         onChange={(e) => setSelectedAge(e)} />
+                <StyledButton onClick={saveWork}> Save </StyledButton>
+            </MainContainer>
         </>
     );
 }
 
 export default CreateWork;
 
-const Header = styled.div`
-    padding-top: 20px;
-    gap: 80px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid black;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+const StyledButton = styled.button`
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    color: black;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat Alternates", sans-serif;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
+    max-width: fit-content;
+    margin-top: 10px;
+
+    transition: 0.3s ease;
+    &:hover {
+        scale: 1.03;
+        box-shadow: 6px 6px 0px 0px #81ADC8;
+    }
 `;
 
-const StyledImage = styled.img``;
-
-const InputTitile = styled.input``;
-
-const HeaderText = styled.div`
-    font-weight: 300;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 18px;
+const InputTitile = styled.input`
+    font-size: 24px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 15px;
+    border: 2px solid #000000;
+    max-width: 40%;
+    font-family: "Montserrat Alternates", sans-serif;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
+    transition: 0.3s ease;
+    margin-bottom: 10px;
+    &:hover {
+        scale: 1.03;
+        box-shadow: 6px 6px 0px 0px #81ADC8;
+    }
+    
+    @media (max-width: 800px) {
+        font-size: 18px;
+        max-width: 70%;
+    }
 `;
 
 const MainContainer = styled.div`
     justify-content: center;
-    align-items: center;
     display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 30px;
 `;

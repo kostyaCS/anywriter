@@ -47,6 +47,10 @@ const CheckboxGroupContainer = styled.div`
     flex-direction: column;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
+    @media (max-width: 800px){
+        max-width: 80%;
+    }
 `;
 
 const GroupTitle = styled.div`
@@ -58,6 +62,10 @@ const GroupTitle = styled.div`
     user-select: none;
     &:hover {
         color: #81ADC8;
+    }
+    
+    @media (max-width: 800px) {
+        font-size: 14px;        
     }
 `;
 

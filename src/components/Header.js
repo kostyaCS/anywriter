@@ -5,6 +5,8 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
 import logo from "../images/logo.png";
+import CreateButton from "./CreateButton";
+import ProfileButton from "./profile/ProfileButton";
 
 const HeaderDef = () => {
     const { currentUser } = useAuth();
@@ -16,40 +18,27 @@ const HeaderDef = () => {
         }
     }, [currentUser, navigate]);
 
-    const handleLogout = () => {
-        signOut(auth).then(() => {
-        }).catch((error) => {
-            console.error("Logout error:", error);
-        });
-    };
-
     const handleLogoClick = () => {
         navigate("/main_page");
     }
 
-    const handleMyPageClick = () => {
-        navigate("/my_page");
+    const handleProfileClick = () => {
+        navigate("/profile");
+    }
+
+    const handleCreateClick = () => {
+        navigate("/create_work");
     }
 
     return (
         <>
             <Header>
-                {currentUser?.email === "admin@gmail.com" && (
-                    <Link to="/create_work">Add Text</Link>
-                )}
-                <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
-                <HeaderCenter>
-                    <HeaderText onClick={handleLogoClick}>
-                        Readly
-                    </HeaderText>
-                </HeaderCenter>
+                <HeaderLeft>
+                    <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
+                </HeaderLeft>
                 <HeaderRight>
-                    <HeaderText>
-                        Settings
-                    </HeaderText>
-                    <HeaderText onClick={handleLogout}>
-                        Log out
-                    </HeaderText>
+                    <CreateButton onClick={handleCreateClick} text="Create writing"/>
+                    <ProfileButton onClick={handleProfileClick} text="Profile"/>
                 </HeaderRight>
             </Header>
         </>
@@ -58,35 +47,37 @@ const HeaderDef = () => {
 
 export default HeaderDef;
 
+
+// ------------- Header -------------
 const Header = styled.div`
-    background-color: #FDF7F4;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    height: 5vh;
-    gap: 75px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    height: 74px;
     display: flex;
     flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 5%;
+    background-color: #FDF7F4;
+    width: 90vw;
+    padding: 5px 5vw;
 `;
 
 const HeaderText = styled.div`
     cursor: pointer;
     font-size: 16px;
-    line-height: 18px;
-    font-family: "Montserrat Alternates", sans-serif;
     font-weight: 600;
-    font-style: normal;
+    transition: all 0.1s ease-in-out;
+
+    &:hover {
+        color: #915F6D;
+    }
 `;
 
-const HeaderCenter = styled.div`
+const HeaderLeft = styled.div`
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Logo = styled.img`
@@ -98,7 +89,7 @@ const Logo = styled.img`
 const HeaderRight = styled.div`
     display: flex;
     flex-direction: row;
-    gap: 50px;
-    margin-left: auto;
-    margin-right: 5%;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
 `;
