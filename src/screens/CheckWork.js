@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
 import { ref, update, onValue, set, child, get } from "firebase/database";
-import { rtdb } from "../firebase";
+import { rtdb, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
-import { auth } from "../firebase";
+import {ref as storageRef, uploadBytes, getDownloadURL} from "firebase/storage";
+import deleteButton from "../images/delete-button-svgrepo-com.svg";
 
 const CheckWork = () => {
     const navigate = useNavigate();
@@ -23,18 +24,28 @@ const CheckWork = () => {
         });
 
         const commentsRef = ref(rtdb, `comments/${workId}`);
-        onValue(commentsRef, (snapshot) => {
+        onValue(commentsRef, async (snapshot) => {
             const commentsData = snapshot.val();
             if (commentsData) {
-                const commentsArray = Object.entries(commentsData).map(([comment, authorId]) => {
-                    return { comment, authorId };
-                });
+                const commentsArray = await Promise.all(Object.entries(commentsData).map(async ([comment, authorId]) => {
+                    const avatarUrl = await getAvatarUrl(authorId);
+                    return { comment, authorId, avatarUrl };
+                }));
                 setComments(commentsArray);
             } else {
                 setComments([]);
             }
         });
     }, [workId]);
+
+    const getAvatarUrl = async (userId) => {
+        try {
+            const url = await getDownloadURL(storageRef(storage, `profile_images/${userId}`));
+            return url;
+        } catch (error) {
+            return '';
+        }
+    };
 
     const handleBackClick = () => {
         navigate("/main_page");
@@ -87,13 +98,20 @@ const CheckWork = () => {
             </AddCommentSection>
             {comments.length > 0 && (
                 <ReviewsSection>
-                    {comments.map(({ comment: cmt, authorId }, index) => (
+                    {comments.map(({ comment: cmt, authorId, avatarUrl }, index) => (
                         <ReviewItem key={index}>
-                            <p>{cmt}</p>
-                            {authorId === userId &&
-                                <button onClick={() => handleDeleteClick(cmt)}>Delete comment</button>
-                            }
-                            <p>{authorId}</p>
+                            <UserBlock>
+                                <Avatar src={avatarUrl} alt="Avatar" />
+                                <ReviewEmail>{currentUser.email}</ReviewEmail>
+                            </UserBlock>
+                            <ReviewBlock>
+                                <StyledComment>{cmt}</StyledComment>
+                                {authorId === userId &&
+                                    <DeleteButton onClick={() => handleDeleteClick(cmt)}>
+                                        <DeleteImage src={deleteButton} alt="Delete" />
+                                    </DeleteButton>
+                                }
+                            </ReviewBlock>
                         </ReviewItem>
                     ))}
                 </ReviewsSection>
@@ -103,6 +121,59 @@ const CheckWork = () => {
 };
 
 export default CheckWork;
+
+const UserBlock = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+`;
+
+const Avatar = styled.img`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+`;
+
+const ReviewBlock = styled.div`
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+`;
+
+const DeleteImage = styled.img`
+    width: 30px;
+    height: 30px;
+`;
+
+
+const ReviewEmail = styled.div`
+    font-size: 20px;
+    font-weight: 600;
+`;
+
+const StyledComment = styled.div`
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+`;
+
+const DeleteButton = styled.button`
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    color: black;
+    border-radius: 15px;
+    padding: 5px 5px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Montserrat Alternates", sans-serif;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px 0px #81ADC8;
+    margin-left: 20px;
+`;
 
 const ReviewTtle = styled.div`
     font-size: 36px;
@@ -177,6 +248,8 @@ const ReviewItem = styled.div`
     color: #5c5c5c;
     font-size: 24px;
     align-self: flex-start;
+    padding-bottom: 10px;
+    border-bottom: gray 1px solid;
     
     @media (max-width: 1300px) {
         font-size: 22px;
