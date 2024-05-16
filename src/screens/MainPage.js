@@ -230,6 +230,10 @@ const MainContainer = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: row;
+    
+    @media (max-width: 800px) {
+        flex-direction: column;
+    }
 `;
 
 const Left = styled.div`
@@ -242,6 +246,18 @@ const Left = styled.div`
     flex-direction: column;
     margin-left: 60px;
     margin-right: 10px;
+    
+    @media (max-width: 800px) {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 10px;
+        height: 10%;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        gap: 5px;
+    }
 `;
 
 const LeftOpt = styled.div`
@@ -250,7 +266,11 @@ const LeftOpt = styled.div`
     border-radius: 10px;
     font-size: 20px;
     font-weight: 500;
-    background-color: ${props => props.active ? '#e3e3e3' : 'transparent'}; // Додано стиль кнопки в залежності від активності
+    background-color: ${props => props.active ? '#e3e3e3' : 'transparent'};
+    
+    @media (max-width: 800px){
+        font-size: 18px;
+    }
 `;
 
 const Right = styled.div`
@@ -260,6 +280,13 @@ const Right = styled.div`
     height: 100vh;
     background-color: white;
     float: left;
+    
+    @media (max-width: 800px) {
+        width: 100%;
+        margin-top: 10px;
+        height: 90%;
+        padding-left: 0;
+    }
 `;
 
 const DivLine = styled.div`
@@ -267,4 +294,8 @@ const DivLine = styled.div`
     height: 400px;
     width: 2px;
     background-color: #d6d6d6;
+    
+    @media (max-width: 800px) {
+        display: none;
+    }
 `;

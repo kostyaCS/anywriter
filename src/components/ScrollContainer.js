@@ -158,7 +158,7 @@ const ScrollContainer = (props) => {
         <>
             <ScrollHeader>
                 <ToggleCheckboxButton onClick={toggleCheckboxVisibility}>
-                    Toggle Filters
+                    Filters
                 </ToggleCheckboxButton>
                 <SearchInput
                     type="text"
@@ -298,6 +298,11 @@ const Item = styled.div`
     box-shadow: 0 10px 32px -15px rgba(0,0,0,0.75);
     font-family: "Montserrat Alternates", sans-serif;
     background: #fff;
+    min-height: fit-content;
+
+    @media (max-width: 800px){
+        padding: 10px;
+    }
 `;
 
 const ItemTitle = styled.div`
@@ -309,12 +314,20 @@ const ItemTitle = styled.div`
         transform: scale(1.01);
     }
     cursor: pointer;
+    
+    @media (max-width: 800px) {
+        font-size: 18px;
+    }
 `;
 
 const ItemText = styled.div`
     font-size: 16px;
     font-weight: 500;
     text-align: left;
+    
+    @media (max-width: 800px) {
+        font-size: 12px;
+    }
 `;
 
 const ItemDate = styled.div`
@@ -322,6 +335,10 @@ const ItemDate = styled.div`
     font-size: 18px;
     font-weight:600;
     text-align: left;
+    
+    @media (max-width: 800px) {
+        font-size: 14px;
+    }
 `;
 
 const ItemGenre = styled.div`
@@ -362,6 +379,11 @@ const ItemTextContainer = styled.div`
     width: 40%;
     font-size: 25px;
     text-align: left;
+    
+    @media (max-width: 800px) {
+        width: 90%;
+        gap: 10px;
+    }
 `;
 
 const ItemReviewsContainer = styled.div`
@@ -424,6 +446,10 @@ const Reaction = styled.div`
     align-content: center;
     align-items: center;
     gap: 50px;
+    
+    @media (max-width: 800px){
+        flex-direction: row;
+    }
 `;
 
 const ReactionIconButton = styled.button`
@@ -438,6 +464,7 @@ const ReactionIconButton = styled.button`
     &:hover {
         transform: scale(1.1);
     }
+    
 `;
 
 const DataContainer = styled.div`
@@ -446,6 +473,10 @@ const DataContainer = styled.div`
     justify-content: space-evenly;
     align-content: center;
     align-items: center;
+    
+    @media (max-width: 800px) {
+        flex-direction: column;
+    }
 `;
 
 const ToggleCheckboxButton = styled.button`
@@ -465,6 +496,10 @@ const ToggleCheckboxButton = styled.button`
     &:hover {
         scale: 1.03;
         box-shadow: 6px 6px 0px 0px #81ADC8;
+    }
+    
+    @media (max-width: 800px) {
+        margin-left: 0;
     }
 `;
 
@@ -492,6 +527,11 @@ const SearchInput = styled.input`
         outline: none;
         box-shadow: 5px 5px 0px 0px rgba(145, 95, 109, 0.5);
     }
+    
+    @media (max-width: 800px) {
+        margin-right: 0;
+        max-width: 55%;
+    }
 `;
 
 const ScrollHeader = styled.div`
@@ -500,4 +540,12 @@ const ScrollHeader = styled.div`
     gap: 20px;
     margin-bottom: 20px;
     padding-bottom: 20px;
+
+    @media (max-width: 800px) {
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        max-width: 100%;
+    }
 `;
