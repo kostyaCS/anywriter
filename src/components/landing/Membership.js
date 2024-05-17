@@ -133,6 +133,7 @@ const StyledScribbleZigImage = styled.img`
 
     @media (max-width: 430px) {
         width: 100px;
+        margin: 0 -30px -20px 0;
     }
 `;
 
@@ -160,6 +161,7 @@ const MembershipCard = styled.div`
 
     @media (max-width: 430px) {
         font-size: 13px;
+        width: 80%;
     }
 `;
 

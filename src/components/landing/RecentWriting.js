@@ -65,6 +65,8 @@ const Main = styled.div`
 
 const StyledReadersText = styled.div`
     display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 50px;
     font-weight: 700;
     text-align: center;
@@ -110,6 +112,11 @@ const RecentWritingCard = styled.div`
 const StyledLinesImg = styled.img`
     height: 80px;
     margin-right: -70px;
+
+    @media (max-width: 430px) {
+        height: 50px;
+        margin-right: -30px;
+    }
 `;
 
 const RecentWritingMain = styled.div`
@@ -124,6 +131,10 @@ const FrameImgContainer = styled.div`
     height: 290px;
     overflow: hidden;
     border-radius: 8px;
+
+    @media (max-width: 430px) {
+        display: none;
+    }
 `;
 
 const StyledRecentWritingImage = styled.img`
@@ -167,6 +178,10 @@ const RecentWritingAdditionalTags = styled.div`
     align-items: center;
     gap: 15px;
     flex-wrap: wrap;
+
+    @media (max-width: 430px) {
+        font-size: 12px;
+    }
 `;
 
 const RecentWritingAdditionalTag = styled.div`

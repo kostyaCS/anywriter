@@ -14,7 +14,7 @@ export default LogInButton;
 
 const StyledButton = styled.button`
     height: 42px;
-    width: 120px;
+    padding: 0 15px;
     background-color: transparent;
     border-radius: 5px;
     border: 2px solid black;
@@ -27,5 +27,14 @@ const StyledButton = styled.button`
 
     &:hover {
         transform: translateY(-1px);
+    }
+
+    @media (max-width: 550px) {
+        gap: 20px;
+    }
+
+    @media (max-width: 430px) {
+        gap: 8px;
+        font-size: 12px;
     }
 `;

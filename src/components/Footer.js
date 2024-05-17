@@ -125,9 +125,8 @@ const FooterTop = styled.div`
     align-items: flex-start;
     margin-bottom: 30px;
 
-    @media (max-width: 836px) {
+    @media (max-width: 900px) {
         flex-direction: column;
-        gap: 60px;
     }
 `;
 
@@ -137,6 +136,10 @@ const FooterLeft = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 22px;
+
+    @media (max-width: 430px) {
+        width: 100%;
+    }
 `;
 
 const FooterRight = styled.div`
@@ -144,6 +147,11 @@ const FooterRight = styled.div`
     display: flex;
     align-items: flex-start;
     gap: 45px;
+
+    @media (max-width: 460px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 const FooterLeftImage = styled.div`

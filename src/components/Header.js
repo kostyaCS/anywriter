@@ -61,17 +61,6 @@ const Header = styled.div`
     padding: 5px 5vw;
 `;
 
-const HeaderText = styled.div`
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.1s ease-in-out;
-
-    &:hover {
-        color: #915F6D;
-    }
-`;
-
 const HeaderLeft = styled.div`
     display: flex;
     flex-direction: row;
