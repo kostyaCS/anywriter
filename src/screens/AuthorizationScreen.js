@@ -110,6 +110,12 @@ const Auth = styled.div`
     align-items: flex-end;
     font-family: 'Montserrat Alternates', sans-serif;
     overflow-x: hidden;
+
+    @media (max-width: 800px) {
+        align-items: center;
+        justify-content: center;
+        gap: 90px;
+    }
 `;
 
 const Logo = styled.img`
