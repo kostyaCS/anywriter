@@ -26,12 +26,6 @@ const StyledDatePicker = (props) => {
 
 export default StyledDatePicker;
 
-const Main = styled.div`
-    @media (max-width: 550px) {
-        width: 100%;
-    }
-`;
-
 const StyledDatePickerContainer = styled(DatePicker)`
     width: 450px;
     height: 50px;

@@ -219,7 +219,7 @@ const Main = styled.div`
     margin-bottom: 60px;
 
     @media (max-width: 627px) {
-        min-height: 760px;
+        min-height: 790px;
     }
 
     @media (max-width: 550px) {
@@ -244,6 +244,11 @@ const TitleText = styled.h1`
     font-size: 50px;
     margin: 0 0 5px 0;
     text-align: center;
+    transition: all 0.3s ease-in;
+
+    @media (max-width: 550px) {
+        font-size: 40px;
+    }
 `;
 
 const HorizontalLineSeparator = styled.div`

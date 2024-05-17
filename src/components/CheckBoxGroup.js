@@ -39,18 +39,13 @@ const CheckboxGroup = ({ title, options, selectedValues, onChange }) => {
 export default CheckboxGroup;
 
 const CheckboxGroupContainer = styled.div`
-    width: 90%;
     margin: 20px;
     background-color: #FDF7F4;
     padding: 20px;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    
-    @media (max-width: 800px){
-        max-width: 80%;
-    }
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const GroupTitle = styled.div`

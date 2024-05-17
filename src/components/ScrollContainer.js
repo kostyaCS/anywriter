@@ -199,41 +199,40 @@ const ScrollContainer = (props) => {
             <List>
                 {filteredText.map((el, index) => (
                     <Item key={el.id || index}>
-                        <DataContainer>
-                            <ItemTextContainer>
-                                <ItemDate>{el.date? el.date : "28.05.2024"}</ItemDate>
-                                <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}  onClick={() => handleReadClick(el.id)}/>
-                                <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
-                            </ItemTextContainer>
-                            <Reaction>
-                                <ReactionIconButton liked={currentLikes.includes(el.id)} onClick={() => {
-                                    handleLikeClick(el.id);
-                                }}>
-                                    <svg className="w-[35px] h-[35px]" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                         fill={currentLikes.includes(el.id) ? "red" : "none"}
-                                         viewBox="0 0 24 24"
-                                         stroke={currentLikes.includes(el.id) ? "red" : "currentColor"}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                              d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
-                                    </svg>
-                                </ReactionIconButton>
-                                <ReactionIconButton saved={currentSaved.includes(el.id)} onClick={() => {
-                                    handleSavedClick(el.id)
-                                }
-                                }>
-                                    <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
-                                         xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                         fill={currentSaved.includes(el.id) ? "orange" : "none"}
-                                         viewBox="0 0 24 24">
-                                        <path stroke={currentSaved.includes(el.id) ? "orange" : "currentColor"}
-                                              strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
-                                              d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
-                                    </svg>
-                                </ReactionIconButton>
-                            </Reaction>
+                        <ItemTextContainer>
+                            <ItemDate>{el.date? el.date : "28.05.2024"}</ItemDate>
+                            <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}  onClick={() => handleReadClick(el.id)}/>
+                            <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
                             <ItemGenre>{el.genre}</ItemGenre>
-                        </DataContainer>
+                        </ItemTextContainer>
+                        <Reaction>
+                            <ReactionIconButton liked={currentLikes.includes(el.id)} onClick={() => {
+                                handleLikeClick(el.id);
+                            }}>
+                                <svg className="w-[35px] h-[35px]" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                     fill={currentLikes.includes(el.id) ? "red" : "none"}
+                                     viewBox="0 0 24 24"
+                                     stroke={currentLikes.includes(el.id) ? "red" : "currentColor"}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                          d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                </svg>
+                            </ReactionIconButton>
+                            <ReactionIconButton saved={currentSaved.includes(el.id)} onClick={() => {
+                                handleSavedClick(el.id)
+                            }
+                            }>
+                                <svg className="w-[35px] h-[35px] text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                     fill={currentSaved.includes(el.id) ? "orange" : "none"}
+                                     viewBox="0 0 24 24">
+                                    <path stroke={currentSaved.includes(el.id) ? "orange" : "currentColor"}
+                                          strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3"
+                                          d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"/>
+                                </svg>
+                            </ReactionIconButton>
+                        </Reaction>
+                        {/*<ItemGenre>{el.genre}</ItemGenre>*/}
                     </Item>
                 ))}
                 {filteredText.length === 0 && <Loader>No matches found</Loader>}
@@ -245,54 +244,43 @@ const ScrollContainer = (props) => {
 export default ScrollContainer;
 
 const List = styled.div`
-    margin-top: 20px;
-    max-height: 80vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    background: #fff;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: 80vh;
+    margin-top: 20px;
+    background: #fff;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
         display: none;
     }
+
+    @media (max-width: 800px) {
+        height: 75vh;
+    }
+
+    @media (max-width: 430px) {
+        height: 69vh;
+    }
+
+    @media (max-width: 355px) {
+        height: 63vh;
+    }
 `;
-
-const CheckboxContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-`;
-
-const GenreCheckboxes = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    margin: 20px 0;
-`;
-
-
-
-const ButtonsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 25px;
-`;
-
 
 const Item = styled.div`
     margin: 0 20px 20px 20px;
     padding: 60px 0;
     text-align: center;
     display: flex;
-    flex-direction: column;
+    gap: 15px;
     justify-content: space-evenly;
     align-items: center;
     align-content: center;
     scroll-snap-align: start;
-    min-height: 25vh;
     border-radius: 25px;
     border: 2px solid #000;
     box-shadow: 0 10px 32px -15px rgba(0,0,0,0.75);
@@ -301,7 +289,11 @@ const Item = styled.div`
     min-height: fit-content;
 
     @media (max-width: 800px){
-        padding: 10px;
+        padding: 20px;
+    }
+
+    @media (max-width: 430px) {
+        flex-direction: column;
     }
 `;
 
@@ -345,75 +337,26 @@ const ItemGenre = styled.div`
     padding: 10px;
     border-radius: 6px;
     font-size: 16px;
-    font-weight:400;
     border: 1px solid #000;
-`;
+    width: max-content;
 
-const StyledButton = styled.button`
-    align-items: center;
-    background-color: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: .25rem;
-    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
-    color: rgba(0, 0, 0, 0.85);
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 600;
-    min-height: 3rem;
-    padding: calc(.875rem - 1px) calc(1.5rem - 1px);
-    transition: all 250ms;
-    user-select: none;
-
-    &:hover {
-        border-color: rgba(0, 0, 0, 0.15);
-        box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-        color: rgba(0, 0, 0, 0.85);
+    @media (max-width: 800px) {
+        font-size: 14px;
     }
-`
+`;
 
 const ItemTextContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 25px;
-    width: 40%;
+    width: 70%;
     font-size: 25px;
     text-align: left;
     
     @media (max-width: 800px) {
-        width: 90%;
-        gap: 10px;
+        width: 85%;
+        gap: 15px;
     }
-`;
-
-const ItemReviewsContainer = styled.div`
-    width: 40%;
-    max-height: 70vh;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    overflow: scroll;
-`;
-
-const ItemReviewsElement = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    //align-items: center;
-    background-color: white;
-    padding: 25px 15px 25px 15px;
-    margin: 5px;
-    border-radius: 15px;
-    text-align: left;
-`;
-
-const ItemReviewsText = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    align-items: flex-start;
-    word-break: break-all;
-    text-align: left;
 `;
 
 const Loader = styled.div`
@@ -431,14 +374,6 @@ const Loader = styled.div`
     border-radius: 25px;
 `;
 
-const Text = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-left: 30px;
-`;
-
 const Reaction = styled.div`
     display: flex;
     flex-direction: column;
@@ -447,7 +382,7 @@ const Reaction = styled.div`
     align-items: center;
     gap: 50px;
     
-    @media (max-width: 800px){
+    @media (max-width: 430px){
         flex-direction: row;
     }
 `;
@@ -465,18 +400,6 @@ const ReactionIconButton = styled.button`
         transform: scale(1.1);
     }
     
-`;
-
-const DataContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-content: center;
-    align-items: center;
-    
-    @media (max-width: 800px) {
-        flex-direction: column;
-    }
 `;
 
 const ToggleCheckboxButton = styled.button`
@@ -520,12 +443,12 @@ const SearchInput = styled.input`
 
     &:hover {
         scale: 1.03;
-        box-shadow: 6px 6px 0px 0px #81ADC8;
+        box-shadow: 6px 6px 0 0 #81ADC8;
     }
 
     &:focus {
         outline: none;
-        box-shadow: 5px 5px 0px 0px rgba(145, 95, 109, 0.5);
+        box-shadow: 5px 5px 0 0 rgba(145, 95, 109, 0.5);
     }
     
     @media (max-width: 800px) {
@@ -539,13 +462,15 @@ const ScrollHeader = styled.div`
     align-items: center;
     gap: 20px;
     margin-bottom: 20px;
-    padding-bottom: 20px;
 
     @media (max-width: 800px) {
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
+        margin: 0 20px 10px 20px;
+        justify-content: space-between;
+        gap: 15px;
         max-width: 100%;
+    }
+
+    @media (max-width: 430px) {
+        flex-direction: column-reverse;
     }
 `;

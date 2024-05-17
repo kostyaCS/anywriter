@@ -92,4 +92,13 @@ const HeaderRight = styled.div`
     gap: 30px;
     justify-content: center;
     align-items: center;
+    transition: all 0.3s ease-in;
+
+    @media (max-width: 550px) {
+        gap: 20px;
+    }
+    
+    @media (max-width: 430px) {
+        gap: 8px;
+    }
 `;

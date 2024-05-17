@@ -161,23 +161,27 @@ const Main = styled.div`
 const MainContainer = styled.div`
     overflow: hidden;
     display: flex;
+    gap: 5px;
     flex-direction: row;
+    margin-top: 30px;
+    width: 100%;
     
     @media (max-width: 800px) {
         flex-direction: column;
+        margin-top: 10px;
     }
 `;
 
 const Left = styled.div`
-    margin-top: 40px;
-    width: 15%;
-    height: 100vh;
+    min-width: 140px;
+    height: max-content;
     background-color: white;
     float: left;
     display: flex;
     flex-direction: column;
     margin-left: 60px;
     margin-right: 10px;
+    flex-wrap: wrap;
     
     @media (max-width: 800px) {
         width: 100%;
@@ -206,10 +210,10 @@ const LeftOpt = styled.div`
 `;
 
 const Right = styled.div`
-    padding-left: 3%;
-    margin-top: 40px;
-    width: 79%;
-    height: 100vh;
+    margin-left: 10px;
+    //width: 80%;
+    //width: 79%;
+    //height: 100vh;
     background-color: white;
     float: left;
     
@@ -222,7 +226,6 @@ const Right = styled.div`
 `;
 
 const DivLine = styled.div`
-    margin-top: 40px;
     height: 400px;
     width: 2px;
     background-color: #d6d6d6;

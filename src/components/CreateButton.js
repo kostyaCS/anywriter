@@ -30,7 +30,7 @@ const StyledButton = styled.button`
     }
 
     @media (max-width: 460px) {
-        padding: 0 6px;
+        padding: 0 8px;
         font-size: 12px;
     }
 `;

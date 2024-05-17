@@ -25,16 +25,17 @@ const ExtraSingInContainer = styled.div`
     width: 420px;
     padding-left: 20px;
     flex-wrap: wrap;
+    font-size: 19px;
 
     @media (max-width: 550px) {
         width: 90%;
         padding-left: 0;
+        font-size: 17px;
     }
 `;
 
 const ExtraSingInText = styled.span`
     color: #4D4D4D;
-    font-size: 19px;
     font-weight: 500;
 `;
 
@@ -44,7 +45,6 @@ const ExtraSingInButton = styled.button`
     border: none;
     padding: 0;
     font: inherit;
-    font-size: 19px;
     font-weight: 600;
     text-decoration: underline;
     cursor: pointer;

@@ -33,6 +33,6 @@ const MainEditor = styled.div`
     min-height: 40%;
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
+    box-shadow: 5px 5px 0 0 #81ADC8;
     margin-bottom: 10px;
 `;
