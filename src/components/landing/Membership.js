@@ -160,7 +160,7 @@ const MembershipCard = styled.div`
     }
 
     @media (max-width: 430px) {
-        font-size: 13px;
+        font-size: 15px;
         width: 80%;
     }
 `;

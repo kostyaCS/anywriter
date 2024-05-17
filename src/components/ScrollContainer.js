@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-hook-inview";
 import styled from "styled-components";
-import {useAuth} from "../AuthContext";
-import {ref as firebaseRef, get, set} from "firebase/database"
+import { useAuth } from "../AuthContext";
+import { ref as firebaseRef, get, set } from "firebase/database";
 import { rtdb } from "../firebase";
 import { useNavigate } from 'react-router-dom';
 import CheckboxGroup from "./CheckBoxGroup";
@@ -11,30 +11,50 @@ const ScrollContainer = (props) => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
     const [state, setState] = useState([]);
-    const [ref, isVisible] = useInView({ threshold: 1 });
+    const [isVisible] = useInView({ threshold: 1 });
     const [currentLikes, setCurrentLikes] = useState([]);
     const [currentSaved, setCurrentSaved] = useState([]);
     const newData = [...Array(1).keys()].map((x) => x + state.length);
     const [currIds, setCurrIds] = useState(props.text.map(obj => obj.id)[0]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredText, setFilteredText] = useState(props.text);
-    const [selectedGenres, setSelectedGenres] = useState([]);
-    const [selectedInterests, setSelectedInterests] = useState([]);
-    const [selectedFormats, setSelectedFormats] = useState([]);
-    const [selectedEmotions, setSelectedEmotions] = useState([]);
+
+    // Initialize state from localStorage
+    const [selectedGenres, setSelectedGenres] = useState(() => {
+        return JSON.parse(localStorage.getItem("selectedGenres")) || [];
+    });
+    const [selectedInterests, setSelectedInterests] = useState(() => {
+        return JSON.parse(localStorage.getItem("selectedInterests")) || [];
+    });
+    const [selectedFormats, setSelectedFormats] = useState(() => {
+        return JSON.parse(localStorage.getItem("selectedFormats")) || [];
+    });
+    const [selectedEmotions, setSelectedEmotions] = useState(() => {
+        return JSON.parse(localStorage.getItem("selectedEmotions")) || [];
+    });
+
     const [isCheckboxVisible, setIsCheckboxVisible] = useState(false);
 
-    const genreData = [ "Хорор", "Фентезі", "Наукова фантастика", "Містика",
-        "Трилер", "Історичний", "Романтичний роман", "Детектив"];
+    const genreData = ["Хорор", "Фентезі", "Наукова фантастика", "Містика", "Трилер", "Історичний", "Романтичний роман", "Детектив"];
+    const interestsData = ["Подорожі", "Живопис", "Скульптура", "Музика", "Театр", "Історія", "Кіно", "Спорт"];
+    const formatData = ["Нарис", "Лист", "Новела", "Оповідання", "Спогад", "Легенда"];
+    const emotionsData = ["Радість", "Сум", "Спокій", "Страх"];
 
-    const interestsData = ["Подорожі", "Живопис", "Скульптура",
-        "Музика", "Театр", "Історія", "Кіно", "Спорт",
-    ];
+    useEffect(() => {
+        localStorage.setItem("selectedGenres", JSON.stringify(selectedGenres));
+    }, [selectedGenres]);
 
-    const formatData = ["Нарис", "Лист", "Новела", "Оповідання", "Спогад", "Легенда",];
+    useEffect(() => {
+        localStorage.setItem("selectedInterests", JSON.stringify(selectedInterests));
+    }, [selectedInterests]);
 
-    const emotionsData = ["Радість", "Сум", "Спокій", "Страх",];
+    useEffect(() => {
+        localStorage.setItem("selectedFormats", JSON.stringify(selectedFormats));
+    }, [selectedFormats]);
 
+    useEffect(() => {
+        localStorage.setItem("selectedEmotions", JSON.stringify(selectedEmotions));
+    }, [selectedEmotions]);
 
     useEffect(() => {
         const filtered = props.text.filter(item => {
@@ -140,15 +160,13 @@ const ScrollContainer = (props) => {
         setState(updatedState);
     };
 
-
     const handleReadClick = (workId) => {
         navigate(`/work/${workId}`);
-    }
+    };
 
     useEffect(() => {
         console.log(filteredText);
-    }, []);
-
+    }, [filteredText]);
 
     const toggleCheckboxVisibility = () => {
         setIsCheckboxVisible((prevVisibility) => !prevVisibility);
@@ -169,7 +187,6 @@ const ScrollContainer = (props) => {
             </ScrollHeader>
             {isCheckboxVisible && (
                 <>
-                    {/* Checkbox groups */}
                     <CheckboxGroup
                         title="Жанри"
                         options={genreData}
@@ -200,9 +217,9 @@ const ScrollContainer = (props) => {
                 {filteredText.map((el, index) => (
                     <Item key={el.id || index}>
                         <ItemTextContainer>
-                            <ItemDate>{el.date? el.date : "28.05.2024"}</ItemDate>
-                            <ItemTitle dangerouslySetInnerHTML={{__html: el.title}}  onClick={() => handleReadClick(el.id)}/>
-                            <ItemText dangerouslySetInnerHTML={{__html: el.content.slice(3, 300)}}/>
+                            <ItemDate>{el.date ? el.date : "28.05.2024"}</ItemDate>
+                            <ItemTitle dangerouslySetInnerHTML={{ __html: el.title }} onClick={() => handleReadClick(el.id)} />
+                            <ItemText dangerouslySetInnerHTML={{ __html: el.content.slice(3, 300) }} />
                             <ItemGenre>{el.genre}</ItemGenre>
                         </ItemTextContainer>
                         <Reaction>
@@ -232,14 +249,13 @@ const ScrollContainer = (props) => {
                                 </svg>
                             </ReactionIconButton>
                         </Reaction>
-                        {/*<ItemGenre>{el.genre}</ItemGenre>*/}
                     </Item>
                 ))}
                 {filteredText.length === 0 && <Loader>No matches found</Loader>}
             </List>
         </>
     );
-}
+};
 
 export default ScrollContainer;
 
@@ -294,7 +310,7 @@ const Item = styled.div`
 
     @media (max-width: 430px) {
         flex-direction: column;
-        
+
     }
 `;
 
@@ -307,7 +323,7 @@ const ItemTitle = styled.div`
         transform: scale(1.01);
     }
     cursor: pointer;
-    
+
     @media (max-width: 800px) {
         font-size: 18px;
     }
@@ -317,7 +333,7 @@ const ItemText = styled.div`
     font-size: 16px;
     font-weight: 500;
     text-align: left;
-    
+
     @media (max-width: 800px) {
         font-size: 12px;
     }
@@ -328,7 +344,7 @@ const ItemDate = styled.div`
     font-size: 18px;
     font-weight:600;
     text-align: left;
-    
+
     @media (max-width: 800px) {
         font-size: 14px;
     }
@@ -353,7 +369,7 @@ const ItemTextContainer = styled.div`
     width: 70%;
     font-size: 25px;
     text-align: left;
-    
+
     @media (max-width: 800px) {
         width: 85%;
         gap: 15px;
@@ -382,7 +398,7 @@ const Reaction = styled.div`
     align-content: center;
     align-items: center;
     gap: 50px;
-    
+
     @media (max-width: 430px){
         flex-direction: row;
     }
@@ -400,7 +416,6 @@ const ReactionIconButton = styled.button`
     &:hover {
         transform: scale(1.1);
     }
-    
 `;
 
 const ToggleCheckboxButton = styled.button`
@@ -415,18 +430,17 @@ const ToggleCheckboxButton = styled.button`
     cursor: pointer;
     box-shadow: 5px 5px 0px 0px #81ADC8;
     margin-left: 20px;
-    
+
     transition: 0.3s ease;
     &:hover {
         scale: 1.03;
         box-shadow: 6px 6px 0px 0px #81ADC8;
     }
-    
+
     @media (max-width: 800px) {
         margin-left: 0;
     }
 `;
-
 
 const SearchInput = styled.input`
     background-color: #ffffff;
@@ -451,7 +465,7 @@ const SearchInput = styled.input`
         outline: none;
         box-shadow: 5px 5px 0 0 rgba(145, 95, 109, 0.5);
     }
-    
+
     @media (max-width: 800px) {
         margin-right: 0;
         max-width: 55%;

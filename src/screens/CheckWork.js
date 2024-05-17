@@ -207,7 +207,7 @@ const BackButton = styled.button`
     transition: 0.3s ease;
     &:hover {
         scale: 1.03;
-        box-shadow: 6px 6px 0px 0px #81ADC8;
+        box-shadow: 6px 6px 0 0 #81ADC8;
     }
     align-self: flex-end;
     
@@ -284,6 +284,8 @@ const AddCommentSection = styled.div`
 `;
 
 const Title = styled.div`
+    width: 90%;
+    text-align: center;
     font-weight: 600;
     font-size: 36px;
     

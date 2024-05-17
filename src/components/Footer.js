@@ -125,8 +125,9 @@ const FooterTop = styled.div`
     align-items: flex-start;
     margin-bottom: 30px;
 
-    @media (max-width: 900px) {
+    @media (max-width: 870px) {
         flex-direction: column;
+        gap: 40px;
     }
 `;
 
@@ -137,7 +138,7 @@ const FooterLeft = styled.div`
     align-items: flex-start;
     gap: 22px;
 
-    @media (max-width: 430px) {
+    @media (max-width: 870px) {
         width: 100%;
     }
 `;

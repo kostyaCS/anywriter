@@ -23,14 +23,10 @@ const StyledButton = styled.button`
     font-family: 'Montserrat Alternates', sans-serif;
     font-weight: 700;
     cursor: pointer;
-    -webkit-box-shadow: 5px 5px 0 0 ${props => props.shadowColor || 'rgba(0,0,0,0.25)'};
-    -moz-box-shadow: 5px 5px 0 0 ${props => props.shadowColor || 'rgba(0,0,0,0.25)'};
-    box-shadow: 5px 5px 0 0 ${props => props.shadowColor || 'rgba(0,0,0,0.25)'};
     transition: all 0.3s ease-in-out;
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 7px 7px 0 0 ${props => props.shadowColor || 'rgba(0,0,0,0.25)'};
+        transform: translateY(-1px);
     }
 
     @media (max-width: 460px) {
