@@ -215,9 +215,9 @@ const Right = styled.div`
     margin-left: 10px;
     background-color: white;
     float: left;
-    
+    width: 100%;
+
     @media (max-width: 800px) {
-        width: 100%;
         margin-top: 10px;
         margin-left: 0;
         height: 90%;
