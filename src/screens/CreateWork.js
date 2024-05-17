@@ -80,6 +80,7 @@ const CreateWork = () => {
                 console.error("No user is currently logged in.");
                 return;
             }
+
             const mainDbRef = ref(rtdb, "works");
             const newMainRef = push(mainDbRef);
             await set(newMainRef, {
@@ -91,6 +92,7 @@ const CreateWork = () => {
                 genre: getLabels(selectedGenre),
                 interests: getLabels(selectedInterest),
                 date: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`,
+                userId: currentUser.uid,
                 reviews: [],
             });
             console.log('Work saved successfully!');
