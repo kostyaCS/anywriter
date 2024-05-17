@@ -206,6 +206,12 @@ const Registration = styled.div`
     align-items: flex-end;
     font-family: 'Montserrat Alternates', sans-serif;
     overflow-x: hidden;
+
+    @media (max-width: 800px) {
+        align-items: center;
+        justify-content: center;
+        gap: 90px;
+    }
 `;
 
 const Main = styled.div`
@@ -248,6 +254,10 @@ const TitleText = styled.h1`
 
     @media (max-width: 550px) {
         font-size: 40px;
+    }
+
+    @media (max-width: 420px) {
+        width: 90%;
     }
 `;
 
