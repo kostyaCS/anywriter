@@ -294,6 +294,7 @@ const Item = styled.div`
 
     @media (max-width: 430px) {
         flex-direction: column;
+        
     }
 `;
 

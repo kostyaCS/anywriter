@@ -173,7 +173,7 @@ const MainContainer = styled.div`
 `;
 
 const Left = styled.div`
-    min-width: 140px;
+    min-width: fit-content;
     height: max-content;
     background-color: white;
     float: left;
@@ -220,6 +220,7 @@ const Right = styled.div`
     @media (max-width: 800px) {
         width: 100%;
         margin-top: 10px;
+        margin-left: 0;
         height: 90%;
         padding-left: 0;
     }
