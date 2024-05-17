@@ -24,15 +24,13 @@ function MyEditor({ editorData, onEditorChange }) {
 export default MyEditor;
 
 const MainEditor = styled.div`
-    background-color: #ffffff;
-    border: 2px solid #000000;
     color: black;
-    border-radius: 15px;
     padding: 5px 5px;
     font-size: 16px;
-    min-height: 40%;
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
-    box-shadow: 5px 5px 0 0 #81ADC8;
     margin-bottom: 10px;
+    .ck-editor__editable {
+        min-height: 200px; 
+    };
 `;

@@ -9,8 +9,8 @@ import google_podcast from "../../images/landing/google_podcast.png";
 import avatar_4 from "../../images/landing/avatar_4.png";
 import apple_podcast from "../../images/landing/apple_podcast.png";
 
-const ReadersOpinion = () => {
 
+const ReadersOpinion = () => {
     return (
         <Main>
             <StyledReadersText>

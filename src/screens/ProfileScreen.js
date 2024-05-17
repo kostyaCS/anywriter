@@ -4,19 +4,16 @@ import {auth, rtdb, storage} from "../firebase";
 import {ref as storageRef, uploadBytes, getDownloadURL} from "firebase/storage";
 import {get, onValue, ref} from "firebase/database";
 import {useAuth} from "../AuthContext";
-import logo from "../images/logo.png";
-import CreateButton from "../components/CreateButton";
 import {useNavigate} from "react-router-dom";
 import Avatar from "../images/avatar.png";
-import ProfileButton from "../components/profile/ProfileButton";
 import TimedAlert from "../components/profile/TimedAlert";
 import {getAuth, signOut} from "firebase/auth";
 import LogOutButton from "../components/profile/LogOutButton";
 import InvalidUpdateInput from "../components/profile/InvalidUpdateInput";
 import {update} from "@firebase/database";
+import ProfileHeader from "../components/profile/ProfileHeader";
 
-
-const ProfilePage = () => {
+const ProfileScreen = () => {
     const [allData, setAllData] = useState([]);
     const [activeTab, setActiveTab] = useState("all");
     const { currentUser } = useAuth();
@@ -40,18 +37,6 @@ const ProfilePage = () => {
         } catch (error) { return ''; }
     };
     checkImage();
-
-    const handleLogoClick = () => {
-        navigate("/main_page");
-    }
-
-    const handleProfileClick = () => {
-        navigate("/profile");
-    }
-
-    const handleCreateClick = () => {
-        navigate("/create_work");
-    }
 
     const handleLogout = () => {
         signOut(auth).then(() => {
@@ -293,21 +278,12 @@ const ProfilePage = () => {
 
     return (
         <Main>
-            <Header>
-                <HeaderLeft>
-                    <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
-                </HeaderLeft>
-                <HeaderRight>
-                    <CreateButton onClick={handleCreateClick} text="Create writing"/>
-                    <ProfileButton shadowColor={'rgb(145, 95, 109, 25)'}
-                                   onClick={handleProfileClick} text="Profile"/>
-                </HeaderRight>
-            </Header>
+            <ProfileHeader/>
             <MainContainer>
                 <MainContainerTitle>Profile picture</MainContainerTitle>
                 <MainContainerImage>
                     <FrameImgContainer>
-                        <StyledRecentWritingImage src={avatarUrl || Avatar} alt="Profile picture"/>
+                        <StyledRecentWritingImage src={avatarUrl || Avatar} alt="ProfileScreen picture"/>
                     </FrameImgContainer>
                     <MainContainerInput onChange={(e) => {
                         handleImageFileClick(e.target.files[0]);
@@ -346,65 +322,28 @@ const ProfilePage = () => {
     );
 };
 
-export default ProfilePage;
+export default ProfileScreen;
 
 const Main = styled.div`
     font-family: 'Montserrat Alternates', sans-serif;
     height: 100vh;
     min-height: 790px;
     overflow: hidden;
-`;
-
-// ------------- Header -------------
-const Header = styled.div`
-    height: 74px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #FDF7F4;
-    width: 90vw;
-    padding: 5px 5vw;
-`;
-
-const HeaderLeft = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Logo = styled.img`
-    width: 80px;
-    height: auto;
-    cursor: pointer;
-`;
-
-const HeaderRight = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
-    align-items: center;
-
-    @media (max-width: 460px) {
-        gap: 10px;
-    }
-`;
-
-// ------------- MainContainer -------------
-const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+`;
+
+const MainContainer = styled.div`
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     overflow: hidden;
     margin-top: 30px;
     padding-bottom: 10px;
 `;
 
-// ------------- MainContainer -------------
 const MainContainerTitle = styled.h2`
     font-size: 21px;
     transition: all 0.3s ease-in-out;
@@ -414,7 +353,6 @@ const MainContainerTitle = styled.h2`
     }
 `;
 
-// ------------- MainContainerImage -------------
 const MainContainerImage = styled.div`
     width: 90vw;
     display: flex;
@@ -453,7 +391,6 @@ const StyledRecentWritingImage = styled.img`
     }
 `;
 
-// ------------- MainContainerInput -------------
 const MainContainerLabel = styled.label`
     padding: 10px 20px;
     border-radius: 5px;

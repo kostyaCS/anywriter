@@ -7,8 +7,20 @@ import bulb from "../../images/landing/bulb.png";
 import spiral from "../../images/spiral.png";
 import avatar from "../../images/landing/avatar.png";
 import black_star from "../../images/landing/black_star.png";
+import ContinueButton from "../ContinueButton";
+import {useNavigate} from "react-router-dom";
+
 
 const AboutComponent = () => {
+    const navigate = useNavigate();
+
+    const handleReadMore = () => {
+        navigate("/about");
+        window.scroll({
+            top: 0
+        });
+    }
+
     return (
         <Main>
             <StyledAboutText>Read. Discuss. Get inspired by every minute of it.</StyledAboutText>
@@ -40,6 +52,7 @@ const AboutComponent = () => {
                 </AboutReviewMain>
                 <StyledBlackStarImage src={black_star} alt="black star" />
             </AboutReviewContainer>
+            <ContinueButton onClick={handleReadMore} text="Read more"/>
             <ScribbleImg src={scribble_black} alt="scribble black" />
         </Main>
     )
@@ -75,7 +88,6 @@ const StyledAboutText = styled.h2`
     }
 `;
 
-// ------------- Images -------------
 const AboutImgContainer = styled.div`
     width: 85vw;
     display: flex;
@@ -122,7 +134,6 @@ const AboutImgCardText = styled.div`
     }
 `;
 
-// ------------- Review -------------
 const AboutReviewContainer = styled.div`
     width: 100vw;
     display: flex;
@@ -156,7 +167,6 @@ const StyledBlackStarImage = styled.img`
     }
 `;
 
-// ------------- Review Main -------------
 const AboutReviewMain = styled.div`
     width: 60vw;
     display: flex;
@@ -166,6 +176,7 @@ const AboutReviewMain = styled.div`
     background-color: #F7EDE8;
     border-radius: 8px;
     padding: 40px;
+    margin-bottom: 30px;
 `;
 
 const StyledAboutReviewText = styled.h4`

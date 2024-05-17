@@ -25,13 +25,10 @@ const StyledOption = styled.div`
     color: black;
     padding: 5px 5px;
     font-size: 16px;
-    min-height: 40%;
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
     
     @media (max-width: 800px) {
         max-width: 90%;
     }
 `;
-

@@ -1,43 +1,38 @@
-import "react-datepicker/dist/react-datepicker.css";
-import logo from "../images/logo.png";
+import React from "react";
 import spiral from "../images/spiral.png";
 import three_diamonds from "../images/three_diamonds.png";
-import React from "react";
-import styled from "styled-components";
-import {useNavigate} from "react-router-dom";
-import RegistrationMain from "../components/registration/RegistrationMain";
+import styled from 'styled-components';
+import "../App.css"
+import { useNavigate } from "react-router-dom";
+import logo from "../images/logo.png";
+import AuthMain from "../components/auth/AuthMain";
 
-const RegistrationScreen = () => {
+const AuthScreen = () => {
     const navigate = useNavigate();
+
     const handleLogoClick = () => {
         navigate("/");
         window.scroll({
-            top: 0
+            top: 0,
+            behavior: "smooth"
         });
     }
 
     return (
         <>
             <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
-            <Main>
+            <Auth>
                 <StyledSpiralImage src={spiral} alt="spiral" />
-                <RegistrationMain/>
+                <AuthMain/>
                 <StyledStarsImage src={three_diamonds} alt="three diamonds" />
-            </Main>
+            </Auth>
         </>
     )
 };
 
-export default RegistrationScreen;
+export default AuthScreen;
 
-const Logo = styled.img`
-    width: 80px;
-    height: auto;
-    cursor: pointer;
-    padding: 9px 5vw;
-`;
-
-const Main = styled.div`
+const Auth = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -50,6 +45,13 @@ const Main = styled.div`
         justify-content: center;
         gap: 90px;
     }
+`;
+
+const Logo = styled.img`
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    padding: 9px 5vw;
 `;
 
 const StyledSpiralImage = styled.img`

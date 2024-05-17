@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Options from "../components/Options";
 import Header from "../components/Header";
 
-const CreateWork = () => {
+const CreateWorkScreen = () => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
     const [editorData, setEditorData] = useState('');
@@ -99,15 +99,15 @@ const CreateWork = () => {
         } catch (error) {
             console.error('Error saving work: ', error);
         } finally {
-            navigate("/main_page");
+            navigate("/main");
         }
     };
 
     return (
-        <>
+        <Main>
             <Header />
             <MainContainer>
-                <InputTitile value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Введіть назву"/>
+                <InputTitle value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter title"/>
                 <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
                 <Options placeholder={'Select Genre'} data={genreData} value={selectedGenre}
                          onChange={(e) => setSelectedGenre(e)} />
@@ -121,11 +121,15 @@ const CreateWork = () => {
                          onChange={(e) => setSelectedAge(e)} />
                 <StyledButton onClick={saveWork}> Save </StyledButton>
             </MainContainer>
-        </>
+        </Main>
     );
 }
 
-export default CreateWork;
+export default CreateWorkScreen;
+
+const Main = styled.div`
+    font-family: "Montserrat Alternates", sans-serif;
+`;
 
 const StyledButton = styled.button`
     background-color: #ffffff;
@@ -148,7 +152,7 @@ const StyledButton = styled.button`
     }
 `;
 
-const InputTitile = styled.input`
+const InputTitle = styled.input`
     font-size: 24px;
     font-weight: 600;
     padding: 10px;
@@ -159,9 +163,10 @@ const InputTitile = styled.input`
     box-shadow: 5px 5px 0px 0px #81ADC8;
     transition: 0.3s ease;
     margin-bottom: 10px;
-    &:hover {
-        scale: 1.03;
-        box-shadow: 6px 6px 0px 0px #81ADC8;
+
+    &:focus {
+        outline: none;
+        box-shadow: 5px 5px 0 0 rgba(145, 95, 109, 0.5);
     }
     
     @media (max-width: 800px) {

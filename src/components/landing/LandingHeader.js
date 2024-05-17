@@ -5,23 +5,29 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 import LogInButton from "./LogInButton";
 
+
 const LandingHeader = ({ aboutButtonColor = "black" }) => {
     const navigate = useNavigate();
 
     const handleLogoClick = () => {
         navigate("/");
         window.scroll({
-            top: 0,
-            behavior: "smooth"
+            top: 0
         });
     }
 
     const handleLogInClick = () => {
         navigate("/auth");
+        window.scroll({
+            top: 0
+        });
     }
 
     const handleSignUpClick = () => {
         navigate("/registration");
+        window.scroll({
+            top: 0
+        });
     }
 
     const handleAboutClick = () => {
@@ -57,7 +63,7 @@ const Header = styled.div`
     background-color: #FDF7F4;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 3;
     width: 90vw;
     padding: 5px 5vw;
 `;

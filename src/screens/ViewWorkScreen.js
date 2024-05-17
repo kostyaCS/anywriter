@@ -8,7 +8,7 @@ import { useAuth } from "../AuthContext";
 import {ref as storageRef, uploadBytes, getDownloadURL} from "firebase/storage";
 import deleteButton from "../images/delete-button-svgrepo-com.svg";
 
-const CheckWork = () => {
+const ViewWorkScreen = () => {
     const navigate = useNavigate();
     const { workId } = useParams();
     const [comment, setComment] = useState("");
@@ -48,7 +48,7 @@ const CheckWork = () => {
     };
 
     const handleBackClick = () => {
-        navigate("/main_page");
+        navigate("/main");
     };
 
     const submitForm = async (event) => {
@@ -84,9 +84,9 @@ const CheckWork = () => {
                 <Title>{work.title}</Title>
                 <StyledDiv dangerouslySetInnerHTML={{ __html: work.content }} />
             </Text>
-            <StyledLine />
+            <HorizontalLine />
             <AddCommentSection>
-                <ReviewTtle>Reviews</ReviewTtle>
+                <ReviewTitle>Reviews</ReviewTitle>
                 <CommentForm onSubmit={submitForm}>
                     <StyledTextarea
                         value={comment}
@@ -120,7 +120,7 @@ const CheckWork = () => {
     );
 };
 
-export default CheckWork;
+export default ViewWorkScreen;
 
 const UserBlock = styled.div`
     display: flex;
@@ -175,13 +175,13 @@ const DeleteButton = styled.button`
     margin-left: 20px;
 `;
 
-const ReviewTtle = styled.div`
+const ReviewTitle = styled.div`
     font-size: 36px;
     font-weight: 600;
     align-self: flex-start;
 `;
 
-const StyledLine = styled.div`
+const HorizontalLine = styled.div`
     width: 90%;
     height: 2px;
     background-color: gray;
@@ -210,21 +210,18 @@ const BackButton = styled.button`
         box-shadow: 6px 6px 0 0 #81ADC8;
     }
     align-self: flex-end;
-    
-    
 `;
 
 const Text = styled.div`
     display: flex;
+    gap: 20px;
     flex-direction: column;
-    font-family: "Montserrat Alternates", sans-serif;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    margin-top: 20px;
+    width: 90%;
     
-    @media (max-width: 1000px) {
-        gap: 5px;
-        margin-top: 8px;
+    @media (max-width: 800px) {
     }
 `;
 
@@ -269,6 +266,7 @@ const StyledContainer = styled.div`
     justify-content: center;
     align-items: center;
     padding-bottom: 20px;
+    font-family: "Montserrat Alternates", sans-serif;
 `;
 
 const AddCommentSection = styled.div`
@@ -343,13 +341,13 @@ const StyledButton = styled.button`
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
     cursor: pointer;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
+    box-shadow: 5px 5px 0 0 #81ADC8;
     margin-left: 20px;
 
     transition: 0.3s ease;
     &:hover {
         scale: 1.03;
-        box-shadow: 6px 6px 0px 0px #81ADC8;
+        box-shadow: 6px 6px 0 0 #81ADC8;
     }
 `;
 
@@ -368,5 +366,11 @@ const StyledTextarea = styled.textarea`
     border-radius: 10px;
     font-size: 16px;
     margin-top: 10px;
+    transition: 0.2s ease-in-out;
+
+    &:focus {
+        outline: none;
+        box-shadow: 2px 2px 0 0 #81ADC8;
+    }
 `;
 

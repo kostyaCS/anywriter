@@ -1,23 +1,23 @@
-import React, { useState } from "react";
 import styled from 'styled-components';
-import OrLineSeparator from "./OrLineSeparator";
-import { useNavigate } from "react-router-dom";
-import { auth, rtdb } from "../firebase";
-import {createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, getAuth} from "firebase/auth";
+import React, {useState} from "react";
+import ContinueButton from "../ContinueButton";
+import {useNavigate} from "react-router-dom";
+import doodle from "../../images/doodle.png";
+import ExtraRedirectContainer from "../ExtraRedirectContainer";
+import InvalidInput from "../InvalidInput";
+import OrLineSeparator from "../OrLineSeparator";
+import GoogleButton from "../GoogleButton";
+import {
+    createUserWithEmailAndPassword, getAuth,
+    GoogleAuthProvider,
+    signInWithPopup
+} from "firebase/auth";
+import {auth, rtdb} from "../../firebase";
+import StyledDatePicker from "../StyledDatePicker";
 import {ref, set} from "@firebase/database";
-import "react-datepicker/dist/react-datepicker.css";
-import GoogleButton from "../components/GoogleButton";
-import InvalidInput from "../components/InvalidInput";
-import ExtraRedirectContainer from "../components/ExtraRedirectContainer";
-import StyledDatePicker from "./StyledDatePicker";
-import doodle from "../images/doodle.png";
-import spiral from "../images/spiral.png";
-import three_diamonds from "../images/three_diamonds.png";
-import ContinueButton from "./ContinueButton";
-import logo from "../images/logo.png";
 
 
-const RegistrationForm = () => {
+const RegistrationMain = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -87,7 +87,7 @@ const RegistrationForm = () => {
             setEmail("");
             setPassword("");
             setNickname("");
-            navigate("/main_page");
+            navigate("/main");
         } catch (err) {
             console.log(err.message)
         }
@@ -104,9 +104,9 @@ const RegistrationForm = () => {
             prompt: 'select_account consent',
         });
         try {
-            
+
             const result = await signInWithPopup(auth, googleProvider);
-            navigate("/main_page");
+            navigate("/main");
         } catch (error) {
             console.error(error.message);
         }
@@ -131,88 +131,58 @@ const RegistrationForm = () => {
 
     const handleRedirect = () => {
         navigate("/auth");
-    }
-
-    const handleLogoClick = () => {
-        navigate("/");
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        });
     }
 
     return (
-        <>
-            <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
-            <Registration>
-                <StyledSpiralImage src={spiral} alt="spiral" />
-                <Main>
-                    <Title>
-                        <StyledImage src={doodle} alt="doodle" />
-                        <TitleText>Create an account</TitleText>
-                    </Title>
-                    <ExtraRedirectContainer onClick={handleRedirect}
-                                            text="Already have an account?"
-                                            redirectButton="Log in"
-                    />
-                    <HorizontalLineSeparator/>
-                    <Subtitle>Nickname</Subtitle>
-                    <InputField type="text" placeholder="Enter your nickname" value={nickname}
-                                onChange={(e) => {
-                                    const value = e.target.value.replace(/\s/g, '');
-                                    setNickname(value);
-                                    checkNickname(value);
-                                }} />
-                    {invalidNicknameMessage && (<InvalidInput text={invalidNicknameMessage} />)}
-                    <Subtitle>Email</Subtitle>
-                    <InputField type="email" placeholder="Enter your email" value={email}
-                                onChange={(e) => setEmail(e.target.value)} />
-                    {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
-                    <Subtitle>Password</Subtitle>
-                    <InputField type="password" placeholder="Enter your password" value={password}
-                                onChange={(e) => setPassword(e.target.value)} />
-                    {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage} />)}
-                    <Subtitle>Birthdate</Subtitle>
-                    <StyledDatePicker
-                        startDate={startDate} setStartDate={setStartDate}
-                        checkDate={checkDate} subtractYears={subtractYears}
-                    />
-                    {invalidDateMessage && (<InvalidInput text={invalidDateMessage} />)}
-                    <ContinueButton onClick={async () => {
-                        await handleRegister();
-                        await saveInfoAboutUser();
-                    }} text="SIGN UP"/>
-                    <OrLineSeparator text="OR" />
-                    <GoogleButton onClick={handleGoogleSignIn}
-                                  text="Sign up with Google"
-                    />
-                </Main>
-                <StyledStarsImage src={three_diamonds} alt="three diamonds" />
-            </Registration>
-        </>
+        <Main>
+            <Title>
+                <StyledImage src={doodle} alt="doodle" />
+                <TitleText>Create an account</TitleText>
+            </Title>
+            <ExtraRedirectContainer onClick={handleRedirect}
+                                    text="Already have an account?"
+                                    redirectButton="Log in"
+            />
+            <HorizontalLineSeparator/>
+            <Subtitle>Nickname</Subtitle>
+            <InputField type="text" placeholder="Enter your nickname" value={nickname}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/\s/g, '');
+                            setNickname(value);
+                            checkNickname(value);
+                        }} />
+            {invalidNicknameMessage && (<InvalidInput text={invalidNicknameMessage} />)}
+            <Subtitle>Email</Subtitle>
+            <InputField type="email" placeholder="Enter your email" value={email}
+                        onChange={(e) => setEmail(e.target.value)} />
+            {invalidEmailMessage && (<InvalidInput text={invalidEmailMessage} />)}
+            <Subtitle>Password</Subtitle>
+            <InputField type="password" placeholder="Enter your password" value={password}
+                        onChange={(e) => setPassword(e.target.value)} />
+            {invalidPasswordMessage && (<InvalidInput text={invalidPasswordMessage} />)}
+            <Subtitle>Birthdate</Subtitle>
+            <StyledDatePicker
+                startDate={startDate} setStartDate={setStartDate}
+                checkDate={checkDate} subtractYears={subtractYears}
+            />
+            {invalidDateMessage && (<InvalidInput text={invalidDateMessage} />)}
+            <ContinueButton onClick={async () => {
+                await handleRegister();
+                await saveInfoAboutUser();
+            }} text="SIGN UP"/>
+            <OrLineSeparator text="OR" />
+            <GoogleButton onClick={handleGoogleSignIn}
+                          text="Sign up with Google"
+            />
+        </Main>
     )
 };
 
-
-export default RegistrationForm;
-
-const Logo = styled.img`
-    width: 80px;
-    height: auto;
-    cursor: pointer;
-    padding: 9px 5vw;
-`;
-
-const Registration = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-end;
-    font-family: 'Montserrat Alternates', sans-serif;
-    overflow-x: hidden;
-
-    @media (max-width: 800px) {
-        align-items: center;
-        justify-content: center;
-        gap: 90px;
-    }
-`;
+export default RegistrationMain;
 
 const Main = styled.div`
     display: flex;
@@ -296,16 +266,4 @@ const InputField = styled.input`
     @media (max-width: 550px) {
         width: 90%;
     }
-`;
-
-const StyledSpiralImage = styled.img`
-    width: 75px;
-    height: auto;
-    margin-bottom: 20vh;
-`;
-
-const StyledStarsImage = styled.img`
-    width: 65px;
-    height: auto;
-    margin-bottom: 55vh;
 `;

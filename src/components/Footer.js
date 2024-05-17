@@ -23,16 +23,22 @@ const Footer = ({ backgroundColor = "white" }) => {
 
     const handleLogInClick = () => {
         navigate("/auth");
+        window.scroll({
+            top: 0
+        });
     }
 
     const handleSignUpClick = () => {
         navigate("/registration");
+        window.scroll({
+            top: 0
+        });
     }
 
     const handleAboutClick = () => {
+        navigate("/about");
         window.scroll({
-            top: 0,
-            behavior: "smooth"
+            top: 0
         });
     }
 
@@ -129,6 +135,10 @@ const FooterTop = styled.div`
         flex-direction: column;
         gap: 40px;
     }
+
+    @media (max-width: 430px) {
+        width: 80%;
+    }
 `;
 
 const FooterLeft = styled.div`
@@ -218,13 +228,16 @@ const StyledMarketImage = styled.img`
     cursor: pointer;
 `;
 
-// ----- FooterBottom -----
 const FooterBottom = styled.div`
     width: 90%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 20px 0 40px 0;
+
+    @media (max-width: 430px) {
+        width: 80%;
+    }
 `;
 
 const FooterBottomText = styled.div`

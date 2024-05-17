@@ -1,16 +1,15 @@
 import {
     BrowserRouter as Router, Route, Routes
 } from "react-router-dom";
-import LandingScreen from "./screens/Landing";
-import AuthorizationScreen from "./screens/AuthorizationScreen";
+import LandingScreen from "./screens/LandingScreen";
+import AuthScreen from "./screens/AuthScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
-import MainPage from "./screens/MainPage";
+import MainScreen from "./screens/MainScreen";
 import { AuthProvider } from './AuthContext';
-import ProfilePage from "./screens/ProfilePage";
-import CreateWork from "./screens/CreateWork";
-import MyPage from "./screens/MyPage";
-import CheckWork from "./screens/CheckWork";
-import AboutScreen from "./screens/About";
+import ProfileScreen from "./screens/ProfileScreen";
+import CreateWorkScreen from "./screens/CreateWorkScreen";
+import ViewWorkScreen from "./screens/ViewWorkScreen";
+import AboutScreen from "./screens/AboutScreen";
 
 function App() {
     return (
@@ -19,13 +18,12 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LandingScreen />} />
                     <Route path="/about" element={<AboutScreen />} />
-                    <Route path="/auth" element={<AuthorizationScreen />} />
+                    <Route path="/auth" element={<AuthScreen />} />
                     <Route path="/registration" element={<RegistrationScreen />} />
-                    <Route path="/main_page" element={<MainPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/create_work" element={<CreateWork />} />
-                    <Route path="/my_page" element={<MyPage />} />
-                    <Route path="/work/:workId" element={<CheckWork />} />
+                    <Route path="/main" element={<MainScreen />} />
+                    <Route path="/profile" element={<ProfileScreen />} />
+                    <Route path="/create_work" element={<CreateWorkScreen />} />
+                    <Route path="/work/:workId" element={<ViewWorkScreen />} />
                 </Routes>
             </Router>
         </AuthProvider>

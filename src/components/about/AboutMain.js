@@ -3,11 +3,9 @@ import React from "react";
 import spiral_star from "../../images/landing/spiral_star.png";
 import ContinueButton from "../ContinueButton";
 import three_stars from "../../images/landing/three_stars.png";
-import scribble_pink from "../../images/landing/scribble_pink.png";
 import {useNavigate} from "react-router-dom";
 
-
-const LandingMain = () => {
+const AboutMain = () => {
     const navigate = useNavigate();
 
     const handleLogInClick = () => {
@@ -21,21 +19,34 @@ const LandingMain = () => {
                     <StyledSpiralStarImage src={spiral_star} alt="spiral star" />
                 </LeftImgContainer>
                 <MainTextContainer>
-                    <StyledMainText>Your Daily</StyledMainText>
-                    <StyledMainTextPink>Writings</StyledMainTextPink>
-                    <SimpleText>Experience the magic of storytelling with our daily dose of captivating narratives.</SimpleText>
+                    <StyledMainText>About</StyledMainText>
+                    <StyledMainTextPink>Readly</StyledMainTextPink>
+                    <SimpleText>We believe in the power of words to inspire, connect, and transform. Dive into a vibrant community where writers and readers come together to explore diverse perspectives, share their stories, and ignite their creativity.</SimpleText>
                     <ContinueButton onClick={handleLogInClick} text="Get Started"/>
                 </MainTextContainer>
                 <RightImgContainer>
                     <StyledStarsImage src={three_stars} alt="three stars" />
                 </RightImgContainer>
             </MainContainer>
-            <ScribbleImg src={scribble_pink} alt="scribble pink" />
+            <MainNumbers>
+                <MainNumbersCard>
+                    <MainNumbersCardTitle>76K</MainNumbersCardTitle>
+                    <MainNumbersCardText>Community Members</MainNumbersCardText>
+                </MainNumbersCard>
+                <MainNumbersCard>
+                    <MainNumbersCardTitle>128K</MainNumbersCardTitle>
+                    <MainNumbersCardText>Writings</MainNumbersCardText>
+                </MainNumbersCard>
+                <MainNumbersCard>
+                    <MainNumbersCardTitle>59K</MainNumbersCardTitle>
+                    <MainNumbersCardText>Daily Readers</MainNumbersCardText>
+                </MainNumbersCard>
+            </MainNumbers>
         </Main>
     )
 };
 
-export default LandingMain;
+export default AboutMain;
 
 const Main = styled.div`
     display: flex;
@@ -43,27 +54,7 @@ const Main = styled.div`
     align-items: center;
     background-color: #FDF7F4;
     width: 100vw;
-    height: 590px;
-
-    @media (max-width: 863px){
-        height: 570px;
-    }
-
-    @media (max-width: 740px){
-        height: 650px;
-    }
-
-    @media (max-width: 550px){
-        height: 635px;
-    }
-
-    @media (max-width: 430px){
-        height: 595px;
-    }
-
-    @media (max-width: 345px){
-        height: 635px;
-    }
+    height: max-content;
 `;
 
 const MainContainer = styled.div`
@@ -110,7 +101,7 @@ const StyledMainTextPink = styled.h1`
     @media (max-width: 863px){
         font-size: 65px;
     }
-    
+
     @media (max-width: 550px){
         font-size: 60px;
     }
@@ -136,6 +127,64 @@ const SimpleText = styled.div`
     }
 `;
 
+const MainNumbers = styled.div`
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    align-items: center;
+    margin: 60px 15px -65px 15px;
+    z-index: 2;
+    text-align: center;
+    flex-wrap: wrap;
+`;
+
+const MainNumbersCard = styled.div`
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 60px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    -webkit-box-shadow: 5px 5px 0 0 rgba(145,95,109,1);
+    -moz-box-shadow: 5px 5px 0 0 rgba(145,95,109,1);
+    box-shadow: 5px 5px 0 0 rgba(145,95,109,1);
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 6px 6px 0 0 rgba(145,95,109,1);
+    }
+
+    @media (max-width: 430px) {
+        height: 140px;
+        padding: 0 30px;
+    }
+`;
+
+const MainNumbersCardTitle = styled.h3`
+    font-size: 55px;
+    margin: 20px 0 5px 0;
+
+    @media (max-width: 863px){
+        font-size: 50px;
+    }
+
+    @media (max-width: 550px){
+        font-size: 45px;
+    }
+
+    @media (max-width: 430px) {
+        font-size: 40px;
+    }
+`;
+
+const MainNumbersCardText = styled.p`
+`;
+
 const LeftImgContainer = styled.div`
     height: 400px;
     width: 230px;
@@ -144,7 +193,7 @@ const LeftImgContainer = styled.div`
     margin-top: 10px;
 
     @media (max-width: 863px) {
-        margin-top: 5px;
+        margin-top: -10px;
     }
 `;
 
@@ -159,18 +208,15 @@ const RightImgContainer = styled.div`
     margin-top: 115px;
 
     @media (max-width: 863px) {
-        margin-top: 105px;
+        margin-top: 95px;
+    }
+
+    @media (max-width: 430px) {
+        margin-top: 70px;
     }
 `;
 
 const StyledStarsImage = styled.img`
     height: 170px;
     width: auto;
-`;
-
-const ScribbleImg = styled.img`
-    height: 150px;
-    margin-top: 70px;
-    margin-left: 30px;
-    z-index: 1;
 `;

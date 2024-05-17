@@ -2,18 +2,14 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { rtdb } from "../firebase";
 import { ref, onValue, get } from "firebase/database";
-import ScrollContainer from "../components/ScrollContainer";
 import {useAuth} from "../AuthContext";
-import {useNavigate} from "react-router-dom";
 import Header from "../components/Header";
-import Left from "../components/MainLeft";
+import ScrollContainer from "../components/main/ScrollContainer";
 
 const MainPage = () => {
     const [allData, setAllData] = useState([]);
-    const { currentUser } = useAuth();
-    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("all");
-
+    const { currentUser } = useAuth();
 
     useEffect(() => {
         if (!currentUser) return;
@@ -70,6 +66,21 @@ const MainPage = () => {
         fetchWorks();
     }, [activeTab, currentUser]);
 
+    useEffect(() => {
+        if (!currentUser || activeTab === "all" || activeTab === "your-writings") return;
+
+        const userWorksRef = ref(rtdb, `users/${currentUser.uid}/${activeTab}`);
+        const unsubscribe = onValue(userWorksRef, (snapshot) => {
+            const ids = snapshot.val() || [];
+            const updatedData = allData.filter(work => ids.includes(work.id));
+            setAllData(updatedData);
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    }, [activeTab, currentUser, allData]);
+
 
     useEffect(() => {
         const worksRef = ref(rtdb, `works`);
@@ -92,11 +103,40 @@ const MainPage = () => {
     }, []);
 
 
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
+
     return (
         <Main>
             <Header />
             <MainContainer>
-                <Left />
+                <Tabs>
+                    <Option
+                        onClick={() => handleTabClick("all")}
+                        active={activeTab === "all"}
+                    >
+                        All
+                    </Option>
+                    <Option
+                        onClick={() => handleTabClick("liked")}
+                        active={activeTab === "liked"}
+                    >
+                        Liked
+                    </Option>
+                    <Option
+                        onClick={() => handleTabClick("saved")}
+                        active={activeTab === "saved"}
+                    >
+                        Saved
+                    </Option>
+                    <Option
+                        onClick={() => handleTabClick("your-writings")}
+                        active={activeTab === "your-writings"}
+                    >
+                        Your writings
+                    </Option>
+                </Tabs>
                 <DivLine />
                 <Right>
                     <ScrollContainer text={allData} />
@@ -122,18 +162,57 @@ const MainContainer = styled.div`
     flex-direction: row;
     margin-top: 30px;
     width: 100%;
-    
+
     @media (max-width: 800px) {
         flex-direction: column;
         margin-top: 10px;
     }
 `;
 
+const Tabs = styled.div`
+    min-width: fit-content;
+    height: max-content;
+    background-color: white;
+    float: left;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-left: 60px;
+    margin-right: 10px;
+    flex-wrap: wrap;
+
+    @media (max-width: 800px) {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 10px;
+        height: 10%;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+    }
+`;
+
+const Option = styled.div`
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    background-color: ${props => props.active ? '#e3e3e3' : 'transparent'};
+    transition: all 0.1s ease-in-out;
+
+    @media (max-width: 800px){
+        font-size: 18px;
+    }
+
+    @media (max-width: 430px) {
+        font-size: 14px;
+    }
+`;
+
 const Right = styled.div`
     margin-left: 10px;
-    //width: 80%;
-    //width: 79%;
-    //height: 100vh;
     background-color: white;
     float: left;
     

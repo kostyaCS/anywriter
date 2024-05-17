@@ -19,7 +19,7 @@ const HeaderDef = () => {
     }, [currentUser, navigate]);
 
     const handleLogoClick = () => {
-        navigate("/main_page");
+        navigate("/main");
     }
 
     const handleProfileClick = () => {

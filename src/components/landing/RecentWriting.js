@@ -7,6 +7,7 @@ import scribble_black from "../../images/landing/scribble_black.png";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 
+
 const RecentWriting = () => {
     const navigate = useNavigate();
 
@@ -162,7 +163,6 @@ const HorizontalLine = styled.div`
 const RecentWritingMainText = styled.div`
 `;
 
-// ------------ RecentWritingAdditional ------------
 const RecentWritingAdditional = styled.div`
     width: 100%;
     display: flex;

@@ -11,11 +11,15 @@ import fire from "../../images/landing/fire.png";
 import asterisk from "../../images/landing/asterisk.png";
 import {useNavigate} from "react-router-dom";
 
+
 const Membership = () => {
     const navigate = useNavigate();
 
     const handleLogInClick = () => {
         navigate("/auth");
+        window.scroll({
+            top: 0
+        });
     }
 
     return (
@@ -137,7 +141,6 @@ const StyledScribbleZigImage = styled.img`
     }
 `;
 
-// ------------ Membership Cards Container ------------
 const MembershipCardsContainer = styled.div`
     width: 90vw;
     display: flex;
