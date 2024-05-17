@@ -26,6 +26,12 @@ const StyledDatePicker = (props) => {
 
 export default StyledDatePicker;
 
+const Main = styled.div`
+    @media (max-width: 550px) {
+        width: 100%;
+    }
+`;
+
 const StyledDatePickerContainer = styled(DatePicker)`
     width: 450px;
     height: 50px;
@@ -35,9 +41,13 @@ const StyledDatePickerContainer = styled(DatePicker)`
     font-family: 'Montserrat Alternates', sans-serif;
     padding: 0 10px 0 20px;
     box-sizing: border-box;
-
+    
     &:focus {
         outline: none;
         box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 550px) {
+        width: 100%;
     }
 `;

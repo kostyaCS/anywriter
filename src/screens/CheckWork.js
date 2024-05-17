@@ -6,7 +6,7 @@ import { rtdb, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import {ref as storageRef, uploadBytes, getDownloadURL} from "firebase/storage";
-import deleteButton from "../images/delete-button-svgrepo-com.svg";
+import deleteButton from "../images/avatar.png";
 
 const CheckWork = () => {
     const navigate = useNavigate();

@@ -35,6 +35,10 @@ const StyledButton = styled.button`
         transform: translateY(-0.1mm);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
+
+    @media (max-width: 550px) {
+        width: 90%;
+    }
 `;
 
 const GoogleImage = styled.img`

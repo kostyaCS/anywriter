@@ -24,7 +24,12 @@ const ExtraSingInContainer = styled.div`
     align-items: center;
     width: 420px;
     padding-left: 20px;
-    height: 25px;
+    flex-wrap: wrap;
+
+    @media (max-width: 550px) {
+        width: 90%;
+        padding-left: 0;
+    }
 `;
 
 const ExtraSingInText = styled.span`

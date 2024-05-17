@@ -129,7 +129,10 @@ const Main = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: 'Montserrat Alternates';
+
+    @media (max-width: 550px) {
+        width: 100vw;
+    }
 `;
 
 const Title = styled.div`
@@ -162,6 +165,10 @@ const Subtitle = styled.h4`
     width: 450px;
     font-size: 15px;
     margin: 12px 0;
+
+    @media (max-width: 550px) {
+        width: 90%;
+    }
 `;
 
 const InputField = styled.input`
@@ -177,6 +184,10 @@ const InputField = styled.input`
     &:focus {
         outline: none;
         box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 550px) {
+        width: 90%;
     }
 `;
 
