@@ -1,70 +1,156 @@
-# Getting Started with Create React App
+<div align="center">
+    <br>
+    <img src="src/images/logo.png" alt="Location icon" width="180" style="background-color: #FDF7F4; padding: 15px 0; border-radius: 30px">
+    <h1 style="margin: 0">Readly</h1>
+    <br>
+</div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h4 align="center" style='margin: 0 10px;'>
+A platform for enhancing the reading experience by offering a daily dose of captivating writings.
+</h4>
 
-## Available Scripts
+<p align="center">
+  <a href="#description">Description</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#example-of-usage">Example of usage</a> •
+  <a href="#emailware">Emailware</a>
+</p>
 
-In the project directory, you can run:
+## Description
 
-### `npm start`
+Our mission is to cultivate a vibrant community where individuals can explore diverse perspectives, share their stories, and unleash their creativity.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Key Features:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Daily Writings**:  
+  Enjoy a fresh selection of stories and articles every day, crafted to inspire and entertain.
 
-### `npm test`
+- **Engaging Discussions**:  
+  Join thought-provoking discussions, absorb inspiring perspectives, and contribute your own insights.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Supportive Community**:  
+  Connect with a community of like-minded individuals who support and inspire each other.  
 
-### `npm run build`
+- **Reader Reviews**:  
+  Discover how Readly has impacted the lives of our readers through their heartfelt testimonials.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Exclusive Membership Benefits**:  
+  Unlock personalized content, exclusive writings, special merchandise, and more. Participate in live events, workshops, and author interviews.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Recent Writings**:  
+  Stay up-to-date with our latest content and explore a wide range of topics.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Why Join Readly?
 
-### `npm run eject`
+- **Inspiration and Growth**:  
+  Readly is more than just a reading platform; it's a place for personal and creative growth. Whether you're looking for inspiration or a supportive community to share your ideas, Readly has something for everyone.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Exclusive Content**:  
+  Members gain access to exclusive content and events that aren't available to the general public. Enjoy unique writings, live broadcasts, and opportunities to connect with authors and creators.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Tailored Experience**:  
+  Customize your reading experience by requesting topics that resonate with you and receive content that aligns with your interests.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### How to Get Started?
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Sign Up**:  
+  Create an account on our website to start exploring our diverse content.
 
-## Learn More
+- **Join the Community**:  
+  Connect with other members, participate in discussions, and share your stories.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Access Exclusive Content**:  
+  Become a member to unlock special perks, exclusive writings, and much more.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## How To Use
 
-### Code Splitting
+Go to our website [Readly](https://anywriter.nw.r.appspot.com/) to see the web application.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Alternatively, clone this repository and run the web application:
 
-### Analyzing the Bundle Size
+```bash
+git clone https://github.com/kostyaCS/anywriter.git
+cd anywriter
+npm i
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+It runs the app in the development mode.\
+To view it in your browser open [http://localhost:3000](http://localhost:3000).
 
-### Making a Progressive Web App
+## How To Use
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+You can access the web application by visiting our website: [Readly](https://anywriter.nw.r.appspot.com/).
 
-### Advanced Configuration
+Alternatively, you can run the web application locally by following these steps:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/kostyaCS/anywriter.git
+    ```
 
-### Deployment
+2. Navigate to the project directory:
+    ```bash
+    cd anywriter
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+3. Install the necessary dependencies:
+    ```bash
+    npm install
+    ```
 
-### `npm run build` fails to minify
+4. Start the development server:
+    ```bash
+    npm start
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This will launch the app in development mode. Open [http://localhost:3000](http://localhost:3000) in your browser to view it.
+
+## Example of usage
+
+The photos below show the UI of the web application. Click on the image to view the complete version on Figma.
+
+### Landing page
+
+[![Landing page](src/images/readme/landing.png)](https://www.figma.com/design/GEGoAIUeZlz1mu3WzT0IiJ/Readly?node-id=1%3A296&t=yxPj5Wr0RgIdE0Kr-1)
+
+### About page
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="src/images/readme/about.png" alt="About page" style="width: 48%;">
+    <img src="src/images/readme/getintouch.png" alt="Get in touch" style="width: 48%;">
+</div>
+
+### Log in page
+
+![Log in page](src/images/readme/login.png)
+
+### Main page
+
+![Main](src/images/readme/main.png)
+
+Ypu can view different tabs and apply filters to the search:
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="src/images/readme/mainliked.png" alt="Liked page" style="width: 48%;">
+    <img src="src/images/readme/filters.png" alt="Main page" style="width: 48%;">
+</div>
+
+### View work page
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="src/images/readme/viewwork.png" alt="View work page" style="width: 48%;">
+    <img src="src/images/readme/reviews.png" alt="Reviews" style="width: 48%;">
+</div>
+
+### Create work page
+
+![Create work page](src/images/readme/create.png)
+
+### Profile page
+
+![Profile page](src/images/readme/profile.png)
+
+## Emailware
+
+**Readly** is an [emailware](https://en.wiktionary.org/wiki/emailware). Meaning, if you liked using this app or it has helped you in any way, We'd like you send me an email at <readly@gmail.com> about anything you'd want to say about this web page. We'd really appreciate it!

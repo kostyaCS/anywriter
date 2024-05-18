@@ -6,7 +6,7 @@ import { rtdb, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import {ref as storageRef, uploadBytes, getDownloadURL} from "firebase/storage";
-import deleteButton from "../images/delete-button-svgrepo-com.svg";
+import deleteButton from "../images/delete-button.svg";
 
 const ViewWorkScreen = () => {
     const navigate = useNavigate();
@@ -145,8 +145,8 @@ const ReviewBlock = styled.div`
 `;
 
 const DeleteImage = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
 `;
 
 
@@ -162,17 +162,26 @@ const StyledComment = styled.div`
 `;
 
 const DeleteButton = styled.button`
+    width: 40px;
+    height: 40px;
     background-color: #ffffff;
-    border: 2px solid #000000;
+    border: 1px solid #000000;
     color: black;
     border-radius: 15px;
-    padding: 5px 5px;
     font-size: 16px;
     font-weight: 500;
     font-family: "Montserrat Alternates", sans-serif;
     cursor: pointer;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
+    box-shadow: 3px 3px 0 0 #81ADC8;
     margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        box-shadow: 3px 3px 0 0 #915F6D;
+    }
 `;
 
 const ReviewTitle = styled.div`

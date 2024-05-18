@@ -477,6 +477,7 @@ const ScrollHeader = styled.div`
     align-items: center;
     gap: 20px;
     margin-bottom: 20px;
+    padding-top: 1px;
 
     @media (max-width: 800px) {
         margin: 0 20px 10px 20px;
