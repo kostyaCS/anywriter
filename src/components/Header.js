@@ -20,25 +20,25 @@ const HeaderDef = () => {
 
     const handleLogoClick = () => {
         navigate("/main");
-    }
+    };
 
     const handleProfileClick = () => {
         navigate("/profile");
-    }
+    };
 
     const handleCreateClick = () => {
         navigate("/create_work");
-    }
+    };
 
     return (
         <>
             <Header>
                 <HeaderLeft>
-                    <Logo src={logo} alt="Readly" onClick={handleLogoClick}/>
+                    <Logo src={logo} alt="Readly" onClick={handleLogoClick} />
                 </HeaderLeft>
                 <HeaderRight>
-                    <CreateButton onClick={handleCreateClick} text="Create writing"/>
-                    <ProfileButton onClick={handleProfileClick} text="Profile"/>
+                    <CreateButton onClick={handleCreateClick} text="Create writing" />
+                    <ProfileButton onClick={handleProfileClick} text="Profile" />
                 </HeaderRight>
             </Header>
         </>
@@ -47,47 +47,46 @@ const HeaderDef = () => {
 
 export default HeaderDef;
 
-
 // ------------- Header -------------
 const Header = styled.div`
-    height: 74px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #FDF7F4;
-    width: 90vw;
-    padding: 5px 5vw;
+  height: 74px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fdf7f4;
+  width: 90vw;
+  padding: 5px 5vw;
 `;
 
 const HeaderLeft = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Logo = styled.img`
-    width: 80px;
-    height: auto;
-    cursor: pointer;
+  width: 80px;
+  height: auto;
+  cursor: pointer;
 `;
 
 const HeaderRight = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease-in;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in;
 
-    @media (max-width: 550px) {
-        gap: 20px;
-    }
-    
-    @media (max-width: 430px) {
-        gap: 8px;
-    }
+  @media (max-width: 550px) {
+    gap: 20px;
+  }
+
+  @media (max-width: 430px) {
+    gap: 8px;
+  }
 `;

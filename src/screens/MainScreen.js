@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { rtdb } from "../firebase";
 import { ref, onValue, get } from "firebase/database";
-import {useAuth} from "../AuthContext";
+import { useAuth } from "../AuthContext";
 import Header from "../components/Header";
 import ScrollContainer from "../components/main/ScrollContainer";
 
@@ -26,19 +26,21 @@ const MainPage = () => {
                 const worksData = snapshot.val();
                 let allWorks = [];
                 if (activeTab === "all") {
-                    allWorks = Object.keys(worksData).map(key => ({
+                    allWorks = Object.keys(worksData).map((key) => ({
                         id: key,
-                        ...worksData[key]
+                        ...worksData[key],
                     }));
                 } else {
-                    allWorks = Object.keys(worksData).map(key => {
-                        if (worksData[key].userId === currentUser.uid) {
-                            return {
-                                id: key,
-                                ...worksData[key]
-                            };
-                        }
-                    }).filter(work => work !== undefined);
+                    allWorks = Object.keys(worksData)
+                        .map((key) => {
+                            if (worksData[key].userId === currentUser.uid) {
+                                return {
+                                    id: key,
+                                    ...worksData[key],
+                                };
+                            }
+                        })
+                        .filter((work) => work !== undefined);
                 }
                 setAllData(allWorks);
             } else {
@@ -50,11 +52,15 @@ const MainPage = () => {
                 }
 
                 const ids = userSnapshot.val() || [];
-                const worksPromises = ids.map(id => {
+                const worksPromises = ids.map((id) => {
                     const workRef = ref(rtdb, `works/${id}`);
                     return new Promise((resolve) => {
                         onValue(workRef, (snapshot) => {
-                            resolve(snapshot.exists() ? { id: snapshot.key, ...snapshot.val() } : null);
+                            resolve(
+                                snapshot.exists()
+                                    ? { id: snapshot.key, ...snapshot.val() }
+                                    : null
+                            );
                         });
                     });
                 });
@@ -67,12 +73,13 @@ const MainPage = () => {
     }, [activeTab, currentUser]);
 
     useEffect(() => {
-        if (!currentUser || activeTab === "all" || activeTab === "your-writings") return;
+        if (!currentUser || activeTab === "all" || activeTab === "your-writings")
+            return;
 
         const userWorksRef = ref(rtdb, `users/${currentUser.uid}/${activeTab}`);
         const unsubscribe = onValue(userWorksRef, (snapshot) => {
             const ids = snapshot.val() || [];
-            const updatedData = allData.filter(work => ids.includes(work.id));
+            const updatedData = allData.filter((work) => ids.includes(work.id));
             setAllData(updatedData);
         });
 
@@ -80,7 +87,6 @@ const MainPage = () => {
             unsubscribe();
         };
     }, [activeTab, currentUser, allData]);
-
 
     useEffect(() => {
         const worksRef = ref(rtdb, `works`);
@@ -92,16 +98,14 @@ const MainPage = () => {
                 allContents.push({
                     id: id,
                     liked: false,
-                    ...works[id]
+                    ...works[id],
                 });
             }
 
             setAllData(allContents);
         });
-        return () => {
-        };
+        return () => { };
     }, []);
-
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
@@ -149,88 +153,87 @@ const MainPage = () => {
 export default MainPage;
 
 const Main = styled.div`
-    font-family: 'Montserrat Alternates', sans-serif;
-    overflow: hidden;
-    height: 100vh;
+  font-family: "Montserrat Alternates", sans-serif;
+  overflow: hidden;
+  height: 100vh;
 `;
 
-
 const MainContainer = styled.div`
-    overflow: hidden;
-    display: flex;
-    gap: 5px;
-    flex-direction: row;
-    margin-top: 30px;
-    width: 100%;
+  overflow: hidden;
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  margin-top: 30px;
+  width: 100%;
 
-    @media (max-width: 800px) {
-        flex-direction: column;
-        margin-top: 10px;
-    }
+  @media (max-width: 800px) {
+    flex-direction: column;
+    margin-top: 10px;
+  }
 `;
 
 const Tabs = styled.div`
-    min-width: fit-content;
-    height: max-content;
-    background-color: white;
-    float: left;
-    display: flex;
-    gap: 5px;
-    flex-direction: column;
-    margin-left: 60px;
-    margin-right: 10px;
-    flex-wrap: wrap;
+  min-width: fit-content;
+  height: max-content;
+  background-color: white;
+  float: left;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  margin-left: 60px;
+  margin-right: 10px;
+  flex-wrap: wrap;
 
-    @media (max-width: 800px) {
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        margin-top: 10px;
-        height: 10%;
-        flex-direction: row;
-        align-content: center;
-        justify-content: center;
-    }
+  @media (max-width: 800px) {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
+    height: 10%;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+  }
 `;
 
 const Option = styled.div`
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: 500;
-    background-color: ${props => props.active ? '#e3e3e3' : 'transparent'};
-    transition: all 0.1s ease-in-out;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: ${(props) => (props.active ? "#e3e3e3" : "transparent")};
+  transition: all 0.1s ease-in-out;
 
-    @media (max-width: 800px){
-        font-size: 18px;
-    }
+  @media (max-width: 800px) {
+    font-size: 18px;
+  }
 
-    @media (max-width: 430px) {
-        font-size: 14px;
-    }
+  @media (max-width: 430px) {
+    font-size: 14px;
+  }
 `;
 
 const Right = styled.div`
-    margin-left: 10px;
-    background-color: white;
-    float: left;
-    width: 100%;
+  margin-left: 10px;
+  background-color: white;
+  float: left;
+  width: 100%;
 
-    @media (max-width: 800px) {
-        margin-top: 10px;
-        margin-left: 0;
-        height: 90%;
-        padding-left: 0;
-    }
+  @media (max-width: 800px) {
+    margin-top: 10px;
+    margin-left: 0;
+    height: 90%;
+    padding-left: 0;
+  }
 `;
 
 const DivLine = styled.div`
-    height: 400px;
-    width: 2px;
-    background-color: #d6d6d6;
-    
-    @media (max-width: 800px) {
-        display: none;
-    }
+  height: 400px;
+  width: 2px;
+  background-color: #d6d6d6;
+
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;

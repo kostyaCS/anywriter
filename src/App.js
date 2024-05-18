@@ -1,11 +1,9 @@
-import {
-    BrowserRouter as Router, Route, Routes
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LandingScreen from "./screens/LandingScreen";
 import AuthScreen from "./screens/AuthScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import MainScreen from "./screens/MainScreen";
-import { AuthProvider } from './AuthContext';
+import { AuthProvider } from "./AuthContext";
 import ProfileScreen from "./screens/ProfileScreen";
 import CreateWorkScreen from "./screens/CreateWorkScreen";
 import ViewWorkScreen from "./screens/ViewWorkScreen";

@@ -11,8 +11,8 @@ import Header from "../components/Header";
 const CreateWorkScreen = () => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
-    const [editorData, setEditorData] = useState('');
-    const [title, setTitle] = useState('');
+    const [editorData, setEditorData] = useState("");
+    const [title, setTitle] = useState("");
     const [selectedGenre, setSelectedGenre] = useState(null);
     const [selectedInterest, setSelectedInterest] = useState(null);
     const [selectedEmotion, setSelectedEmotion] = useState(null);
@@ -27,7 +27,7 @@ const CreateWorkScreen = () => {
         { label: "Трилер", value: 5 },
         { label: "Історичний роман", value: 6 },
         { label: "Романтичний роман", value: 7 },
-        { label: "Детектив", value: 8 }
+        { label: "Детектив", value: 8 },
     ];
 
     const interestsData = [
@@ -38,7 +38,7 @@ const CreateWorkScreen = () => {
         { label: "Театр", value: 5 },
         { label: "Історія", value: 6 },
         { label: "Кіно", value: 7 },
-        { label: "Спорт", value: 8 }
+        { label: "Спорт", value: 8 },
     ];
 
     const emotionData = [
@@ -54,7 +54,7 @@ const CreateWorkScreen = () => {
         { label: "Новела", value: 3 },
         { label: "Оповідання", value: 4 },
         { label: "Спогад", value: 5 },
-        { label: "Легенда", value: 6 }
+        { label: "Легенда", value: 6 },
     ];
 
     const ageData = [
@@ -70,8 +70,8 @@ const CreateWorkScreen = () => {
     };
 
     const getLabels = (options) => {
-        return options ? options.map(item => item.label) : [];
-    }
+        return options ? options.map((item) => item.label) : [];
+    };
 
     const saveWork = async () => {
         const date = new Date();
@@ -95,9 +95,9 @@ const CreateWorkScreen = () => {
                 userId: currentUser.uid,
                 reviews: [],
             });
-            console.log('Work saved successfully!');
+            console.log("Work saved successfully!");
         } catch (error) {
-            console.error('Error saving work: ', error);
+            console.error("Error saving work: ", error);
         } finally {
             navigate("/main");
         }
@@ -107,78 +107,102 @@ const CreateWorkScreen = () => {
         <Main>
             <Header />
             <MainContainer>
-                <InputTitle value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter title"/>
+                <InputTitle
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Enter title"
+                />
                 <MyEditor editorData={editorData} onEditorChange={handleEditorChange} />
-                <Options placeholder={'Select Genre'} data={genreData} value={selectedGenre}
-                         onChange={(e) => setSelectedGenre(e)} />
-                <Options placeholder={'Select sphere of interest of the text'} data={interestsData} value={selectedInterest}
-                         onChange={(e) => setSelectedInterest(e)} />
-                <Options placeholder={'Select emotion, which your text represent'} data={emotionData} value={selectedEmotion}
-                         onChange={(e) => setSelectedEmotion(e)} />
-                <Options placeholder={'Select format of the text'} data={formatData} value={selectedFormat}
-                         onChange={(e) => setSelectedFormat(e)} />
-                <Options placeholder={'Select age category of your text'} data={ageData} value={selectedAge}
-                         onChange={(e) => setSelectedAge(e)} />
+                <Options
+                    placeholder={"Select Genre"}
+                    data={genreData}
+                    value={selectedGenre}
+                    onChange={(e) => setSelectedGenre(e)}
+                />
+                <Options
+                    placeholder={"Select sphere of interest of the text"}
+                    data={interestsData}
+                    value={selectedInterest}
+                    onChange={(e) => setSelectedInterest(e)}
+                />
+                <Options
+                    placeholder={"Select emotion, which your text represent"}
+                    data={emotionData}
+                    value={selectedEmotion}
+                    onChange={(e) => setSelectedEmotion(e)}
+                />
+                <Options
+                    placeholder={"Select format of the text"}
+                    data={formatData}
+                    value={selectedFormat}
+                    onChange={(e) => setSelectedFormat(e)}
+                />
+                <Options
+                    placeholder={"Select age category of your text"}
+                    data={ageData}
+                    value={selectedAge}
+                    onChange={(e) => setSelectedAge(e)}
+                />
                 <StyledButton onClick={saveWork}> Save </StyledButton>
             </MainContainer>
         </Main>
     );
-}
+};
 
 export default CreateWorkScreen;
 
 const Main = styled.div`
-    font-family: "Montserrat Alternates", sans-serif;
+  font-family: "Montserrat Alternates", sans-serif;
 `;
 
 const StyledButton = styled.button`
-    background-color: #ffffff;
-    border: 2px solid #000000;
-    color: black;
-    border-radius: 15px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: "Montserrat Alternates", sans-serif;
-    cursor: pointer;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
-    max-width: fit-content;
-    margin-top: 10px;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  color: black;
+  border-radius: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat Alternates", sans-serif;
+  cursor: pointer;
+  box-shadow: 5px 5px 0px 0px #81adc8;
+  max-width: fit-content;
+  margin-top: 10px;
 
-    transition: 0.3s ease;
-    &:hover {
-        scale: 1.03;
-        box-shadow: 6px 6px 0px 0px #81ADC8;
-    }
+  transition: 0.3s ease;
+  &:hover {
+    scale: 1.03;
+    box-shadow: 6px 6px 0px 0px #81adc8;
+  }
 `;
 
 const InputTitle = styled.input`
-    font-size: 24px;
-    font-weight: 600;
-    padding: 10px;
-    border-radius: 15px;
-    border: 2px solid #000000;
-    max-width: 40%;
-    font-family: "Montserrat Alternates", sans-serif;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
-    transition: 0.3s ease;
-    margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 15px;
+  border: 2px solid #000000;
+  max-width: 40%;
+  font-family: "Montserrat Alternates", sans-serif;
+  box-shadow: 5px 5px 0px 0px #81adc8;
+  transition: 0.3s ease;
+  margin-bottom: 10px;
 
-    &:focus {
-        outline: none;
-        box-shadow: 5px 5px 0 0 rgba(145, 95, 109, 0.5);
-    }
-    
-    @media (max-width: 800px) {
-        font-size: 18px;
-        max-width: 70%;
-    }
+  &:focus {
+    outline: none;
+    box-shadow: 5px 5px 0 0 rgba(145, 95, 109, 0.5);
+  }
+
+  @media (max-width: 800px) {
+    font-size: 18px;
+    max-width: 70%;
+  }
 `;
 
 const MainContainer = styled.div`
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 30px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 30px;
 `;

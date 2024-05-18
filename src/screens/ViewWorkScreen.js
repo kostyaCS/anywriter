@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import { ref, update, onValue, set, child, get } from "firebase/database";
 import { rtdb, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
-import {ref as storageRef, uploadBytes, getDownloadURL} from "firebase/storage";
+import {
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL,
+} from "firebase/storage";
 import deleteButton from "../images/delete-button.svg";
 
 const ViewWorkScreen = () => {
@@ -27,10 +31,12 @@ const ViewWorkScreen = () => {
         onValue(commentsRef, async (snapshot) => {
             const commentsData = snapshot.val();
             if (commentsData) {
-                const commentsArray = await Promise.all(Object.entries(commentsData).map(async ([comment, authorId]) => {
-                    const avatarUrl = await getAvatarUrl(authorId);
-                    return { comment, authorId, avatarUrl };
-                }));
+                const commentsArray = await Promise.all(
+                    Object.entries(commentsData).map(async ([comment, authorId]) => {
+                        const avatarUrl = await getAvatarUrl(authorId);
+                        return { comment, authorId, avatarUrl };
+                    })
+                );
                 setComments(commentsArray);
             } else {
                 setComments([]);
@@ -40,10 +46,12 @@ const ViewWorkScreen = () => {
 
     const getAvatarUrl = async (userId) => {
         try {
-            const url = await getDownloadURL(storageRef(storage, `profile_images/${userId}`));
+            const url = await getDownloadURL(
+                storageRef(storage, `profile_images/${userId}`)
+            );
             return url;
         } catch (error) {
-            return '';
+            return "";
         }
     };
 
@@ -56,16 +64,19 @@ const ViewWorkScreen = () => {
 
         const commentData = {
             comment,
-            authorId: userId
+            authorId: userId,
         };
 
         const commentsRef = ref(rtdb, `comments/${workId}`);
         await set(child(commentsRef, comment), userId);
 
-        const updatedReviews = [...(work.reviews || []), { comment, authorId: userId }];
+        const updatedReviews = [
+            ...(work.reviews || []),
+            { comment, authorId: userId },
+        ];
         await update(ref(rtdb, `works/${workId}`), { reviews: updatedReviews });
 
-        setComment('');
+        setComment("");
     };
 
     const handleDeleteClick = async (comment) => {
@@ -106,11 +117,11 @@ const ViewWorkScreen = () => {
                             </UserBlock>
                             <ReviewBlock>
                                 <StyledComment>{cmt}</StyledComment>
-                                {authorId === userId &&
+                                {authorId === userId && (
                                     <DeleteButton onClick={() => handleDeleteClick(cmt)}>
                                         <DeleteImage src={deleteButton} alt="Delete" />
                                     </DeleteButton>
-                                }
+                                )}
                             </ReviewBlock>
                         </ReviewItem>
                     ))}
@@ -123,263 +134,260 @@ const ViewWorkScreen = () => {
 export default ViewWorkScreen;
 
 const UserBlock = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 `;
 
 const Avatar = styled.img`
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
 `;
 
 const ReviewBlock = styled.div`
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 `;
 
 const DeleteImage = styled.img`
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 `;
 
-
 const ReviewEmail = styled.div`
-    font-size: 20px;
-    font-weight: 600;
+  font-size: 20px;
+  font-weight: 600;
 `;
 
 const StyledComment = styled.div`
-    font-size: 24px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const DeleteButton = styled.button`
-    width: 40px;
-    height: 40px;
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    color: black;
-    border-radius: 15px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: "Montserrat Alternates", sans-serif;
-    cursor: pointer;
-    box-shadow: 3px 3px 0 0 #81ADC8;
-    margin-left: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  color: black;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat Alternates", sans-serif;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 #81adc8;
+  margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
 
-    &:hover {
-        box-shadow: 3px 3px 0 0 #915F6D;
-    }
+  &:hover {
+    box-shadow: 3px 3px 0 0 #915f6d;
+  }
 `;
 
 const ReviewTitle = styled.div`
-    font-size: 36px;
-    font-weight: 600;
-    align-self: flex-start;
+  font-size: 36px;
+  font-weight: 600;
+  align-self: flex-start;
 `;
 
 const HorizontalLine = styled.div`
-    width: 90%;
-    height: 2px;
-    background-color: gray;
-    margin-top: 50px;
-    margin-bottom: 50px;
+  width: 90%;
+  height: 2px;
+  background-color: gray;
+  margin-top: 50px;
+  margin-bottom: 50px;
 `;
 
 const BackButton = styled.button`
-    background-color: #ffffff;
-    border: 2px solid #000000;
-    color: black;
-    border-radius: 15px;
-    padding: 10px 20px;
-    margin-top: 20px;
-    margin-right: 20px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: "Montserrat Alternates", sans-serif;
-    cursor: pointer;
-    box-shadow: 5px 5px 0px 0px #81ADC8;
-    margin-left: 20px;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  color: black;
+  border-radius: 15px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat Alternates", sans-serif;
+  cursor: pointer;
+  box-shadow: 5px 5px 0px 0px #81adc8;
+  margin-left: 20px;
 
-    transition: 0.3s ease;
-    &:hover {
-        scale: 1.03;
-        box-shadow: 6px 6px 0 0 #81ADC8;
-    }
-    align-self: flex-end;
+  transition: 0.3s ease;
+  &:hover {
+    scale: 1.03;
+    box-shadow: 6px 6px 0 0 #81adc8;
+  }
+  align-self: flex-end;
 `;
 
 const Text = styled.div`
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    width: 90%;
-    
-    @media (max-width: 800px) {
-    }
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 90%;
+
+  @media (max-width: 800px) {
+  }
 `;
 
 const ReviewsSection = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 50px;
-    margin-top: 40px;
-    
-    @media (max-width: 1000px) {
-        width: 90%;
-    }
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 50px;
+  margin-top: 40px;
+
+  @media (max-width: 1000px) {
+    width: 90%;
+  }
 `;
 
 const ReviewItem = styled.div`
-    width: 70%;
-    color: #5c5c5c;
-    font-size: 24px;
-    align-self: flex-start;
-    padding-bottom: 10px;
-    border-bottom: gray 1px solid;
-    
-    @media (max-width: 1300px) {
-        font-size: 22px;
-        width: 80%;
-    }
-    
-    @media (max-width: 900px) {
-        font-size: 20px;
-        width: 90%;
-    }
+  width: 70%;
+  color: #5c5c5c;
+  font-size: 24px;
+  align-self: flex-start;
+  padding-bottom: 10px;
+  border-bottom: gray 1px solid;
+
+  @media (max-width: 1300px) {
+    font-size: 22px;
+    width: 80%;
+  }
+
+  @media (max-width: 900px) {
+    font-size: 20px;
+    width: 90%;
+  }
 `;
 
-
 const StyledContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 20px;
-    font-family: "Montserrat Alternates", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+  font-family: "Montserrat Alternates", sans-serif;
 `;
 
 const AddCommentSection = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    justify-content: center;
-    align-items: center;
-    
-    @media (max-width: 1000px) {
-        width: 90%;
-    }
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 1000px) {
+    width: 90%;
+  }
 `;
 
 const Title = styled.div`
-    width: 90%;
-    text-align: center;
-    font-weight: 600;
-    font-size: 36px;
-    
-    @media (max-width: 1300px) {
-        font-size: 32px;
-    }
-    
-    @media (max-width: 900px) {
-        font-size: 30px;
-    }
-    
-    @media (max-width: 420px) {
-        font-size: 28px;
-    }
+  width: 90%;
+  text-align: center;
+  font-weight: 600;
+  font-size: 36px;
+
+  @media (max-width: 1300px) {
+    font-size: 32px;
+  }
+
+  @media (max-width: 900px) {
+    font-size: 30px;
+  }
+
+  @media (max-width: 420px) {
+    font-size: 28px;
+  }
 `;
 
 const StyledDiv = styled.div`
-    margin-bottom: 50px;
-    font-size: 24px;
-    line-height: 1.55;
-    font-weight: 450;
-    max-width: 70%;
-    text-align: justify;
-    word-wrap: break-word;
-    
-    @media (max-width: 1300px) {
-        max-width: 80%;
-        font-size: 22px;
-    }
-    
-    @media (max-width: 900px) {
-        max-width: 85%;
-    }
-    
-    @media (max-width: 420px) {
-        max-width: 90%;
-        font-size: 20px;
-    }
-    
-    @media (max-width: 380px){
-        max-width: 95%;
-        font-size: 18px;
-    }
+  margin-bottom: 50px;
+  font-size: 24px;
+  line-height: 1.55;
+  font-weight: 450;
+  max-width: 70%;
+  text-align: justify;
+  word-wrap: break-word;
+
+  @media (max-width: 1300px) {
+    max-width: 80%;
+    font-size: 22px;
+  }
+
+  @media (max-width: 900px) {
+    max-width: 85%;
+  }
+
+  @media (max-width: 420px) {
+    max-width: 90%;
+    font-size: 20px;
+  }
+
+  @media (max-width: 380px) {
+    max-width: 95%;
+    font-size: 18px;
+  }
 `;
 
 const StyledButton = styled.button`
-    background-color: #ffffff;
-    border: 2px solid #000000;
-    color: black;
-    border-radius: 15px;
-    padding: 10px 20px;
-    margin-top: 20px;
-    margin-right: 20px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: "Montserrat Alternates", sans-serif;
-    cursor: pointer;
-    box-shadow: 5px 5px 0 0 #81ADC8;
-    margin-left: 20px;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  color: black;
+  border-radius: 15px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat Alternates", sans-serif;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 0 #81adc8;
+  margin-left: 20px;
 
-    transition: 0.3s ease;
-    &:hover {
-        scale: 1.03;
-        box-shadow: 6px 6px 0 0 #81ADC8;
-    }
+  transition: 0.3s ease;
+  &:hover {
+    scale: 1.03;
+    box-shadow: 6px 6px 0 0 #81adc8;
+  }
 `;
 
 const CommentForm = styled.form`
-    display: flex;
-    flex-direction: row;
-    align-self: flex-start;
-    margin-top: 20px;
-    align-items: center;
-    align-content: center;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  margin-top: 20px;
+  align-items: center;
+  align-content: center;
 `;
 
 const StyledTextarea = styled.textarea`
-    padding: 10px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: 0.2s ease-in-out;
+  padding: 10px;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: 0.2s ease-in-out;
 
-    &:focus {
-        outline: none;
-        box-shadow: 2px 2px 0 0 #81ADC8;
-    }
+  &:focus {
+    outline: none;
+    box-shadow: 2px 2px 0 0 #81adc8;
+  }
 `;
-

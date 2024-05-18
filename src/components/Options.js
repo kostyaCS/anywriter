@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Options = (props) => {
     return (
-        <StyledOption style={{ width: '420px', fontSize: '14px' }}>
+        <StyledOption style={{ width: "420px", fontSize: "14px" }}>
             <Select
                 placeholder={props.placeholder}
                 isMulti
@@ -15,20 +15,20 @@ const Options = (props) => {
                 onChange={props.onChange}
             />
         </StyledOption>
-    )
+    );
 };
 
 export default Options;
 
 const StyledOption = styled.div`
-    background-color: #ffffff;
-    color: black;
-    padding: 5px 5px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: "Montserrat Alternates", sans-serif;
-    
-    @media (max-width: 800px) {
-        max-width: 90%;
-    }
+  background-color: #ffffff;
+  color: black;
+  padding: 5px 5px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat Alternates", sans-serif;
+
+  @media (max-width: 800px) {
+    max-width: 90%;
+  }
 `;

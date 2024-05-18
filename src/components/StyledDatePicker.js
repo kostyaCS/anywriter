@@ -16,32 +16,32 @@ const StyledDatePicker = (props) => {
                 }}
                 placeholderText="Enter your birthdate (dd/mm/yyyy)"
                 isClearable={() => props.setStartDate(undefined)}
-                dateFormat='dd/MM/yyyy'
+                dateFormat="dd/MM/yyyy"
                 minDate={props.subtractYears(new Date(), 110)}
                 maxDate={props.subtractYears(new Date(), 4)}
             />
         </>
-    )
+    );
 };
 
 export default StyledDatePicker;
 
 const StyledDatePickerContainer = styled(DatePicker)`
-    width: 450px;
-    height: 50px;
-    border: 1px solid black;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: 'Montserrat Alternates', sans-serif;
-    padding: 0 10px 0 20px;
-    box-sizing: border-box;
-    
-    &:focus {
-        outline: none;
-        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-    }
+  width: 450px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Montserrat Alternates", sans-serif;
+  padding: 0 10px 0 20px;
+  box-sizing: border-box;
 
-    @media (max-width: 550px) {
-        width: 100%;
-    }
+  &:focus {
+    outline: none;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 550px) {
+    width: 100%;
+  }
 `;
