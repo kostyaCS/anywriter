@@ -64,22 +64,6 @@ Our mission is to cultivate a vibrant community where individuals can explore di
 
 ## How To Use
 
-Go to our website [Readly](https://anywriter.nw.r.appspot.com/) to see the web application.
-
-Alternatively, clone this repository and run the web application:
-
-```bash
-git clone https://github.com/kostyaCS/anywriter.git
-cd anywriter
-npm i
-npm start
-```
-
-It runs the app in the development mode.\
-To view it in your browser open [http://localhost:3000](http://localhost:3000).
-
-## How To Use
-
 You can access the web application by visiting our website: [Readly](https://anywriter.nw.r.appspot.com/).
 
 Alternatively, you can run the web application locally by following these steps:
